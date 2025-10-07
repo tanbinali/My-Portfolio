@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Iceland&family=Pixelify+Sans:wght@400..700&display=swap");
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+  font-family: "Iceland", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.logo {
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+/* ======== JADE CHAMBER THEME ======== */
+@plugin "daisyui/theme" {
+  name: "jadechamber";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  /* === Base (Dark Stone & Shadow) === */
+  --color-base-100: oklch(17% 0.02 270); /* Dark obsidian */
+  --color-base-200: oklch(23% 0.03 270); /* Slightly lighter panels */
+  --color-base-300: oklch(28% 0.04 270); /* Panel contrast */
+  --color-base-content: oklch(95% 0.02 180); /* Soft jade-tinted white text */
+
+  /* === Primary (Jade Core Glow) === */
+  --color-primary: oklch(55% 0.25 150);
+  --color-primary-content: oklch(98% 0.01 160);
+
+  /* === Secondary (Gold Edge Shine) === */
+  --color-secondary: oklch(70% 0.23 85);
+  --color-secondary-content: oklch(15% 0.05 80);
+
+  /* === Accent (Chrome / Silver Edge) === */
+  --color-accent: oklch(65% 0.05 260);
+  --color-accent-content: oklch(95% 0.02 260);
+
+  /* === Neutrals (Depth + Shadows) === */
+  --color-neutral: oklch(20% 0.03 270);
+  --color-neutral-content: oklch(92% 0.01 160);
+
+  /* === Status Colors === */
+  --color-info: oklch(65% 0.2 220);
+  --color-success: oklch(55% 0.25 150);
+  --color-warning: oklch(70% 0.25 85);
+  --color-error: oklch(60% 0.25 25);
+
+  /* === Radii & Borders === */
+  --radius-selector: 0.75rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+
+  /* === Visual Texture === */
+  --depth: 1.5;
+  --noise: 0.05;
+}
+
+/* ======== CUSTOM UTILITIES ======== */
+
+/* === Background Gradients === */
+@layer utilities {
+  .bg-jade-gradient {
+    background: linear-gradient(135deg, #00a86b 0%, #006644 50%, #001a0d 100%);
+  }
+
+  .bg-gold-gradient {
+    background: linear-gradient(135deg, #ffd700 0%, #b8860b 40%, #705f00 100%);
+  }
+
+  .bg-chamber-dark {
+    background: radial-gradient(
+      circle at center,
+      #1a1a1a 0%,
+      #0c0c0c 70%,
+      #000 100%
+    );
+  }
+
+  /* === Text Effects === */
+  .text-jade {
+    color: #00ff99;
+  }
+
+  .text-gold {
+    color: #ffd700;
+  }
+
+  .text-silver {
+    color: #c0c0c0;
+  }
+
+  /* === Glow Effects === */
+  .glow-jade {
+    box-shadow: 0 0 10px #00ff99, 0 0 25px #00cc77;
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 10px #ffd700, 0 0 25px #b8860b;
+  }
+
+  .glow-soft {
+    box-shadow: 0 0 20px rgba(0, 255, 150, 0.2);
+  }
+
+  /* === Button Variants === */
+  .btn-jade {
+    @apply bg-gradient-to-r from-emerald-500 to-emerald-700 text-white font-semibold rounded-xl shadow-md transition-all duration-300;
+  }
+
+  .btn-jade:hover {
+    @apply shadow-emerald-500/50 scale-105;
+  }
+
+  .btn-gold {
+    @apply bg-gradient-to-r from-yellow-400 to-amber-600 text-black font-semibold rounded-xl shadow-md transition-all duration-300;
+  }
+
+  .btn-gold:hover {
+    @apply shadow-yellow-400/50 scale-105;
+  }
+
+  /* === Card Styling === */
+  .card-jade {
+    @apply bg-base-200 border border-emerald-600 rounded-2xl p-6 shadow-lg transition-all duration-300;
+  }
+
+  .card-jade:hover {
+    @apply shadow-emerald-400/50 scale-[1.02];
+  }
+
+  .card-gold {
+    @apply bg-base-200 border border-amber-500 rounded-2xl p-6 shadow-lg transition-all duration-300;
+  }
+
+  .card-gold:hover {
+    @apply shadow-amber-400/50 scale-[1.02];
+  }
+}
