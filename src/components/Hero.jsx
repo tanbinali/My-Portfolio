@@ -1,13 +1,14 @@
-import ProfileCard from "./ProfileCard/ProfileCard";
-import avatar from "../assets/picture.png";
-import logo from "../assets/logo.png";
-import miniAvatar from "../assets/pfp.jpg";
+import avatar from "../assets/picture.webp";
+import logo from "../assets/logo.webp";
+import miniAvatar from "../assets/pfp.webp";
 import resume from "../assets/Tanbin Resume.pdf";
 import { FaDiscord, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiMail } from "react-icons/fi";
 import { CgNotes } from "react-icons/cg";
 import TextType from "./TextType/TextType";
 import ShinyText from "./ShinyText/ShinyText";
+import React from "react";
+const ProfileCard = React.lazy(() => import("./ProfileCard/ProfileCard"));
 
 const Hero = () => {
   return (
