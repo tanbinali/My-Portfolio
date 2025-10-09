@@ -87,7 +87,7 @@ const TechStack = ({ useImages = false }) => {
     : techLogos;
 
   return (
-    <div className="w-full py-12 text-center">
+    <div className="w-full text-center">
       {/* Title */}
       <h2 className="text-3xl md:text-4xl font-extrabold text-white inline-block relative mb-8 rounded-full backdrop-blur-sm">
         <ShinyText
@@ -100,7 +100,7 @@ const TechStack = ({ useImages = false }) => {
       </h2>
 
       {/* Logo Loop */}
-      <div className="relative h-32 overflow-hidden">
+      <div className="relative overflow-hidden">
         <LogoLoop
           logos={logos}
           speed={80}

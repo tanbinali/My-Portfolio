@@ -47,7 +47,7 @@ const categories = [
     title: "Tools & Databases",
     color: "from-gray-300 via-gray-400 to-gray-600", // ⚙️ Silver tones
     items: [
-      { icon: <BiLogoVisualStudio />, name: "Visual Studio Code" },
+      { icon: <BiLogoVisualStudio />, name: "VS Code" },
       { icon: <SiMysql />, name: "MySQL" },
       { icon: <SiPostgresql />, name: "PostgreSQL" },
       { icon: <SiEclipseide />, name: "Eclipse IDE" },
@@ -57,7 +57,7 @@ const categories = [
 
 const Expertise = () => {
   return (
-    <section className="py-20 px-6 md:px-16 lg:px-24 text-center">
+    <section className="py-12 px-6 md:px-16 lg:px-24 text-center">
       {/* Title */}
       <h2 className="text-3xl md:text-4xl font-extrabold text-white inline-block relative mb-12 rounded-full backdrop-blur-sm">
         <ShinyText text="Expertise" disabled={false} speed={3} />
