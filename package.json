@@ -12,9 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
     "framer-motion": "^12.23.22",
-    "gasp": "^0.0.2",
     "gsap": "^3.13.0",
-    "lucide-react": "^0.545.0",
     "postprocessing": "^6.37.8",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

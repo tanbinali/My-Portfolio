@@ -1,32 +1,25 @@
 import {
   SiReact,
-  SiNextdotjs,
-  SiTypescript,
   SiTailwindcss,
   SiPython,
   SiDjango,
   SiCplusplus,
   SiC,
-  SiHtml5,
-  SiCss3,
   SiJavascript,
   SiMysql,
   SiPostgresql,
   SiBootstrap,
+  SiEclipseide,
 } from "react-icons/si";
 import LogoLoop from "./LogoLoop/LogoLoop";
 import { BiLogoVisualStudio } from "react-icons/bi";
 import ShinyText from "./ShinyText/ShinyText";
+import { MdHtml } from "react-icons/md";
+import { FaJava } from "react-icons/fa";
 
 // Tech logos using React Icons
 const techLogos = [
   { node: <SiReact />, title: "React", href: "https://react.dev" },
-  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
-  {
-    node: <SiTypescript />,
-    title: "TypeScript",
-    href: "https://www.typescriptlang.org",
-  },
   {
     node: <SiTailwindcss />,
     title: "Tailwind CSS",
@@ -44,8 +37,7 @@ const techLogos = [
     href: "https://www.w3schools.com/cpp/",
   },
   { node: <SiC />, title: "C", href: "https://www.cprogramming.com/" },
-  { node: <SiHtml5 />, title: "HTML5", href: "https://www.w3.org/html/" },
-  { node: <SiCss3 />, title: "CSS3", href: "https://www.w3schools.com/css/" },
+  { node: <MdHtml />, title: "HTML", href: "https://html.com/" },
   {
     node: <SiJavascript />,
     title: "JavaScript",
@@ -66,6 +58,16 @@ const techLogos = [
     node: <SiBootstrap />,
     title: "Bootstrap",
     href: "https://getbootstrap.com",
+  },
+  {
+    node: <SiEclipseide />,
+    title: "Eclipseide",
+    href: "http://eclipseide.org/",
+  },
+  {
+    node: <FaJava />,
+    title: "Java",
+    href: "https://www.java.com/en",
   },
 ];
 
