@@ -1,5 +1,5 @@
 import PillNav from "./PillNav/PillNav";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.webp";
 
 const Navbar = () => {
   return (
