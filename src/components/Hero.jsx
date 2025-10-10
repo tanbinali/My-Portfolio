@@ -110,7 +110,7 @@ const Hero = () => {
       {/* RIGHT CARD */}
       <div className="flex-1 flex justify-center items-center mt-16 md:mt-0 z-10">
         <div className="relative">
-          <ProfileCard
+          {/* <ProfileCard
             name="MD. Tanbin Ali"
             title="Full Stack Developer"
             handle="tanbinali"
@@ -125,7 +125,7 @@ const Hero = () => {
             enableTilt={false}
             enableMobileTilt={false}
             showUserInfo={true}
-          />
+          /> */}
         </div>
       </div>
     </section>

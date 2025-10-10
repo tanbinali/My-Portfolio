@@ -1,22 +1,45 @@
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import TechStack from "./components/TechStack";
 import Expertise from "./components/Expertise";
 import Background from "./components/Background";
 import Education from "./components/Education";
 import Footer from "./components/Footer";
-
+import Contacts from "./components/Contacts";
+import Projects from "./components/Projects";
 function App() {
   return (
     <>
       <Background />
       <Navbar />
-      <Hero />
-      <TechStack />
-      <section id="expertise" className="scroll-mt-28">
+      <section id="about" className="scroll-mt-28">
+        <Hero />
+      </section>
+
+      <section
+        id="expertise"
+        className="scroll-mt-28 py-16 px-6 md:px-16 lg:px-24"
+      >
         <Expertise />
       </section>
-      <Education />
+      <section
+        id="projects"
+        className="scroll-mt-28 py-16 px-6 md:px-16 lg:px-24"
+      >
+        <Projects />
+      </section>
+
+      <section
+        id="education"
+        className="scroll-mt-28 py-16 px-6 md:px-16 lg:px-24"
+      >
+        <Education />
+      </section>
+      <section
+        id="contact"
+        className="scroll-mt-28 py-16 px-6 md:px-16 lg:px-24"
+      >
+        <Contacts />
+      </section>
       <Footer />
     </>
   );

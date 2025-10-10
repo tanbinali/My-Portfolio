@@ -1,14 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/logo.webp";
-import {
-  FaInfoCircle,
-  FaBoxes,
-  FaEnvelopeOpenText,
-  FaMapMarkerAlt,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
+import { FaInfoCircle, FaBars, FaTimes } from "react-icons/fa";
+import { IoIosCall } from "react-icons/io";
+import { SiEducative } from "react-icons/si";
+import { TbCertificate } from "react-icons/tb";
+import { GrUserExpert } from "react-icons/gr";
 
 const menuItems = [
   {
@@ -19,17 +16,22 @@ const menuItems = [
   {
     id: "expertise",
     label: "Expertise",
-    icon: <FaBoxes className="inline-block mr-2" />,
+    icon: <GrUserExpert className="inline-block mr-2" />,
   },
   {
     id: "projects",
     label: "Projects",
-    icon: <FaEnvelopeOpenText className="inline-block mr-2" />,
+    icon: <SiEducative className="inline-block mr-2" />,
+  },
+  {
+    id: "education",
+    label: "Education",
+    icon: <TbCertificate className="inline-block mr-2" />,
   },
   {
     id: "contact",
     label: "Contact",
-    icon: <FaMapMarkerAlt className="inline-block mr-2" />,
+    icon: <IoIosCall className="inline-block mr-2" />,
   },
 ];
 
