@@ -7,9 +7,11 @@ import {
   FaMapMarkerAlt,
   FaCalendarAlt,
   FaLaptopCode,
+  FaAward,
 } from "react-icons/fa";
 import { IoSchool } from "react-icons/io5";
 import ShinyText from "./ShinyText/ShinyText";
+import ElectricBorder from "./ElectricBorder/ElectricBorder";
 import uniimage from "../assets/versity.webp";
 import phitron from "../assets/phitron.webp";
 
@@ -18,130 +20,281 @@ const Education = () => {
     {
       title: "B.Sc in Computer Science & Engineering",
       university: "East Delta University",
+      shortName: "EDU",
       location: "Chattogram, Bangladesh",
       duration: "2024 – 2028 (expected)",
+      status: "In Progress",
       image: uniimage,
-      icon: <FaGraduationCap className="text-green-400" />,
+      icon: <FaGraduationCap className="text-white" />,
+      color: "#10B981",
+      gradient: "from-green-500 to-emerald-600",
+      achievements: [
+        "Focus on Software Engineering & Web Technologies",
+        "Data Structures & Algorithms",
+        "Database Management Systems",
+        "Computer Networks & Security",
+      ],
+      current: true,
     },
     {
       title: "CSE Fundamentals with Phitron",
       university: "Phitron",
-      location: "Online",
+      shortName: "Phitron",
+      location: "Online Platform",
       duration: "2024 – 2025",
+      status: "Completed",
       image: phitron,
-      icon: <FaLaptopCode className="text-yellow-400" />,
+      icon: <FaLaptopCode className="text-white" />,
+      color: "#F59E0B",
+      gradient: "from-amber-500 to-yellow-600",
+      achievements: [
+        "Advanced Problem Solving Techniques",
+        "Competitive Programming Fundamentals",
+        "Software Development Best Practices",
+        "Project-based Learning Approach",
+      ],
+      current: false,
     },
   ];
 
   const [index, setIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  // Auto-slide every 10s
+  // Auto-slide every 8s
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % educationData.length);
-    }, 10000);
+      handleNext();
+    }, 8000);
     return () => clearInterval(timer);
   }, [educationData.length]);
 
-  const nextSlide = () => setIndex((prev) => (prev + 1) % educationData.length);
-  const prevSlide = () =>
+  const handleNext = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setIndex((prev) => (prev + 1) % educationData.length);
+    setTimeout(() => setIsAnimating(false), 700);
+  };
+
+  const handlePrev = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
     setIndex((prev) => (prev === 0 ? educationData.length - 1 : prev - 1));
+    setTimeout(() => setIsAnimating(false), 700);
+  };
+
+  const goToSlide = (i) => {
+    if (isAnimating || i === index) return;
+    setIsAnimating(true);
+    setIndex(i);
+    setTimeout(() => setIsAnimating(false), 700);
+  };
+
+  const currentEdu = educationData[index];
 
   return (
-    <section className="py-12 px-6 md:px-16 lg:px-24 text-center">
-      <h2 className="text-3xl md:text-4xl font-extrabold text-white inline-block relative mb-12 rounded-full backdrop-blur-sm">
-        <ShinyText
-          text="Education & Certifications"
-          disabled={false}
-          speed={3}
-        />
-        <span className="block w-24 h-1 bg-primary rounded mx-auto mt-3"></span>
-      </h2>
+    <section
+      id="education"
+      className="py-20 px-6 md:px-16 lg:px-24 bg-transparent"
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-6 mx-auto">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-accent">
+              Academic Journey
+            </span>
+          </div>
 
-      {/* Carousel Container */}
-      <div className="relative max-w-5xl mx-auto h-auto">
-        {/* Slides wrapper with fixed height */}
-        <div className="relative h-[480px] md:h-[400px] overflow-hidden">
-          {educationData.map((edu, i) => (
-            <div
-              key={i}
-              className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-in-out ${
-                i === index
-                  ? "opacity-100 translate-x-0 z-10"
-                  : "opacity-0 translate-x-10 z-0"
-              }`}
-            >
-              <div className="flex flex-col md:flex-row items-center justify-center gap-10 bg-transparent backdrop-blur-md rounded-2xl shadow-lg p-8 border border-gold hover:border-yellow-400/60 transition-all duration-300 max-w-4xl mx-auto">
-                {/* Image */}
-                <div className="w-full md:w-1/2 flex justify-center relative">
-                  <img
-                    src={edu.image}
-                    alt={edu.university}
-                    className="rounded-2xl shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(250,204,21,0.4)] transition-all duration-300 w-full max-w-md object-cover"
-                  />
-                  {/* Icon overlay */}
-                  <div className="absolute -top-3 -right-3 bg-gray-900/90 backdrop-blur-sm p-3 rounded-full border border-green-400/50">
-                    {edu.icon}
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <ShinyText text="Education & Learning" disabled={false} speed={3} />
+          </h2>
+
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-6">
+            My academic background and professional certifications that form the
+            foundation of my technical expertise and problem-solving abilities.
+          </p>
+
+          <div className="w-32 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto"></div>
+        </div>
+
+        {/* Main Carousel Container */}
+        <div className="relative max-w-6xl mx-auto">
+          <ElectricBorder
+            color={currentEdu.color}
+            thickness={2}
+            speed={0.8}
+            chaos={0.1}
+            style={{ borderRadius: 24 }}
+          >
+            <div className="bg-base-200/30 backdrop-blur-md rounded-3xl p-8 border border-base-300/50">
+              {/* Carousel Content */}
+              <div className="flex flex-col lg:flex-row gap-8 items-center">
+                {/* Image Section */}
+                <div className="lg:w-2/5 relative">
+                  <div className="relative group">
+                    <img
+                      src={currentEdu.image}
+                      alt={currentEdu.university}
+                      className="w-full h-64 lg:h-80 object-cover rounded-2xl shadow-2xl transition-all duration-500 group-hover:scale-105"
+                    />
+
+                    {/* Status Badge */}
+                    <div
+                      className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm border"
+                      style={{
+                        backgroundColor: `${currentEdu.color}20`,
+                        borderColor: `${currentEdu.color}40`,
+                        color: currentEdu.color,
+                      }}
+                    >
+                      {currentEdu.status}
+                    </div>
+
+                    {/* Icon Overlay */}
+                    <div
+                      className="absolute -top-3 -right-3 w-14 h-14 rounded-2xl flex items-center justify-center backdrop-blur-sm border shadow-lg transition-all duration-300 group-hover:scale-110"
+                      style={{
+                        backgroundColor: `${currentEdu.color}20`,
+                        borderColor: `${currentEdu.color}40`,
+                      }}
+                    >
+                      {currentEdu.icon}
+                    </div>
                   </div>
                 </div>
 
-                {/* Text */}
-                <div className="w-full md:w-1/2 text-left text-gray-200 space-y-4">
-                  <h3 className="text-2xl md:text-3xl font-bold text-gold flex items-center gap-3">
-                    <IoSchool className="text-green-400 text-2xl" />
-                    {edu.title}
-                  </h3>
+                {/* Content Section */}
+                <div className="lg:w-3/5 space-y-6">
+                  {/* Title */}
+                  <div>
+                    <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2">
+                      {currentEdu.title}
+                    </h3>
+                    <div
+                      className="w-16 h-1 rounded-full mb-4"
+                      style={{ background: currentEdu.color }}
+                    ></div>
+                  </div>
 
-                  <p className="text-lg text-green-400 flex items-center gap-2">
-                    <FaUniversity className="text-gray-400 text-lg" />
-                    <span className="font-semibold text-gray-400">
-                      {edu.university}
-                    </span>
-                  </p>
+                  {/* University & Details */}
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-lg">
+                      <FaUniversity className="text-gray-400 flex-shrink-0" />
+                      <span className="text-white font-semibold">
+                        {currentEdu.university}
+                      </span>
+                    </div>
 
-                  <p className="text-sm text-white flex items-center gap-2">
-                    <FaMapMarkerAlt className="text-green-400" />
-                    {edu.location}
-                  </p>
+                    <div className="flex items-center gap-3 text-gray-300">
+                      <FaMapMarkerAlt className="text-gray-400 flex-shrink-0" />
+                      <span>{currentEdu.location}</span>
+                    </div>
 
-                  <p className="text-sm text-white italic flex items-center gap-2">
-                    <FaCalendarAlt className="text-yellow-400" />
-                    Duration: {edu.duration}
-                  </p>
+                    <div className="flex items-center gap-3 text-gray-300">
+                      <FaCalendarAlt className="text-gray-400 flex-shrink-0" />
+                      <span>{currentEdu.duration}</span>
+                    </div>
+                  </div>
+
+                  {/* Key Focus Areas */}
+                  <div>
+                    <h4 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                      <FaAward className="text-yellow-400" />
+                      Key Focus Areas
+                    </h4>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {currentEdu.achievements.map((achievement, i) => (
+                        <li
+                          key={i}
+                          className="flex items-center gap-2 text-sm text-gray-300 p-2 rounded-lg bg-base-300/30 backdrop-blur-sm"
+                        >
+                          <div
+                            className="w-2 h-2 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: currentEdu.color }}
+                          ></div>
+                          {achievement}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          ))}
+          </ElectricBorder>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={handlePrev}
+            className="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-6 w-12 h-12 bg-base-300/80 hover:bg-base-300 text-white rounded-full transition-all duration-300 z-20 backdrop-blur-sm border border-base-400/50 hover:border-accent/60 hover:scale-110 flex items-center justify-center shadow-xl"
+          >
+            <FaChevronLeft className="text-lg" />
+          </button>
+          <button
+            onClick={handleNext}
+            className="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-6 w-12 h-12 bg-base-300/80 hover:bg-base-300 text-white rounded-full transition-all duration-300 z-20 backdrop-blur-sm border border-base-400/50 hover:border-accent/60 hover:scale-110 flex items-center justify-center shadow-xl"
+          >
+            <FaChevronRight className="text-lg" />
+          </button>
+
+          {/* Progress Dots */}
+          <div className="flex justify-center gap-3 mt-8">
+            {educationData.map((edu, i) => (
+              <button
+                key={i}
+                onClick={() => goToSlide(i)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 backdrop-blur-sm border ${
+                  i === index
+                    ? "scale-110 shadow-lg"
+                    : "opacity-70 hover:opacity-100 hover:scale-105"
+                }`}
+                style={{
+                  backgroundColor:
+                    i === index ? `${edu.color}20` : "rgba(255,255,255,0.05)",
+                  borderColor:
+                    i === index ? `${edu.color}40` : "rgba(255,255,255,0.1)",
+                }}
+              >
+                <div
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    i === index ? "scale-125" : ""
+                  }`}
+                  style={{
+                    backgroundColor: i === index ? edu.color : "#6B7280",
+                  }}
+                ></div>
+                <span
+                  className="text-sm font-medium hidden sm:block"
+                  style={{
+                    color: i === index ? edu.color : "#9CA3AF",
+                  }}
+                >
+                  {edu.shortName}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Navigation Arrows */}
-        <button
-          onClick={prevSlide}
-          className="absolute top-1/2 -translate-y-1/2 left-3 md:left-6 bg-black/30 hover:bg-green-500/30 text-green-400 p-3 rounded-full transition z-20 backdrop-blur-sm border border-green-400/30 hover:border-green-400/60"
-        >
-          <FaChevronLeft className="text-lg" />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="absolute top-1/2 -translate-y-1/2 right-3 md:right-6 bg-black/30 hover:bg-green-500/30 text-green-400 p-3 rounded-full transition z-20 backdrop-blur-sm border border-green-400/30 hover:border-green-400/60"
-        >
-          <FaChevronRight className="text-lg" />
-        </button>
-
-        {/* Dots */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-          {educationData.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                i === index
-                  ? "bg-green-400 scale-125 shadow-[0_0_10px_rgba(16,185,129,0.7)]"
-                  : "bg-gray-600 hover:bg-gray-500"
-              }`}
-            ></button>
-          ))}
+        {/* Call to Action */}
+        <div className="text-center mt-16">
+          <div className="bg-gradient-to-r from-base-200/50 to-base-300/30 backdrop-blur-md rounded-2xl p-8 border border-base-300/50 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Continuous Learning Journey
+            </h3>
+            <p className="text-gray-300">
+              I believe in lifelong learning and continuously upgrading my
+              skills to stay at the forefront of technology and software
+              development practices.
+            </p>
+          </div>
         </div>
+      </div>
+
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
       </div>
     </section>
   );

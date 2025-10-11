@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState, memo } from "react";
 import "./LogoLoop.css";
 
-const ANIMATION_CONFIG = {
+const ANIMATION_CONFIG = Object.freeze({
   SMOOTH_TAU: 0.25,
   MIN_COPIES: 2,
   COPY_HEADROOM: 2,
-};
+});
 
 const toCssLength = (value) =>
   typeof value === "number" ? `${value}px` : value ?? undefined;
@@ -38,7 +38,6 @@ const useResizeObserver = (callback, elements, dependencies) => {
 const useImageLoader = (seqRef, onLoad, dependencies) => {
   useEffect(() => {
     const images = seqRef.current?.querySelectorAll("img") ?? [];
-
     if (images.length === 0) {
       onLoad();
       return;
@@ -53,12 +52,11 @@ const useImageLoader = (seqRef, onLoad, dependencies) => {
     };
 
     images.forEach((img) => {
-      const htmlImg = img;
-      if (htmlImg.complete) {
+      if (img.complete) {
         handleImageLoad();
       } else {
-        htmlImg.addEventListener("load", handleImageLoad, { once: true });
-        htmlImg.addEventListener("error", handleImageLoad, { once: true });
+        img.addEventListener("load", handleImageLoad, { once: true });
+        img.addEventListener("error", handleImageLoad, { once: true });
       }
     });
 
@@ -113,9 +111,7 @@ const useAnimationLoop = (
         let nextOffset = offsetRef.current + velocityRef.current * deltaTime;
         nextOffset = ((nextOffset % seqWidth) + seqWidth) % seqWidth;
         offsetRef.current = nextOffset;
-
-        const translateX = -offsetRef.current;
-        track.style.transform = `translate3d(${translateX}px, 0, 0)`;
+        track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
       }
 
       rafRef.current = requestAnimationFrame(animate);
@@ -133,7 +129,7 @@ const useAnimationLoop = (
   }, [targetVelocity, seqWidth, isHovered, pauseOnHover, trackRef]);
 };
 
-export const LogoLoop = memo(
+const LogoLoop = memo(
   ({
     logos,
     speed = 120,
@@ -157,6 +153,7 @@ export const LogoLoop = memo(
     const [copyCount, setCopyCount] = useState(ANIMATION_CONFIG.MIN_COPIES);
     const [isHovered, setIsHovered] = useState(false);
 
+    // Memoize target velocity for smooth animation
     const targetVelocity = useMemo(() => {
       const magnitude = Math.abs(speed);
       const directionMultiplier = direction === "left" ? 1 : -1;
@@ -164,6 +161,7 @@ export const LogoLoop = memo(
       return magnitude * directionMultiplier * speedMultiplier;
     }, [speed, direction]);
 
+    // Update loop dimensions
     const updateDimensions = useCallback(() => {
       const containerWidth = containerRef.current?.clientWidth ?? 0;
       const sequenceWidth =
@@ -178,12 +176,12 @@ export const LogoLoop = memo(
       }
     }, []);
 
+    // Efficient resize and image load batching
     useResizeObserver(
       updateDimensions,
       [containerRef, seqRef],
       [logos, gap, logoHeight]
     );
-
     useImageLoader(seqRef, updateDimensions, [logos, gap, logoHeight]);
 
     useAnimationLoop(
@@ -194,6 +192,7 @@ export const LogoLoop = memo(
       pauseOnHover
     );
 
+    // All CSS variables for layout/motion
     const cssVariables = useMemo(
       () => ({
         "--logoloop-gap": `${gap}px`,
@@ -203,6 +202,7 @@ export const LogoLoop = memo(
       [gap, logoHeight, fadeOutColor]
     );
 
+    // Stable root className
     const rootClassName = useMemo(
       () =>
         [
@@ -216,17 +216,17 @@ export const LogoLoop = memo(
       [fadeOut, scaleOnHover, className]
     );
 
+    // Stable mouse event handlers
     const handleMouseEnter = useCallback(() => {
       if (pauseOnHover) setIsHovered(true);
     }, [pauseOnHover]);
-
     const handleMouseLeave = useCallback(() => {
       if (pauseOnHover) setIsHovered(false);
     }, [pauseOnHover]);
 
+    // Memoized logo item renderer
     const renderLogoItem = useCallback((item, key) => {
       const isNodeItem = "node" in item;
-
       const content = isNodeItem ? (
         <span
           className="logoloop__node"
@@ -248,11 +248,9 @@ export const LogoLoop = memo(
           draggable={false}
         />
       );
-
       const itemAriaLabel = isNodeItem
         ? item.ariaLabel ?? item.title
         : item.alt ?? item.title;
-
       const itemContent = item.href ? (
         <a
           className="logoloop__link"
@@ -266,7 +264,6 @@ export const LogoLoop = memo(
       ) : (
         content
       );
-
       return (
         <li className="logoloop__item" key={key} role="listitem">
           {itemContent}
@@ -274,6 +271,7 @@ export const LogoLoop = memo(
       );
     }, []);
 
+    // Memoized logo lists for smooth copy and re-use
     const logoLists = useMemo(
       () =>
         Array.from({ length: copyCount }, (_, copyIndex) => (
@@ -292,6 +290,7 @@ export const LogoLoop = memo(
       [copyCount, logos, renderLogoItem]
     );
 
+    // Container style processing
     const containerStyle = useMemo(
       () => ({
         width: toCssLength(width) ?? "100%",
@@ -320,5 +319,4 @@ export const LogoLoop = memo(
 );
 
 LogoLoop.displayName = "LogoLoop";
-
 export default LogoLoop;

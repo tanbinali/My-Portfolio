@@ -1,5 +1,11 @@
-import { useEffect, useId, useLayoutEffect, useRef } from "react";
-
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import "./ElectricBorder.css";
 
 const ElectricBorder = ({
@@ -11,21 +17,34 @@ const ElectricBorder = ({
   className,
   style,
 }) => {
-  const rawId = useId().replace(/[:]/g, "");
-  const filterId = `turbulent-displace-${rawId}`;
+  const instanceId = useId().replace(/[:]/g, "");
+  const filterId = useMemo(
+    () => `turbulent-displace-${instanceId}`,
+    [instanceId]
+  );
   const svgRef = useRef(null);
   const rootRef = useRef(null);
   const strokeRef = useRef(null);
 
-  const updateAnim = () => {
+  // Memoize core border variables for stable referential equality
+  const vars = useMemo(
+    () => ({
+      "--electric-border-color": color,
+      "--eb-border-width": `${thickness}px`,
+    }),
+    [color, thickness]
+  );
+
+  // Animations and SVG sync, batched into a stable callback
+  const updateAnim = useCallback(() => {
     const svg = svgRef.current;
     const host = rootRef.current;
-    if (!svg || !host) return;
+    const stroke = strokeRef.current;
+    if (!svg || !host || !stroke) return;
 
-    if (strokeRef.current) {
-      strokeRef.current.style.filter = `url(#${filterId})`;
-    }
+    stroke.style.filter = `url(#${filterId})`;
 
+    // Use layoutBox for precision, fallback to getBoundingClientRect if needed
     const width = Math.max(
       1,
       Math.round(host.clientWidth || host.getBoundingClientRect().width || 0)
@@ -35,29 +54,33 @@ const ElectricBorder = ({
       Math.round(host.clientHeight || host.getBoundingClientRect().height || 0)
     );
 
-    const dyAnims = Array.from(
-      svg.querySelectorAll('feOffset > animate[attributeName="dy"]')
+    // Query all 'animate' elements for dx and dy just once
+    const dyAnims = svg.querySelectorAll(
+      'feOffset > animate[attributeName="dy"]'
     );
     if (dyAnims.length >= 2) {
       dyAnims[0].setAttribute("values", `${height}; 0`);
       dyAnims[1].setAttribute("values", `0; -${height}`);
     }
 
-    const dxAnims = Array.from(
-      svg.querySelectorAll('feOffset > animate[attributeName="dx"]')
+    const dxAnims = svg.querySelectorAll(
+      'feOffset > animate[attributeName="dx"]'
     );
     if (dxAnims.length >= 2) {
       dxAnims[0].setAttribute("values", `${width}; 0`);
       dxAnims[1].setAttribute("values", `0; -${width}`);
     }
 
+    // Calculate animation duration, clamp safely
     const baseDur = 6;
     const dur = Math.max(0.001, baseDur / (speed || 1));
     [...dyAnims, ...dxAnims].forEach((a) => a.setAttribute("dur", `${dur}s`));
 
+    // Set turbulence "chaos" effect
     const disp = svg.querySelector("feDisplacementMap");
     if (disp) disp.setAttribute("scale", String(30 * (chaos || 1)));
 
+    // Expand filter area so the SVG does not crop
     const filterEl = svg.querySelector(`#${CSS.escape(filterId)}`);
     if (filterEl) {
       filterEl.setAttribute("x", "-200%");
@@ -66,45 +89,40 @@ const ElectricBorder = ({
       filterEl.setAttribute("height", "500%");
     }
 
+    // Restart animation safely
     requestAnimationFrame(() => {
       [...dyAnims, ...dxAnims].forEach((a) => {
         if (typeof a.beginElement === "function") {
           try {
             a.beginElement();
-          } catch {
-            console.warn(
-              "ElectricBorder: beginElement failed, this may be due to a browser limitation."
-            );
+          } catch (err) {
+            // Browsers may not allow this after load, safe ignore
           }
         }
       });
     });
-  };
+  }, [speed, chaos, filterId]);
 
+  // Sync animation on speed/chaos changes
   useEffect(() => {
     updateAnim();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speed, chaos]);
+  }, [updateAnim]);
 
+  // Attach ResizeObserver, ensure cleanup and throttle with useLayoutEffect
   useLayoutEffect(() => {
-    if (!rootRef.current) return;
-    const ro = new ResizeObserver(() => updateAnim());
-    ro.observe(rootRef.current);
+    const host = rootRef.current;
+    if (!host) return;
+    const ro = new window.ResizeObserver(() => updateAnim());
+    ro.observe(host);
     updateAnim();
     return () => ro.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const vars = {
-    ["--electric-border-color"]: color,
-    ["--eb-border-width"]: `${thickness}px`,
-  };
+  }, [updateAnim]);
 
   return (
     <div
       ref={rootRef}
-      className={`electric-border ${className ?? ""}`}
-      style={{ ...vars, ...style }}
+      className={`electric-border ${className || ""}`}
+      style={useMemo(() => ({ ...vars, ...style }), [vars, style])}
     >
       <svg ref={svgRef} className="eb-svg" aria-hidden focusable="false">
         <defs>
@@ -132,7 +150,6 @@ const ElectricBorder = ({
                 calcMode="linear"
               />
             </feOffset>
-
             <feTurbulence
               type="turbulence"
               baseFrequency="0.02"
@@ -149,7 +166,6 @@ const ElectricBorder = ({
                 calcMode="linear"
               />
             </feOffset>
-
             <feTurbulence
               type="turbulence"
               baseFrequency="0.02"
@@ -166,7 +182,6 @@ const ElectricBorder = ({
                 calcMode="linear"
               />
             </feOffset>
-
             <feTurbulence
               type="turbulence"
               baseFrequency="0.02"
@@ -183,7 +198,6 @@ const ElectricBorder = ({
                 calcMode="linear"
               />
             </feOffset>
-
             <feComposite in="offsetNoise1" in2="offsetNoise2" result="part1" />
             <feComposite in="offsetNoise3" in2="offsetNoise4" result="part2" />
             <feBlend
