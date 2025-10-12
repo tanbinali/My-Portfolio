@@ -26,8 +26,8 @@ const Education = () => {
       status: "In Progress",
       image: uniimage,
       icon: <FaGraduationCap className="text-white" />,
-      color: "#10B981",
-      gradient: "from-green-500 to-emerald-600",
+      color: "#8B0000", // Deep red
+      gradient: "from-red-800 to-red-900",
       achievements: [
         "Focus on Software Engineering & Web Technologies",
         "Data Structures & Algorithms",
@@ -45,8 +45,8 @@ const Education = () => {
       status: "Completed",
       image: phitron,
       icon: <FaLaptopCode className="text-white" />,
-      color: "#F59E0B",
-      gradient: "from-amber-500 to-yellow-600",
+      color: "#6B21A8", // Purple
+      gradient: "from-purple-600 to-purple-800",
       achievements: [
         "Advanced Problem Solving Techniques",
         "Competitive Programming Fundamentals",
