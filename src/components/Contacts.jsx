@@ -230,6 +230,7 @@ const Contacts = () => {
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div variants={containerVariants} className="text-center mb-16">
+          {/* Small badge */}
           <motion.div
             variants={itemVariants}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-6 mx-auto"
@@ -240,21 +241,28 @@ const Contacts = () => {
             </span>
           </motion.div>
 
-          <motion.h2
+          {/* Frosted container for title + description */}
+          <motion.div
             variants={itemVariants}
-            className="text-4xl md:text-5xl font-bold text-white mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="max-w-3xl mx-auto mb-6 p-6 rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
           >
-            <ShinyText text="Let's Work Together" disabled={false} speed={3} />
-          </motion.h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 text-center">
+              <ShinyText
+                text="Let's Work Together"
+                disabled={false}
+                speed={3}
+              />
+            </h2>
+            <p className="text-xl text-neutral-content leading-relaxed text-center">
+              Ready to bring your ideas to life? Reach out through any of these
+              channels and let's start building something amazing.
+            </p>
+          </motion.div>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-xl text-gray-300 max-w-2xl mx-auto mb-6"
-          >
-            Ready to bring your ideas to life? Reach out through any of these
-            channels and let's start building something amazing.
-          </motion.p>
-
+          {/* Underline */}
           <motion.div
             variants={itemVariants}
             initial={{ width: 0 }}
@@ -328,7 +336,7 @@ const Contacts = () => {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="text-center mt-12"
         >
-          <p className="text-gray-400 text-lg mb-6">
+          <p className="text-white text-lg mb-6">
             Have a project in mind? Let's discuss how we can work together.
           </p>
           <motion.a

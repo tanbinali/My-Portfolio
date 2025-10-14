@@ -183,10 +183,10 @@ const Expertise = () => {
         gradient: "from-gray-400 to-gray-600",
         bgGradient: "from-gray-400/10 to-gray-600/10",
         items: [
-          { icon: <BiLogoVisualStudio />, name: "VS Code" },
+          { icon: <BiLogoVisualStudio />, name: "VSCode" },
           { icon: <SiMysql />, name: "MySQL" },
           { icon: <SiPostgresql />, name: "PostgreSQL" },
-          { icon: <SiEclipseide />, name: "Eclipse IDE" },
+          { icon: <SiEclipseide />, name: "EclipseIDE" },
           { icon: <SiXampp />, name: "XAMPP" },
         ],
       },
@@ -206,6 +206,7 @@ const Expertise = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div variants={containerVariants} className="text-center mb-16">
+          {/* Small badge */}
           <motion.div
             variants={itemVariants}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-6 mx-auto"
@@ -216,25 +217,34 @@ const Expertise = () => {
             </span>
           </motion.div>
 
-          <motion.h2
-            variants={itemVariants}
-            id="expertise-heading"
-            className="text-4xl md:text-5xl font-bold text-white mb-4"
-          >
-            <ShinyText text="Technical Expertise" disabled={false} speed={3} />
-          </motion.h2>
-
-          <motion.p
-            variants={itemVariants}
-            className="text-xl text-gray-300 max-w-2xl mx-auto mb-6"
-          >
-            A concise overview of my technical stack and areas of proficiency —
-            showcasing the technologies and tools I work with regularly.
-          </motion.p>
-
+          {/* Frosted container for title + description */}
           <motion.div
             variants={itemVariants}
-            className="w-32 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto"
+            className="max-w-3xl mx-auto mb-6 p-6 rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
+          >
+            <motion.h2
+              variants={itemVariants}
+              className="text-4xl md:text-5xl font-bold text-white mb-4 text-center"
+            >
+              <ShinyText
+                text="Technical Expertise"
+                disabled={false}
+                speed={3}
+              />
+            </motion.h2>
+
+            <motion.p
+              variants={itemVariants}
+              className="text-xl text-gray-300 leading-relaxed text-center"
+            >
+              A concise overview of my technical stack and areas of proficiency
+              — showcasing the technologies and tools I work with regularly.
+            </motion.p>
+          </motion.div>
+          {/* Underline */}
+          <motion.div
+            variants={itemVariants}
+            className="w-32 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mt-6"
           />
         </motion.div>
 
@@ -256,6 +266,7 @@ const Expertise = () => {
             pauseOnHover
             scaleOnHover
             fadeOut
+            fadeOutColor="rgba(0,0,0,1)" // full black fade
             className="logoloop logoloop--scale-hover logoloop--fade"
             style={{ width: "100%" }}
           />
@@ -291,31 +302,26 @@ const Expertise = () => {
                     </h3>
                     <p className="text-gray-400 text-sm">{category.subtitle}</p>
                   </div>
-                  <motion.ul
-                    variants={containerVariants}
-                    role="list"
-                    aria-label={`${category.title} skills`}
-                    className="relative z-10 space-y-3"
-                  >
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 justify-items-center">
                     {category.items.map((item, idx) => (
-                      <motion.li
+                      <motion.div
                         key={idx}
                         variants={itemVariants}
-                        className="flex items-center gap-4 p-3 rounded-xl bg-base-300/30 backdrop-blur-sm border border-base-300/50 hover:border-accent/20 transition-colors duration-300 group-hover:bg-base-300/50"
+                        className="flex flex-col items-center text-center p-2 w-full transition-transform duration-300 hover:scale-110"
                       >
                         <div
-                          className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-xl"
+                          className="text-3xl mb-1"
                           style={{ color: category.color }}
                           aria-hidden="true"
                         >
                           {item.icon}
                         </div>
-                        <span className="text-white font-medium text-sm">
+                        <span className="text-sm text-gray-300">
                           {item.name}
                         </span>
-                      </motion.li>
+                      </motion.div>
                     ))}
-                  </motion.ul>
+                  </div>
                 </div>
               </ElectricBorder>
             </motion.div>
