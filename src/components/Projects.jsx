@@ -295,20 +295,183 @@ const Projects = () => {
           const hoverTextClass = getHoverTextClass(theme);
           return (
             <motion.div key={index} variants={itemVariants} whileHover="hover">
-              <ElectricBorder
-                color={theme.borderColor || "#00FFFF"}
-                thickness={2}
-                speed={0.5}
-                chaos={0.2}
-                style={{ borderRadius: 16 }}
-              >
+              {/* Desktop Electric Border */}
+              <div className="hidden md:block">
+                <ElectricBorder
+                  color={theme.borderColor || "#00FFFF"}
+                  thickness={2}
+                  speed={0.8}
+                  chaos={0.1}
+                  style={{ borderRadius: 24 }}
+                >
+                  <motion.div
+                    variants={cardHoverVariants}
+                    className={`flex flex-col md:flex-row items-center gap-8 p-6 bg-base-200 rounded-2xl shadow-lg transition-shadow duration-300 hover:shadow-[${
+                      theme.borderColor || "#00FFFF"
+                    }]/40 ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {/* Card content */}
+                    <div className="relative w-full md:w-80 lg:w-96 mx-auto">
+                      <div
+                        className="carousel rounded-xl overflow-hidden"
+                        ref={(el) => (carouselRefs.current[index] = el)}
+                        aria-label={`${project.title} image carousel`}
+                      >
+                        {project.images.map((img, i) => (
+                          <div
+                            key={i}
+                            className="carousel-item relative w-full flex justify-center"
+                          >
+                            <motion.img
+                              src={img}
+                              alt={`${project.title} screenshot ${i + 1}`}
+                              loading="lazy"
+                              className="w-full h-44 object-cover cursor-pointer rounded-lg shadow-md"
+                              onClick={() => handleImageClick(img)}
+                              whileHover="hover"
+                              variants={imageHoverVariants}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <motion.button
+                        onClick={() => scrollCarousel(index, "backward")}
+                        aria-label="Scroll carousel backward"
+                        className="absolute -left-8 top-1/2 -translate-y-1/2 btn btn-circle bg-base-300/60 hover:bg-base-300"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        ❮
+                      </motion.button>
+
+                      <motion.button
+                        onClick={() => scrollCarousel(index, "forward")}
+                        aria-label="Scroll carousel forward"
+                        className="absolute -right-8 top-1/2 -translate-y-1/2 btn btn-circle bg-base-300/60 hover:bg-base-300"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        ❯
+                      </motion.button>
+                    </div>
+
+                    <div className="md:w-1/2 flex flex-col justify-between text-left">
+                      <motion.h3
+                        className="text-2xl font-bold text-white mb-2"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {project.title}
+                      </motion.h3>
+                      <motion.p
+                        className="text-gray-300 mb-4"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        {project.description}
+                      </motion.p>
+
+                      <motion.div
+                        className="flex flex-wrap gap-2 mt-2"
+                        aria-label={`${project.title} technologies used`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        {project.tech.map((tech, i) => (
+                          <motion.span
+                            key={i}
+                            className="px-2 py-1 text-xs rounded-full text-white"
+                            style={{
+                              background: `linear-gradient(90deg, ${
+                                theme.gradientFrom || "#00FFFF"
+                              }, ${theme.gradientTo || "#0077FF"})`,
+                            }}
+                            whileHover={{
+                              scale: 1.05,
+                              y: -2,
+                            }}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.1 * i, type: "spring" }}
+                          >
+                            {tech}
+                          </motion.span>
+                        ))}
+                      </motion.div>
+
+                      <motion.div
+                        className="flex gap-4 mt-4 flex-wrap"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                      >
+                        {project.frontend && (
+                          <motion.a
+                            href={project.frontend}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
+                            whileHover={{
+                              scale: 1.05,
+                              x: 5,
+                            }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <FaGithub aria-hidden="true" /> Frontend
+                          </motion.a>
+                        )}
+                        {project.backend && (
+                          <motion.a
+                            href={project.backend}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
+                            whileHover={{
+                              scale: 1.05,
+                              x: 5,
+                            }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <FaGithub aria-hidden="true" /> Backend
+                          </motion.a>
+                        )}
+                        {project.live && (
+                          <motion.a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
+                            whileHover={{
+                              scale: 1.05,
+                              x: 5,
+                            }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <FaExternalLinkAlt aria-hidden="true" /> Live
+                          </motion.a>
+                        )}
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </ElectricBorder>
+              </div>
+
+              {/* Mobile Neon Border */}
+              <div className="block md:hidden">
                 <motion.div
                   variants={cardHoverVariants}
-                  className={`flex flex-col md:flex-row items-center gap-8 p-6 bg-base-200 rounded-2xl shadow-lg transition-shadow duration-300 hover:shadow-[${
-                    theme.borderColor || "#00FFFF"
-                  }]/40 ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
+                  className={`flex flex-col md:flex-row items-center gap-8 p-6 bg-base-200 rounded-2xl shadow-lg transition-shadow duration-300`}
+                  style={{
+                    border: `2px solid ${theme.borderColor || "#00FFFF"}`,
+                    boxShadow: `0 0 15px ${theme.borderColor || "#00FFFF"}`,
+                  }}
                   whileTap={{ scale: 0.98 }}
                 >
+                  {/* Copy all card content exactly from above */}
                   <div className="relative w-full md:w-80 lg:w-96 mx-auto">
                     <div
                       className="carousel rounded-xl overflow-hidden"
@@ -335,16 +498,17 @@ const Projects = () => {
                     <motion.button
                       onClick={() => scrollCarousel(index, "backward")}
                       aria-label="Scroll carousel backward"
-                      className="absolute left-2 top-1/2 -translate-y-1/2 btn btn-circle"
+                      className="absolute -left-8 top-1/2 -translate-y-1/2 btn btn-circle bg-base-300/60 hover:bg-base-300"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
                       ❮
                     </motion.button>
+
                     <motion.button
                       onClick={() => scrollCarousel(index, "forward")}
                       aria-label="Scroll carousel forward"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 btn btn-circle"
+                      className="absolute -right-8 top-1/2 -translate-y-1/2 btn btn-circle bg-base-300/60 hover:bg-base-300"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
@@ -453,7 +617,7 @@ const Projects = () => {
                     </motion.div>
                   </div>
                 </motion.div>
-              </ElectricBorder>
+              </div>
             </motion.div>
           );
         })}

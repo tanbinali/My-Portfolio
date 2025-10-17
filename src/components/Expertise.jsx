@@ -282,14 +282,63 @@ const Expertise = () => {
         >
           {categories.map((category, i) => (
             <motion.div key={i} variants={cardVariants} whileHover="hover">
-              <ElectricBorder
-                color={category.color}
-                speed={0.8}
-                chaos={0.1}
-                thickness={2}
-                style={{ borderRadius: 20 }}
-              >
-                <div className="relative bg-base-200/50 backdrop-blur-md rounded-2xl p-8 border border-base-300/50 hover:border-accent/30 transition-transform duration-500 group hover:scale-105 overflow-hidden">
+              {/* Desktop/Laptop: ElectricBorder */}
+              <div className="hidden md:block">
+                <ElectricBorder
+                  color={category.color}
+                  speed={0.8}
+                  chaos={0.1}
+                  thickness={2}
+                  style={{ borderRadius: 20 }}
+                >
+                  <div className="relative bg-base-200/50 backdrop-blur-md rounded-2xl p-8 border border-transparent hover:border-accent/30 transition-transform duration-500 group hover:scale-105 overflow-hidden">
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${category.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
+                      aria-hidden="true"
+                    />
+                    <div className="relative z-10 text-center mb-8">
+                      <h3
+                        className={`text-2xl font-bold mb-2 bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}
+                      >
+                        {category.title}
+                      </h3>
+                      <p className="text-gray-400 text-sm">
+                        {category.subtitle}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 justify-items-center">
+                      {category.items.map((item, idx) => (
+                        <motion.div
+                          key={idx}
+                          variants={itemVariants}
+                          className="flex flex-col items-center text-center p-2 w-full transition-transform duration-300 hover:scale-110"
+                        >
+                          <div
+                            className="text-3xl mb-1"
+                            style={{ color: category.color }}
+                            aria-hidden="true"
+                          >
+                            {item.icon}
+                          </div>
+                          <span className="text-sm text-gray-300">
+                            {item.name}
+                          </span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </ElectricBorder>
+              </div>
+
+              {/* Mobile/Small screens: Static neon border */}
+              <div className="block md:hidden">
+                <div
+                  className="relative bg-base-200/50 backdrop-blur-md rounded-2xl p-8 border-2 transition-transform duration-500 group hover:scale-105 overflow-hidden"
+                  style={{
+                    borderColor: category.color,
+                    boxShadow: `0 0 10px ${category.color}`,
+                  }}
+                >
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${category.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
                     aria-hidden="true"
@@ -323,7 +372,7 @@ const Expertise = () => {
                     ))}
                   </div>
                 </div>
-              </ElectricBorder>
+              </div>
             </motion.div>
           ))}
         </motion.div>
