@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaGithub, FaExternalLinkAlt, FaTimes } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaTimes, FaImages } from "react-icons/fa";
 import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
 
@@ -35,7 +35,7 @@ import p3img3 from "../assets/eventmanager/image (2).webp";
 
 const Projects = () => {
   const [zoomedImage, setZoomedImage] = useState(null);
-  const carouselRefs = useRef([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState({});
 
   // Animation variants
   const containerVariants = {
@@ -68,8 +68,7 @@ const Projects = () => {
 
   const cardHoverVariants = {
     hover: {
-      y: -8,
-      scale: 1.02,
+      y: -5,
       transition: {
         duration: 0.3,
         ease: "easeOut",
@@ -79,7 +78,7 @@ const Projects = () => {
 
   const imageHoverVariants = {
     hover: {
-      scale: 1.05,
+      scale: 1.03,
       transition: {
         duration: 0.3,
         ease: "easeOut",
@@ -110,41 +109,12 @@ const Projects = () => {
     },
   };
 
-  const scrollCarousel = useCallback((index, direction) => {
-    const carousel = carouselRefs.current[index];
-    if (!carousel) return;
-    const scrollAmount = carousel.clientWidth;
-    const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-    let newScrollLeft =
-      direction === "forward"
-        ? carousel.scrollLeft + scrollAmount
-        : carousel.scrollLeft - scrollAmount;
-    if (direction === "forward" && newScrollLeft > maxScrollLeft) {
-      newScrollLeft = 0;
-    } else if (direction === "backward" && newScrollLeft < 0) {
-      newScrollLeft = maxScrollLeft;
-    }
-    carousel.scrollTo({ left: newScrollLeft, behavior: "smooth" });
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      carouselRefs.current.forEach((carousel) => {
-        if (!carousel) return;
-        const scrollAmount = carousel.clientWidth;
-        const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-        const newScrollLeft = carousel.scrollLeft + scrollAmount;
-        carousel.scrollTo({
-          left: newScrollLeft > maxScrollLeft ? 0 : newScrollLeft,
-          behavior: "smooth",
-        });
-      });
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   const handleImageClick = useCallback((img) => setZoomedImage(img), []);
   const closeZoom = useCallback(() => setZoomedImage(null), []);
+
+  const handleThumbnailClick = useCallback((projectIndex, imageIndex) => {
+    setSelectedImageIndex((prev) => ({ ...prev, [projectIndex]: imageIndex }));
+  }, []);
 
   const getHoverTextClass = useCallback(
     (theme) => theme?.hoverText || "text-cyan-400",
@@ -233,430 +203,339 @@ const Projects = () => {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       id="projects"
-      className="py-16 px-6 md:px-16 lg:px-24 text-center"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-transparent"
     >
-      <motion.div variants={containerVariants} className="text-center mb-16">
-        <motion.div
-          variants={itemVariants}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-6 mx-auto"
-        >
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <motion.div variants={containerVariants} className="text-center mb-16">
+          {/* Small badge */}
           <motion.div
-            className="w-2 h-2 bg-green-400 rounded-full"
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            variants={itemVariants}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-6 mx-auto"
+          >
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <span className="text-sm font-medium text-accent">
+              Featured Work
+            </span>
+          </motion.div>
+
+          {/* Frosted container for title + description */}
+          <motion.div
+            variants={itemVariants}
+            className="max-w-3xl mx-auto mb-6 p-6 rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
+          >
+            <motion.h2
+              variants={itemVariants}
+              className="text-4xl md:text-5xl font-bold text-white mb-4 text-center"
+            >
+              <ShinyText text="Projects Showcase" disabled={false} speed={3} />
+            </motion.h2>
+
+            <motion.p
+              variants={itemVariants}
+              className="text-xl text-gray-300 leading-relaxed text-center"
+            >
+              A showcase of my professional projects demonstrating full-stack
+              development capabilities, modern design principles, and real-world
+              problem-solving skills.
+            </motion.p>
+          </motion.div>
+          {/* Underline */}
+          <motion.div
+            variants={itemVariants}
+            className="w-32 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mt-6"
           />
-          <span className="text-sm font-medium text-accent">Featured Work</span>
         </motion.div>
 
+        {/* Projects Grid */}
         <motion.div
-          variants={itemVariants}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="max-w-3xl mx-auto mb-6 p-6 rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
+          variants={containerVariants}
+          className="grid gap-12 lg:gap-16"
         >
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-bold text-white mb-4 text-center"
-          >
-            <ShinyText text="Projects & Portfolio" disabled={false} speed={3} />
-          </motion.h2>
+          {projects.map((project, index) => {
+            const theme = project.theme || {};
+            const hoverTextClass = getHoverTextClass(theme);
+            const selectedIndex = selectedImageIndex[index] || 0;
+            const mainImage = project.images[selectedIndex];
 
-          <motion.p
-            variants={itemVariants}
-            className="text-xl text-gray-300 leading-relaxed text-center"
-          >
-            A showcase of my professional projects demonstrating full-stack
-            development capabilities, modern design principles, and real-world
-            problem-solving skills.
-          </motion.p>
-        </motion.div>
-
-        <motion.div
-          variants={itemVariants}
-          initial={{ width: 0 }}
-          whileInView={{ width: "8rem" }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          viewport={{ once: true }}
-          className="w-32 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto"
-        />
-      </motion.div>
-
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-        className="flex flex-col gap-12"
-        aria-live="polite"
-      >
-        {projects.map((project, index) => {
-          const theme = project.theme || {};
-          const hoverTextClass = getHoverTextClass(theme);
-          return (
-            <motion.div key={index} variants={itemVariants} whileHover="hover">
-              {/* Desktop Electric Border */}
-              <div className="hidden md:block">
-                <ElectricBorder
-                  color={theme.borderColor || "#00FFFF"}
-                  thickness={2}
-                  speed={0.8}
-                  chaos={0.1}
-                  style={{ borderRadius: 24 }}
-                >
-                  <motion.div
-                    variants={cardHoverVariants}
-                    className={`flex flex-col md:flex-row items-center gap-8 p-6 bg-base-200 rounded-2xl shadow-lg transition-shadow duration-300 hover:shadow-[${
-                      theme.borderColor || "#00FFFF"
-                    }]/40 ${index % 2 !== 0 ? "md:flex-row-reverse" : ""}`}
-                    whileTap={{ scale: 0.98 }}
+            return (
+              <motion.article
+                key={index}
+                variants={itemVariants}
+                whileHover="hover"
+                className="group"
+              >
+                {/* Desktop Layout */}
+                <div className="hidden lg:block">
+                  <ElectricBorder
+                    color={theme.borderColor}
+                    thickness={2}
+                    speed={0.8}
+                    chaos={0.1}
+                    style={{ borderRadius: 20 }}
                   >
-                    {/* Card content */}
-                    <div className="relative w-full md:w-80 lg:w-96 mx-auto">
-                      <div
-                        className="carousel rounded-xl overflow-hidden"
-                        ref={(el) => (carouselRefs.current[index] = el)}
-                        aria-label={`${project.title} image carousel`}
-                      >
-                        {project.images.map((img, i) => (
-                          <div
-                            key={i}
-                            className="carousel-item relative w-full flex justify-center"
-                          >
+                    <motion.div
+                      variants={cardHoverVariants}
+                      className={`flex flex-col xl:flex-row items-stretch gap-8 p-8 bg-base-200 rounded-2xl shadow-2xl ${
+                        index % 2 !== 0 ? "xl:flex-row-reverse" : ""
+                      }`}
+                    >
+                      {/* Image Section */}
+                      <div className="xl:w-1/2">
+                        <div className="space-y-4">
+                          {/* Main Image */}
+                          <div className="relative rounded-xl overflow-hidden bg-base-300/20 aspect-video">
                             <motion.img
-                              src={img}
-                              alt={`${project.title} screenshot ${i + 1}`}
-                              loading="lazy"
-                              className="w-full h-44 object-cover cursor-pointer rounded-lg shadow-md"
-                              onClick={() => handleImageClick(img)}
-                              whileHover="hover"
-                              variants={imageHoverVariants}
+                              src={mainImage}
+                              alt={`${project.title} main screenshot`}
+                              className="w-full h-full object-cover cursor-pointer"
+                              onClick={() => handleImageClick(mainImage)}
+                              whileHover={{ scale: 1.03 }}
                             />
                           </div>
-                        ))}
-                      </div>
-                      <motion.button
-                        onClick={() => scrollCarousel(index, "backward")}
-                        aria-label="Scroll carousel backward"
-                        className="absolute -left-8 top-1/2 -translate-y-1/2 btn btn-circle bg-base-300/60 hover:bg-base-300"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        ❮
-                      </motion.button>
 
-                      <motion.button
-                        onClick={() => scrollCarousel(index, "forward")}
-                        aria-label="Scroll carousel forward"
-                        className="absolute -right-8 top-1/2 -translate-y-1/2 btn btn-circle bg-base-300/60 hover:bg-base-300"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        ❯
-                      </motion.button>
+                          {/* Slider */}
+                          {project.images.length > 1 && (
+                            <motion.div className="flex space-x-3 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300 py-2">
+                              {project.images.map((img, i) => (
+                                <motion.img
+                                  key={i}
+                                  src={img}
+                                  alt={`${project.title} thumbnail ${i + 1}`}
+                                  className={`h-20 w-auto rounded-lg cursor-pointer flex-shrink-0 border-2 transition-all ${
+                                    selectedIndex === i
+                                      ? "border-white ring-2 ring-white/50"
+                                      : "border-transparent hover:border-white/50"
+                                  }`}
+                                  onClick={() => handleThumbnailClick(index, i)}
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                />
+                              ))}
+                            </motion.div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="xl:w-1/2 flex flex-col justify-between">
+                        <div>
+                          <motion.h3 className="text-2xl xl:text-3xl font-bold text-white mb-4">
+                            {project.title}
+                          </motion.h3>
+
+                          <motion.p className="text-gray-300 mb-6 leading-relaxed">
+                            {project.description}
+                          </motion.p>
+
+                          <motion.div className="flex flex-wrap gap-2 mb-6">
+                            {project.tech.map((tech, i) => (
+                              <motion.span
+                                key={i}
+                                className="px-3 py-1.5 text-sm rounded-full text-white font-medium backdrop-blur-sm"
+                                style={{
+                                  background: `linear-gradient(135deg, ${theme.gradientFrom}, ${theme.gradientTo})`,
+                                }}
+                                whileHover={{
+                                  scale: 1.05,
+                                  y: -2,
+                                }}
+                              >
+                                {tech}
+                              </motion.span>
+                            ))}
+                          </motion.div>
+                        </div>
+
+                        <motion.div className="flex gap-4 flex-wrap">
+                          {project.frontend && (
+                            <motion.a
+                              href={project.frontend}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`btn btn-outline border-2 text-white hover:${hoverTextClass.replace(
+                                "text-",
+                                ""
+                              )} hover:border-current gap-2`}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <FaGithub className="text-lg" />
+                              Frontend
+                            </motion.a>
+                          )}
+                          {project.backend && (
+                            <motion.a
+                              href={project.backend}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`btn btn-outline border-2 text-white hover:${hoverTextClass.replace(
+                                "text-",
+                                ""
+                              )} hover:border-current gap-2`}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <FaGithub className="text-lg" />
+                              Backend
+                            </motion.a>
+                          )}
+                          {project.live && (
+                            <motion.a
+                              href={project.live}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`btn bg-white text-gray-900 hover:bg-gray-100 gap-2 border-0 font-semibold`}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <FaExternalLinkAlt className="text-lg" />
+                              Live Demo
+                            </motion.a>
+                          )}
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  </ElectricBorder>
+                </div>
+
+                {/* Mobile Layout */}
+                <div className="block lg:hidden">
+                  <motion.div
+                    variants={cardHoverVariants}
+                    className="bg-base-200 rounded-2xl shadow-2xl overflow-hidden border-2"
+                    style={{ borderColor: theme.borderColor }}
+                  >
+                    {/* Image Section */}
+                    <div className="relative">
+                      <div className="relative aspect-video bg-base-300/20">
+                        <motion.img
+                          src={mainImage}
+                          alt={`${project.title} main screenshot`}
+                          className="w-full h-full object-cover"
+                          onClick={() => handleImageClick(mainImage)}
+                        />
+
+                        {/* Image Count Badge */}
+                        <div className="absolute top-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                          <FaImages className="text-xs" />
+                          <span>{project.images.length}</span>
+                        </div>
+                      </div>
+
+                      {/* Mobile Thumbnail Slider */}
+                      {project.images.length > 1 && (
+                        <div className="p-4 overflow-x-auto flex space-x-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
+                          {project.images.map((img, i) => (
+                            <img
+                              key={i}
+                              src={img}
+                              alt={`${project.title} thumbnail ${i + 1}`}
+                              className={`h-16 w-auto rounded-lg cursor-pointer flex-shrink-0 border-2 transition-all ${
+                                selectedIndex === i
+                                  ? "border-white"
+                                  : "border-transparent hover:border-white/50"
+                              }`}
+                              onClick={() => handleThumbnailClick(index, i)}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
 
-                    <div className="md:w-1/2 flex flex-col justify-between text-left">
-                      <motion.h3
-                        className="text-2xl font-bold text-white mb-2"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                      >
+                    {/* Content */}
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-white mb-3">
                         {project.title}
-                      </motion.h3>
-                      <motion.p
-                        className="text-gray-300 mb-4"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                      >
-                        {project.description}
-                      </motion.p>
+                      </h3>
 
-                      <motion.div
-                        className="flex flex-wrap gap-2 mt-2"
-                        aria-label={`${project.title} technologies used`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                      >
+                      <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                        {project.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5 mb-4">
                         {project.tech.map((tech, i) => (
-                          <motion.span
+                          <span
                             key={i}
                             className="px-2 py-1 text-xs rounded-full text-white"
                             style={{
-                              background: `linear-gradient(90deg, ${
-                                theme.gradientFrom || "#00FFFF"
-                              }, ${theme.gradientTo || "#0077FF"})`,
+                              background: `linear-gradient(135deg, ${theme.gradientFrom}, ${theme.gradientTo})`,
                             }}
-                            whileHover={{
-                              scale: 1.05,
-                              y: -2,
-                            }}
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: 0.1 * i, type: "spring" }}
                           >
                             {tech}
-                          </motion.span>
+                          </span>
                         ))}
-                      </motion.div>
+                      </div>
 
-                      <motion.div
-                        className="flex gap-4 mt-4 flex-wrap"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                      >
+                      <div className="flex gap-3 flex-wrap">
                         {project.frontend && (
-                          <motion.a
+                          <a
                             href={project.frontend}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
-                            whileHover={{
-                              scale: 1.05,
-                              x: 5,
-                            }}
-                            whileTap={{ scale: 0.95 }}
+                            className="btn btn-sm btn-outline border-2 text-white gap-1.5 flex-1 min-w-0"
                           >
-                            <FaGithub aria-hidden="true" /> Frontend
-                          </motion.a>
+                            <FaGithub className="text-sm" />
+                            Frontend
+                          </a>
                         )}
                         {project.backend && (
-                          <motion.a
+                          <a
                             href={project.backend}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
-                            whileHover={{
-                              scale: 1.05,
-                              x: 5,
-                            }}
-                            whileTap={{ scale: 0.95 }}
+                            className="btn btn-sm btn-outline border-2 text-white gap-1.5 flex-1 min-w-0"
                           >
-                            <FaGithub aria-hidden="true" /> Backend
-                          </motion.a>
+                            <FaGithub className="text-sm" />
+                            Backend
+                          </a>
                         )}
                         {project.live && (
-                          <motion.a
+                          <a
                             href={project.live}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
-                            whileHover={{
-                              scale: 1.05,
-                              x: 5,
-                            }}
-                            whileTap={{ scale: 0.95 }}
+                            className="btn btn-sm bg-white text-gray-900 gap-1.5 flex-1 min-w-0 border-0 font-medium"
                           >
-                            <FaExternalLinkAlt aria-hidden="true" /> Live
-                          </motion.a>
+                            <FaExternalLinkAlt className="text-sm" />
+                            Live
+                          </a>
                         )}
-                      </motion.div>
+                      </div>
                     </div>
                   </motion.div>
-                </ElectricBorder>
-              </div>
+                </div>
+              </motion.article>
+            );
+          })}
+        </motion.div>
+      </div>
 
-              {/* Mobile Neon Border */}
-              <div className="block md:hidden">
-                <motion.div
-                  variants={cardHoverVariants}
-                  className={`flex flex-col md:flex-row items-center gap-8 p-6 bg-base-200 rounded-2xl shadow-lg transition-shadow duration-300`}
-                  style={{
-                    border: `2px solid ${theme.borderColor || "#00FFFF"}`,
-                    boxShadow: `0 0 15px ${theme.borderColor || "#00FFFF"}`,
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {/* Copy all card content exactly from above */}
-                  <div className="relative w-full md:w-80 lg:w-96 mx-auto">
-                    <div
-                      className="carousel rounded-xl overflow-hidden"
-                      ref={(el) => (carouselRefs.current[index] = el)}
-                      aria-label={`${project.title} image carousel`}
-                    >
-                      {project.images.map((img, i) => (
-                        <div
-                          key={i}
-                          className="carousel-item relative w-full flex justify-center"
-                        >
-                          <motion.img
-                            src={img}
-                            alt={`${project.title} screenshot ${i + 1}`}
-                            loading="lazy"
-                            className="w-full h-44 object-cover cursor-pointer rounded-lg shadow-md"
-                            onClick={() => handleImageClick(img)}
-                            whileHover="hover"
-                            variants={imageHoverVariants}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    <motion.button
-                      onClick={() => scrollCarousel(index, "backward")}
-                      aria-label="Scroll carousel backward"
-                      className="absolute -left-8 top-1/2 -translate-y-1/2 btn btn-circle bg-base-300/60 hover:bg-base-300"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      ❮
-                    </motion.button>
-
-                    <motion.button
-                      onClick={() => scrollCarousel(index, "forward")}
-                      aria-label="Scroll carousel forward"
-                      className="absolute -right-8 top-1/2 -translate-y-1/2 btn btn-circle bg-base-300/60 hover:bg-base-300"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      ❯
-                    </motion.button>
-                  </div>
-
-                  <div className="md:w-1/2 flex flex-col justify-between text-left">
-                    <motion.h3
-                      className="text-2xl font-bold text-white mb-2"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      {project.title}
-                    </motion.h3>
-                    <motion.p
-                      className="text-gray-300 mb-4"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                    >
-                      {project.description}
-                    </motion.p>
-
-                    <motion.div
-                      className="flex flex-wrap gap-2 mt-2"
-                      aria-label={`${project.title} technologies used`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      {project.tech.map((tech, i) => (
-                        <motion.span
-                          key={i}
-                          className="px-2 py-1 text-xs rounded-full text-white"
-                          style={{
-                            background: `linear-gradient(90deg, ${
-                              theme.gradientFrom || "#00FFFF"
-                            }, ${theme.gradientTo || "#0077FF"})`,
-                          }}
-                          whileHover={{
-                            scale: 1.05,
-                            y: -2,
-                          }}
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.1 * i, type: "spring" }}
-                        >
-                          {tech}
-                        </motion.span>
-                      ))}
-                    </motion.div>
-
-                    <motion.div
-                      className="flex gap-4 mt-4 flex-wrap"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                    >
-                      {project.frontend && (
-                        <motion.a
-                          href={project.frontend}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
-                          whileHover={{
-                            scale: 1.05,
-                            x: 5,
-                          }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <FaGithub aria-hidden="true" /> Frontend
-                        </motion.a>
-                      )}
-                      {project.backend && (
-                        <motion.a
-                          href={project.backend}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
-                          whileHover={{
-                            scale: 1.05,
-                            x: 5,
-                          }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <FaGithub aria-hidden="true" /> Backend
-                        </motion.a>
-                      )}
-                      {project.live && (
-                        <motion.a
-                          href={project.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`text-white hover:${hoverTextClass} flex items-center gap-1`}
-                          whileHover={{
-                            scale: 1.05,
-                            x: 5,
-                          }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <FaExternalLinkAlt aria-hidden="true" /> Live
-                        </motion.a>
-                      )}
-                    </motion.div>
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </motion.div>
-
+      {/* Image Zoom Modal */}
       <AnimatePresence>
         {zoomedImage && (
           <motion.div
-            role="dialog"
-            aria-modal="true"
-            tabIndex={-1}
-            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={closeZoom}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") closeZoom();
-            }}
             initial="hidden"
             animate="visible"
             exit="exit"
             variants={zoomModalVariants}
           >
             <motion.div
-              className="relative"
+              className="relative max-w-6xl max-h-full"
               onClick={(e) => e.stopPropagation()}
-              variants={zoomModalVariants}
             >
               <motion.img
                 src={zoomedImage}
                 alt="Zoomed project screenshot"
-                className="max-h-[90vh] max-w-[90vw] object-contain rounded-xl"
-                loading="lazy"
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
+                className="max-h-[85vh] max-w-full object-contain rounded-lg"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.3 }}
               />
               <motion.button
-                type="button"
-                aria-label="Close zoomed image"
-                className="absolute top-2 right-2 text-white text-2xl hover:text-red-500 transition"
+                className="absolute -top-12 right-0 text-white text-2xl hover:text-red-400 transition-colors"
                 onClick={closeZoom}
                 whileHover={{ scale: 1.2, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}

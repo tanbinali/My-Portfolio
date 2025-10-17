@@ -71,9 +71,7 @@ const underlineVariants = { hidden: { width: 0 }, visible: { width: "100%" } };
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-
   const [pendingScrollId, setPendingScrollId] = useState(null);
-
   const navRef = useRef(null);
 
   useEffect(() => {
@@ -83,27 +81,21 @@ const Navbar = () => {
   }, []);
 
   const performScroll = (id) => {
+    if (id === "top") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     const section = document.getElementById(id);
     if (!section) return;
 
     const navEl = navRef.current;
-    const navHeight = navEl
-      ? Math.ceil(navEl.getBoundingClientRect().height)
-      : 0;
+    const navHeight = navEl ? navEl.offsetHeight : 0;
 
-    const sectionTop = section.getBoundingClientRect().top + window.pageYOffset;
-
-    const offset = 8;
-    const target = Math.max(0, sectionTop - navHeight - offset);
+    // Use section.offsetTop instead of getBoundingClientRect
+    const target = section.offsetTop - navHeight;
 
     window.scrollTo({ top: target, behavior: "smooth" });
-
-    setTimeout(() => {
-      const stillHidden = section.getBoundingClientRect().top < navHeight + 4;
-      if (stillHidden) {
-        window.scrollTo({ top: target + 2, behavior: "smooth" });
-      }
-    }, 650);
   };
 
   const handleDesktopClick = (id) => {
@@ -131,7 +123,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <motion.div
-          onClick={() => performScroll("hero")}
+          onClick={() => performScroll("top")}
           className="cursor-pointer flex items-center gap-3 group"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -140,13 +132,8 @@ const Navbar = () => {
             className="p-1.5 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors duration-300"
             whileHover={{ rotate: 5 }}
           >
-            <img
-              src={logo}
-              alt="Mohammad Khan Auto Parts"
-              className="h-9 w-auto"
-            />
+            <img src={logo} alt="Logo" className="h-9 w-auto" />
           </motion.div>
-
           <span className="text-xl sm:text-2xl font-bold text-primary font-heading tracking-tight">
             MD Tanbin's Portfolio
           </span>
