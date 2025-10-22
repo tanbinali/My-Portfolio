@@ -4,7 +4,13 @@ import avatar from "../assets/picture.webp";
 import logo from "../assets/logo.webp";
 import miniAvatar from "../assets/pfp.webp";
 import resume from "../assets/Tanbin Resume.pdf";
-import { FaDiscord, FaGithub, FaLinkedin, FaDownload } from "react-icons/fa";
+import {
+  FaDiscord,
+  FaGithub,
+  FaLinkedin,
+  FaDownload,
+  FaWhatsapp,
+} from "react-icons/fa";
 import { FiMail } from "react-icons/fi";
 import { CgNotes } from "react-icons/cg";
 import TextType from "./TextType/TextType";
@@ -19,12 +25,6 @@ const socialLinks = [
     color: "hover:text-gray-400",
   },
   {
-    icon: FaLinkedin,
-    href: "https://linkedin.com/in/mdtanbinali",
-    label: "LinkedIn",
-    color: "hover:text-blue-400",
-  },
-  {
     icon: FaDiscord,
     href: "https://discord.com/users/570223124608450570",
     label: "Discord",
@@ -37,6 +37,18 @@ const socialLinks = [
     color: "hover:text-red-400",
   },
   {
+    icon: FaWhatsapp,
+    href: "https://wa.me/8801882393841",
+    label: "Whatsapp",
+    color: "hover:text-red-400",
+  },
+  {
+    icon: FaLinkedin,
+    href: "https://linkedin.com/in/mdtanbinali",
+    label: "LinkedIn",
+    color: "hover:text-blue-400",
+  },
+  {
     icon: CgNotes,
     href: resume,
     label: "Resume",
@@ -46,7 +58,7 @@ const socialLinks = [
 ];
 
 const Hero = () => {
-  // Animation variants
+  // Animation variants - KEEPING ORIGINAL
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -101,7 +113,7 @@ const Hero = () => {
     },
   };
 
-  // Memoize social link elements to avoid re-creating on every render
+  // Memoize social link elements - KEEPING ORIGINAL
   const socialLinkElements = useMemo(() => {
     return socialLinks.map(({ icon: Icon, label, href, download, color }) => (
       <motion.a
@@ -136,7 +148,7 @@ const Hero = () => {
       animate="visible"
       className="relative flex flex-col lg:flex-row items-center justify-between w-full min-h-screen px-6 md:px-16 lg:px-24 py-16 lg:py-20 overflow-hidden bg-transparent"
     >
-      {/* Background Elements - reduced complexity on mobile */}
+      {/* Background Elements - ORIGINAL STYLE */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
@@ -178,12 +190,12 @@ const Hero = () => {
         />
       </div>
 
-      {/* LEFT CONTENT */}
+      {/* LEFT CONTENT - ORIGINAL STRUCTURE */}
       <motion.div
         variants={containerVariants}
         className="flex-1 flex flex-col justify-center gap-8 max-w-2xl z-10 order-2 lg:order-1"
       >
-        {/* Badge */}
+        {/* Badge - ORIGINAL */}
         <motion.div
           variants={itemVariants}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-4"
@@ -194,7 +206,7 @@ const Hero = () => {
           </span>
         </motion.div>
 
-        {/* Main Heading */}
+        {/* Main Heading - ORIGINAL */}
         <motion.div variants={itemVariants} className="space-y-4">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
             <motion.span
@@ -213,7 +225,7 @@ const Hero = () => {
           </h1>
         </motion.div>
 
-        {/* Typing Text */}
+        {/* Typing Text - ORIGINAL */}
         <motion.div variants={itemVariants} className="space-y-3">
           <TextType
             as="h2"
@@ -241,7 +253,7 @@ const Hero = () => {
           />
         </motion.div>
 
-        {/* Description */}
+        {/* Description - ORIGINAL */}
         <motion.p
           variants={itemVariants}
           className="text-lg sm:text-xl text-neutral-content leading-relaxed max-w-xl backdrop-blur-sm bg-base-200/30 rounded-2xl p-6 border border-base-300/50"
@@ -256,7 +268,7 @@ const Hero = () => {
           bring innovative ideas to life with robust, scalable solutions.
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons - ORIGINAL */}
         <motion.div
           variants={itemVariants}
           className="flex flex-col sm:flex-row gap-4"
@@ -289,34 +301,34 @@ const Hero = () => {
           </motion.a>
         </motion.div>
 
-        {/* Social Links */}
+        {/* Social Links - ORIGINAL */}
         <motion.div
           variants={containerVariants}
           className="flex flex-col gap-4 pt-4"
         >
           <motion.p
             variants={itemVariants}
-            className="text-sm font-medium text-neutral-content uppercase tracking-wider"
+            className="text-sm font-medium text-neutral-content uppercase tracking-wider text-center lg:text-left"
           >
             Connect with me
           </motion.p>
           <motion.div
             variants={containerVariants}
-            className="flex gap-3 flex-wrap md:flex-nowrap"
+            className="flex gap-3 flex-wrap justify-center lg:justify-start"
           >
             {socialLinkElements}
           </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* RIGHT CARD - Profile */}
+      {/* RIGHT CARD - Profile - ORIGINAL STYLE */}
       <motion.div
         variants={cardVariants}
         animate="floating"
         className="flex-1 flex justify-center items-center mt-8 lg:mt-0 mb-12 lg:mb-0 z-10 order-1 lg:order-2"
       >
         <div className="relative max-w-xs sm:max-w-sm w-full">
-          {/* Decorative elements */}
+          {/* Decorative elements - ORIGINAL */}
           <motion.div
             animate={{
               rotate: [0, 5, 0, -5, 0],

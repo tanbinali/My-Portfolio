@@ -13,9 +13,12 @@ import {
   SiBootstrap,
   SiEclipseide,
   SiXampp,
+  SiCodeblocks,
 } from "react-icons/si";
+import { DiDjango } from "react-icons/di";
+import { TbApi } from "react-icons/tb";
 import { BiLogoVisualStudio } from "react-icons/bi";
-import { FaJava } from "react-icons/fa";
+import { FaGitAlt, FaJava } from "react-icons/fa";
 import { MdHtml } from "react-icons/md";
 import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
@@ -88,32 +91,48 @@ const Expertise = () => {
     },
   };
 
-  // ✅ Hooks must be inside the component
   const techLogos = useMemo(
     () => [
+      { node: <SiPython />, title: "Python", href: "https://www.python.org" },
+      {
+        node: <DiDjango />,
+        title: "Django MVT",
+        href: "https://www.djangoproject.com",
+      },
+      {
+        node: <TbApi />,
+        title: "Django DRF",
+        href: "https://www.django-rest-framework.org/",
+      },
       { node: <SiReact />, title: "React", href: "https://react.dev" },
       {
         node: <SiTailwindcss />,
-        title: "Tailwind CSS",
+        title: "TailwindCSS",
         href: "https://tailwindcss.com",
       },
-      { node: <SiPython />, title: "Python", href: "https://www.python.org" },
+      { node: <MdHtml />, title: "HTML", href: "https://html.com/" },
       {
-        node: <SiDjango />,
-        title: "Django",
-        href: "https://www.djangoproject.com",
+        node: <SiJavascript />,
+        title: "JavaScript",
+        href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
       },
+      { node: <FaJava />, title: "Java", href: "https://www.java.com/en" },
       {
         node: <SiCplusplus />,
         title: "C++",
         href: "https://www.w3schools.com/cpp/",
       },
       { node: <SiC />, title: "C", href: "https://www.cprogramming.com/" },
-      { node: <MdHtml />, title: "HTML", href: "https://html.com/" },
       {
-        node: <SiJavascript />,
-        title: "JavaScript",
-        href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+        node: <SiBootstrap />,
+        title: "Bootstrap",
+        href: "https://getbootstrap.com",
+      },
+      { node: <FaGitAlt />, title: "Git", href: "https://git-scm.com/" },
+      {
+        node: <BiLogoVisualStudio />,
+        title: "VS Code",
+        href: "https://visualstudio.microsoft.com/",
       },
       { node: <SiMysql />, title: "MySQL", href: "https://www.mysql.com/" },
       {
@@ -122,25 +141,19 @@ const Expertise = () => {
         href: "https://www.postgresql.org",
       },
       {
-        node: <BiLogoVisualStudio />,
-        title: "VS Code",
-        href: "https://visualstudio.microsoft.com/",
-      },
-      {
-        node: <SiBootstrap />,
-        title: "Bootstrap",
-        href: "https://getbootstrap.com",
-      },
-      {
         node: <SiEclipseide />,
         title: "Eclipse IDE",
         href: "http://eclipseide.org/",
       },
-      { node: <FaJava />, title: "Java", href: "https://www.java.com/en" },
       {
         node: <SiXampp />,
         title: "XAMPP",
         href: "https://www.apachefriends.org",
+      },
+      {
+        node: <SiCodeblocks />,
+        title: "CodeBlocks",
+        href: "https://www.codeblocks.org/",
       },
     ],
     []
@@ -156,7 +169,8 @@ const Expertise = () => {
         bgGradient: "from-green-500/10 to-emerald-600/10",
         items: [
           { icon: <SiPython />, name: "Python" },
-          { icon: <SiDjango />, name: "Django" },
+          { icon: <DiDjango />, name: "Django MVT" },
+          { icon: <TbApi />, name: "Django DRF" },
           { icon: <SiReact />, name: "React" },
           { icon: <SiTailwindcss />, name: "TailwindCSS" },
           { icon: <MdHtml />, name: "HTML" },
@@ -174,6 +188,7 @@ const Expertise = () => {
           { icon: <SiCplusplus />, name: "C++" },
           { icon: <SiC />, name: "C" },
           { icon: <SiBootstrap />, name: "Bootstrap" },
+          { icon: <FaGitAlt />, name: "Git" },
         ],
       },
       {
@@ -188,6 +203,7 @@ const Expertise = () => {
           { icon: <SiPostgresql />, name: "PostgreSQL" },
           { icon: <SiEclipseide />, name: "EclipseIDE" },
           { icon: <SiXampp />, name: "XAMPP" },
+          { icon: <SiCodeblocks />, name: "CodeBlocks" },
         ],
       },
     ],
@@ -200,19 +216,22 @@ const Expertise = () => {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       id="expertise"
-      className="py-20 px-6 md:px-16 lg:px-24 bg-transparent relative"
+      className="py-12 xs:py-16 sm:py-20 px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-transparent relative overflow-hidden"
       aria-labelledby="expertise-heading"
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div variants={containerVariants} className="text-center mb-16">
+        <motion.div
+          variants={containerVariants}
+          className="text-center mb-12 sm:mb-16"
+        >
           {/* Small badge */}
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-6 mx-auto"
+            className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 py-1.5 xs:py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-4 xs:mb-6 mx-auto"
           >
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-accent">
+            <span className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-400 rounded-full animate-pulse" />
+            <span className="text-xs xs:text-sm font-medium text-accent">
               Technical Skills
             </span>
           </motion.div>
@@ -220,11 +239,11 @@ const Expertise = () => {
           {/* Frosted container for title + description */}
           <motion.div
             variants={itemVariants}
-            className="max-w-3xl mx-auto mb-6 p-6 rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
+            className="max-w-3xl mx-auto mb-4 xs:mb-6 p-4 xs:p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
           >
             <motion.h2
               variants={itemVariants}
-              className="text-4xl md:text-5xl font-bold text-white mb-4 text-center"
+              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 xs:mb-4 text-center"
             >
               <ShinyText
                 text="Technical Expertise"
@@ -235,7 +254,7 @@ const Expertise = () => {
 
             <motion.p
               variants={itemVariants}
-              className="text-xl text-gray-300 leading-relaxed text-center"
+              className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed text-center"
             >
               A concise overview of my technical stack and areas of proficiency
               — showcasing the technologies and tools I work with regularly.
@@ -244,7 +263,7 @@ const Expertise = () => {
           {/* Underline */}
           <motion.div
             variants={itemVariants}
-            className="w-32 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mt-6"
+            className="w-24 xs:w-32 h-0.5 xs:h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mt-4 xs:mt-6"
           />
         </motion.div>
 
@@ -254,19 +273,19 @@ const Expertise = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="relative overflow-hidden mb-20"
+          className="relative overflow-hidden mb-12 sm:mb-16 md:mb-20"
           aria-label="Scrolling technology stack logos"
         >
           <LogoLoop
             logos={techLogos}
-            speed={60}
+            speed={40}
             direction="left"
-            logoHeight={56}
-            gap={48}
+            logoHeight={40}
+            gap={32}
             pauseOnHover
             scaleOnHover
             fadeOut
-            fadeOutColor="rgba(0,0,0,1)" // full black fade
+            fadeOutColor="rgba(0,0,0,1)"
             className="logoloop logoloop--scale-hover logoloop--fade"
             style={{ width: "100%" }}
           />
@@ -278,7 +297,7 @@ const Expertise = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 xs:gap-6 sm:gap-8"
         >
           {categories.map((category, i) => (
             <motion.div key={i} variants={cardVariants} whileHover="hover">
@@ -291,22 +310,22 @@ const Expertise = () => {
                   thickness={2}
                   style={{ borderRadius: 20 }}
                 >
-                  <div className="relative bg-base-200/50 backdrop-blur-md rounded-2xl p-8 border border-transparent hover:border-accent/30 transition-transform duration-500 group hover:scale-105 overflow-hidden">
+                  <div className="relative bg-base-200/50 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-transparent hover:border-accent/30 transition-transform duration-500 group hover:scale-105 overflow-hidden h-full">
                     <div
                       className={`absolute inset-0 bg-gradient-to-br ${category.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
                       aria-hidden="true"
                     />
-                    <div className="relative z-10 text-center mb-8">
+                    <div className="relative z-10 text-center mb-6 sm:mb-8">
                       <h3
-                        className={`text-2xl font-bold mb-2 bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}
+                        className={`text-xl sm:text-2xl font-bold mb-2 bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}
                       >
                         {category.title}
                       </h3>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-gray-400 text-xs sm:text-sm">
                         {category.subtitle}
                       </p>
                     </div>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 justify-items-center">
+                    <div className="grid grid-cols-3 gap-3 xs:gap-4 justify-items-center">
                       {category.items.map((item, idx) => (
                         <motion.div
                           key={idx}
@@ -314,13 +333,13 @@ const Expertise = () => {
                           className="flex flex-col items-center text-center p-2 w-full transition-transform duration-300 hover:scale-110"
                         >
                           <div
-                            className="text-3xl mb-1"
+                            className="text-2xl sm:text-3xl mb-1"
                             style={{ color: category.color }}
                             aria-hidden="true"
                           >
                             {item.icon}
                           </div>
-                          <span className="text-sm text-gray-300">
+                          <span className="text-xs sm:text-sm text-gray-300 leading-tight">
                             {item.name}
                           </span>
                         </motion.div>
@@ -330,28 +349,28 @@ const Expertise = () => {
                 </ElectricBorder>
               </div>
 
-              {/* Mobile/Small screens: Static neon border */}
-              <div className="block md:hidden">
+              {/* Tablet: Medium screens */}
+              <div className="hidden sm:block md:hidden">
                 <div
-                  className="relative bg-base-200/50 backdrop-blur-md rounded-2xl p-8 border-2 transition-transform duration-500 group hover:scale-105 overflow-hidden"
+                  className="relative bg-base-200/50 backdrop-blur-md rounded-2xl p-6 border-2 transition-transform duration-500 group hover:scale-105 overflow-hidden h-full"
                   style={{
                     borderColor: category.color,
-                    boxShadow: `0 0 10px ${category.color}`,
+                    boxShadow: `0 0 15px ${category.color}30`,
                   }}
                 >
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${category.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
                     aria-hidden="true"
                   />
-                  <div className="relative z-10 text-center mb-8">
+                  <div className="relative z-10 text-center mb-6">
                     <h3
-                      className={`text-2xl font-bold mb-2 bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}
+                      className={`text-xl font-bold mb-2 bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}
                     >
                       {category.title}
                     </h3>
-                    <p className="text-gray-400 text-sm">{category.subtitle}</p>
+                    <p className="text-gray-400 text-xs">{category.subtitle}</p>
                   </div>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 justify-items-center">
+                  <div className="grid grid-cols-3 gap-3 justify-items-center">
                     {category.items.map((item, idx) => (
                       <motion.div
                         key={idx}
@@ -359,13 +378,57 @@ const Expertise = () => {
                         className="flex flex-col items-center text-center p-2 w-full transition-transform duration-300 hover:scale-110"
                       >
                         <div
-                          className="text-3xl mb-1"
+                          className="text-2xl mb-1"
                           style={{ color: category.color }}
                           aria-hidden="true"
                         >
                           {item.icon}
                         </div>
-                        <span className="text-sm text-gray-300">
+                        <span className="text-xs text-gray-300 leading-tight">
+                          {item.name}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile: Small screens */}
+              <div className="block sm:hidden">
+                <div
+                  className="relative bg-base-200/50 backdrop-blur-md rounded-xl p-4 xs:p-5 border-2 transition-transform duration-500 group hover:scale-105 overflow-hidden h-full"
+                  style={{
+                    borderColor: category.color,
+                    boxShadow: `0 0 10px ${category.color}20`,
+                  }}
+                >
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${category.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
+                    aria-hidden="true"
+                  />
+                  <div className="relative z-10 text-center mb-4 xs:mb-5">
+                    <h3
+                      className={`text-lg xs:text-xl font-bold mb-1 xs:mb-2 bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}
+                    >
+                      {category.title}
+                    </h3>
+                    <p className="text-gray-400 text-xs">{category.subtitle}</p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 xs:gap-3 justify-items-center">
+                    {category.items.map((item, idx) => (
+                      <motion.div
+                        key={idx}
+                        variants={itemVariants}
+                        className="flex flex-col items-center text-center p-1 xs:p-2 w-full transition-transform duration-300 hover:scale-110"
+                      >
+                        <div
+                          className="text-xl xs:text-2xl mb-1"
+                          style={{ color: category.color }}
+                          aria-hidden="true"
+                        >
+                          {item.icon}
+                        </div>
+                        <span className="text-xs text-gray-300 leading-tight">
                           {item.name}
                         </span>
                       </motion.div>
@@ -376,6 +439,37 @@ const Expertise = () => {
             </motion.div>
           ))}
         </motion.div>
+      </div>
+
+      {/* Background Elements - Hidden on mobile for performance */}
+      <div className="absolute inset-0 overflow-hidden -z-10 hidden sm:block">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          animate={{
+            scale: [1, 1.05, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 sm:top-1/3 left-1/4 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-primary/5 rounded-full blur-2xl sm:blur-3xl"
+        />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          animate={{
+            scale: [1, 1.05, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            delay: 0.5,
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute bottom-1/4 sm:bottom-1/3 right-1/4 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-secondary/5 rounded-full blur-2xl sm:blur-3xl"
+        />
       </div>
     </motion.section>
   );

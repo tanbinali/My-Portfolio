@@ -3,7 +3,6 @@ import { FaGithub, FaEnvelope, FaWhatsapp, FaDiscord } from "react-icons/fa";
 import logo from "../assets/pfp.webp";
 
 const Footer = () => {
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -31,10 +30,9 @@ const Footer = () => {
   };
 
   const iconVariants = {
-    hidden: { scale: 0, rotate: -180 },
+    hidden: { scale: 0 },
     visible: {
       scale: 1,
-      rotate: 0,
       transition: {
         type: "spring",
         stiffness: 200,
@@ -42,8 +40,7 @@ const Footer = () => {
       },
     },
     hover: {
-      scale: 1.2,
-      rotate: 5,
+      scale: 1.15,
       color: "#34D399",
       transition: {
         duration: 0.2,
@@ -72,7 +69,6 @@ const Footer = () => {
     },
     hover: {
       scale: 1.05,
-      rotate: 2,
       transition: {
         duration: 0.3,
         ease: "easeInOut",
@@ -81,10 +77,9 @@ const Footer = () => {
   };
 
   const textVariants = {
-    hidden: { opacity: 0, x: -20 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      x: 0,
       transition: {
         duration: 0.5,
         ease: "easeOut",
@@ -93,10 +88,9 @@ const Footer = () => {
   };
 
   const copyrightVariants = {
-    hidden: { opacity: 0, x: 20 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      x: 0,
       transition: {
         duration: 0.5,
         ease: "easeOut",
@@ -109,29 +103,29 @@ const Footer = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
-      className="bg-base-100 border-t border-green-700/20 text-gray-400 py-4 sm:py-3"
+      className="bg-base-100 border-t border-green-700/20 text-gray-400 py-3 xs:py-4 sm:py-6 overflow-hidden"
     >
       {/* Mobile Layout - Stacked */}
-      <div className="lg:hidden">
+      <div className="block lg:hidden">
         <motion.div
           variants={containerVariants}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 overflow-hidden"
         >
           {/* Logo + Name - Centered on mobile */}
           <motion.div
             variants={itemVariants}
-            className="flex items-center justify-center gap-2 mb-4"
+            className="flex items-center justify-center gap-2 mb-3 xs:mb-4"
           >
             <motion.img
               src={logo}
               alt="MD Tanbin Logo"
-              className="h-8 w-8 sm:h-9 sm:w-9 rounded-md shadow-md shadow-green-500/20"
+              className="h-7 w-7 xs:h-8 xs:w-8 sm:h-9 sm:w-9 rounded-md shadow-md shadow-green-500/20"
               variants={logoVariants}
               whileHover="hover"
             />
             <motion.span
               variants={textVariants}
-              className="font-semibold text-green-400 text-sm sm:text-base md:text-lg"
+              className="font-semibold text-green-400 text-xs xs:text-sm sm:text-base"
               whileHover={{ color: "#34D399", scale: 1.05 }}
               transition={{ duration: 0.2 }}
             >
@@ -142,14 +136,14 @@ const Footer = () => {
           {/* Social Icons - Centered */}
           <motion.div
             variants={containerVariants}
-            className="flex justify-center gap-4 text-lg sm:text-xl mb-4"
+            className="flex justify-center gap-3 xs:gap-4 text-base xs:text-lg sm:text-xl mb-3 xs:mb-4"
           >
             <motion.a
               href="mailto:tanbinali@gmail.com"
               variants={iconVariants}
               whileHover="hover"
               whileTap="tap"
-              className="transition-colors duration-300"
+              className="transition-colors duration-300 p-1"
               aria-label="Email"
             >
               <FaEnvelope />
@@ -159,7 +153,7 @@ const Footer = () => {
               variants={iconVariants}
               whileHover="hover"
               whileTap="tap"
-              className="transition-colors duration-300"
+              className="transition-colors duration-300 p-1"
               aria-label="WhatsApp"
             >
               <FaWhatsapp />
@@ -171,7 +165,7 @@ const Footer = () => {
               variants={iconVariants}
               whileHover="hover"
               whileTap="tap"
-              className="transition-colors duration-300"
+              className="transition-colors duration-300 p-1"
               aria-label="GitHub"
             >
               <FaGithub />
@@ -183,7 +177,7 @@ const Footer = () => {
               variants={iconVariants}
               whileHover="hover"
               whileTap="tap"
-              className="transition-colors duration-300"
+              className="transition-colors duration-300 p-1"
               aria-label="Discord"
             >
               <FaDiscord />
@@ -193,7 +187,7 @@ const Footer = () => {
           {/* Copyright - Centered */}
           <motion.div
             variants={copyrightVariants}
-            className="text-gray-500 text-xs sm:text-sm text-center"
+            className="text-gray-500 text-xs xs:text-xs sm:text-sm text-center px-2"
             whileHover={{ color: "#9CA3AF", scale: 1.02 }}
             transition={{ duration: 0.2 }}
           >
@@ -202,11 +196,104 @@ const Footer = () => {
         </motion.div>
       </div>
 
-      {/* Desktop Layout - 3 Columns */}
-      <div className="hidden lg:block">
+      {/* Tablet Layout - Modified for medium screens */}
+      <div className="hidden lg:block xl:hidden">
         <motion.div
           variants={containerVariants}
-          className="max-w-7xl mx-auto grid grid-cols-3 items-center px-4 sm:px-6 lg:px-8 text-sm"
+          className="max-w-7xl mx-auto px-6 lg:px-8 overflow-hidden"
+        >
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            {/* Logo + Name */}
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center gap-2"
+            >
+              <motion.img
+                src={logo}
+                alt="MD Tanbin Logo"
+                className="h-8 w-8 rounded-md shadow-md shadow-green-500/20"
+                variants={logoVariants}
+                whileHover="hover"
+              />
+              <motion.span
+                variants={textVariants}
+                className="font-semibold text-green-400 text-sm lg:text-base"
+                whileHover={{ color: "#34D399", scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                MD Tanbin Ali
+              </motion.span>
+            </motion.div>
+
+            {/* Social Icons */}
+            <motion.div
+              variants={containerVariants}
+              className="flex justify-center gap-4 text-lg"
+            >
+              <motion.a
+                href="mailto:tanbinali@gmail.com"
+                variants={iconVariants}
+                whileHover="hover"
+                whileTap="tap"
+                className="transition-colors duration-300 p-1"
+                aria-label="Email"
+              >
+                <FaEnvelope />
+              </motion.a>
+              <motion.a
+                href="https://wa.me/8801882393841"
+                variants={iconVariants}
+                whileHover="hover"
+                whileTap="tap"
+                className="transition-colors duration-300 p-1"
+                aria-label="WhatsApp"
+              >
+                <FaWhatsapp />
+              </motion.a>
+              <motion.a
+                href="https://github.com/tanbinali"
+                target="_blank"
+                rel="noopener noreferrer"
+                variants={iconVariants}
+                whileHover="hover"
+                whileTap="tap"
+                className="transition-colors duration-300 p-1"
+                aria-label="GitHub"
+              >
+                <FaGithub />
+              </motion.a>
+              <motion.a
+                href="https://discord.com/users/570223124608450570"
+                target="_blank"
+                rel="noopener noreferrer"
+                variants={iconVariants}
+                whileHover="hover"
+                whileTap="tap"
+                className="transition-colors duration-300 p-1"
+                aria-label="Discord"
+              >
+                <FaDiscord />
+              </motion.a>
+            </motion.div>
+
+            {/* Copyright */}
+            <motion.div
+              variants={copyrightVariants}
+              className="text-gray-500 text-xs lg:text-sm text-center"
+              whileHover={{ color: "#9CA3AF", scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              © {new Date().getFullYear()} MD Tanbin Ali. All rights reserved.
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Desktop Layout - 3 Columns */}
+      <div className="hidden xl:block">
+        <motion.div
+          variants={containerVariants}
+          className="max-w-7xl mx-auto grid grid-cols-3 items-center px-4 sm:px-6 lg:px-8 text-sm overflow-hidden"
         >
           {/* Left: Logo + Name */}
           <motion.div
@@ -240,7 +327,7 @@ const Footer = () => {
               variants={iconVariants}
               whileHover="hover"
               whileTap="tap"
-              className="transition-colors duration-300"
+              className="transition-colors duration-300 p-1"
               aria-label="Email"
             >
               <FaEnvelope />
@@ -250,7 +337,7 @@ const Footer = () => {
               variants={iconVariants}
               whileHover="hover"
               whileTap="tap"
-              className="transition-colors duration-300"
+              className="transition-colors duration-300 p-1"
               aria-label="WhatsApp"
             >
               <FaWhatsapp />
@@ -262,7 +349,7 @@ const Footer = () => {
               variants={iconVariants}
               whileHover="hover"
               whileTap="tap"
-              className="transition-colors duration-300"
+              className="transition-colors duration-300 p-1"
               aria-label="GitHub"
             >
               <FaGithub />
@@ -274,7 +361,7 @@ const Footer = () => {
               variants={iconVariants}
               whileHover="hover"
               whileTap="tap"
-              className="transition-colors duration-300"
+              className="transition-colors duration-300 p-1"
               aria-label="Discord"
             >
               <FaDiscord />

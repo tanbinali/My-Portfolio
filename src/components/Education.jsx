@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaChevronLeft,
@@ -98,27 +99,27 @@ const Education = () => {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       id="education"
-      className="py-20 px-6 md:px-16 lg:px-24 bg-transparent relative"
+      className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 bg-transparent relative"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-6 mx-auto">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-accent">
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-4 sm:mb-6 mx-auto">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse" />
+            <span className="text-xs sm:text-sm font-medium text-accent">
               Academic Journey
             </span>
           </div>
-          <div className="max-w-3xl mx-auto mb-6 p-6 rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 text-center">
+          <div className="max-w-3xl mx-auto mb-4 sm:mb-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 text-center">
               <ShinyText text="Education & Learning" speed={3} />
             </h2>
-            <p className="text-xl text-gray-300 leading-relaxed text-center">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed text-center">
               A glimpse into my educational journey — where I built strong
               foundations in software engineering and computer science.
             </p>
           </div>
-          <div className="w-32 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto" />
+          <div className="w-24 sm:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto" />
         </div>
 
         {/* Carousel */}
@@ -143,7 +144,7 @@ const Education = () => {
                   style={{ borderRadius: 24, overflow: "visible" }}
                 >
                   <motion.div
-                    className="bg-base-200/30 backdrop-blur-md rounded-3xl p-8 border border-transparent relative z-10"
+                    className="bg-base-200/30 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-transparent relative z-10"
                     whileHover={{ y: -5 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -155,7 +156,7 @@ const Education = () => {
               {/* Mobile static neon border */}
               <div className="block md:hidden">
                 <motion.div
-                  className="bg-base-200/30 backdrop-blur-md rounded-3xl p-8 border-2 relative z-10"
+                  className="bg-base-200/30 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-2 relative z-10"
                   style={{
                     borderColor: currentEdu.color,
                     boxShadow: `0 0 15px ${currentEdu.color}`,
@@ -169,33 +170,53 @@ const Education = () => {
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation */}
+          {/* Navigation - Hidden on smallest screens, shown from sm up */}
           <motion.button
             onClick={handlePrev}
-            className="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-6 w-12 h-12 bg-base-300/80 hover:bg-base-300 text-white rounded-full transition-all duration-300 z-20 backdrop-blur-sm border border-base-400/50 flex items-center justify-center shadow-xl"
+            className="hidden sm:flex absolute top-1/2 -translate-y-1/2 -left-3 md:-left-4 lg:-left-6 w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-base-300/80 hover:bg-base-300 text-white rounded-full transition-all duration-300 z-20 backdrop-blur-sm border border-base-400/50 items-center justify-center shadow-xl"
             whileHover={{ scale: 1.1, x: -2 }}
             whileTap={{ scale: 0.9 }}
           >
-            <FaChevronLeft className="text-lg" />
+            <FaChevronLeft className="text-sm md:text-base lg:text-lg" />
           </motion.button>
           <motion.button
             onClick={handleNext}
-            className="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-6 w-12 h-12 bg-base-300/80 hover:bg-base-300 text-white rounded-full transition-all duration-300 z-20 backdrop-blur-sm border border-base-400/50 flex items-center justify-center shadow-xl"
+            className="hidden sm:flex absolute top-1/2 -translate-y-1/2 -right-3 md:-right-4 lg:-right-6 w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-base-300/80 hover:bg-base-300 text-white rounded-full transition-all duration-300 z-20 backdrop-blur-sm border border-base-400/50 items-center justify-center shadow-xl"
             whileHover={{ scale: 1.1, x: 2 }}
             whileTap={{ scale: 0.9 }}
           >
-            <FaChevronRight className="text-lg" />
+            <FaChevronRight className="text-sm md:text-base lg:text-lg" />
           </motion.button>
 
+          {/* Mobile Navigation - Small buttons for mobile */}
+          <div className="flex sm:hidden justify-center gap-4 mt-6">
+            <motion.button
+              onClick={handlePrev}
+              className="w-10 h-10 bg-base-300/80 hover:bg-base-300 text-white rounded-full transition-all duration-300 backdrop-blur-sm border border-base-400/50 flex items-center justify-center shadow-lg"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaChevronLeft />
+            </motion.button>
+            <motion.button
+              onClick={handleNext}
+              className="w-10 h-10 bg-base-300/80 hover:bg-base-300 text-white rounded-full transition-all duration-300 backdrop-blur-sm border border-base-400/50 flex items-center justify-center shadow-lg"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaChevronRight />
+            </motion.button>
+          </div>
+
           {/* Dots */}
-          <div className="flex justify-center gap-3 mt-8">
+          <div className="flex justify-center gap-2 sm:gap-3 mt-6 sm:mt-8">
             {educationData.map((edu, i) => (
               <motion.button
                 key={i}
                 onClick={() => goToSlide(i)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 backdrop-blur-sm border ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all duration-300 backdrop-blur-sm border ${
                   i === index
-                    ? "scale-110 shadow-lg"
+                    ? "scale-105 sm:scale-110 shadow-md sm:shadow-lg"
                     : "opacity-70 hover:opacity-100 hover:scale-105"
                 }`}
                 style={{
@@ -208,15 +229,15 @@ const Education = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <div
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    i === index ? "scale-125" : ""
+                  className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
+                    i === index ? "scale-110 sm:scale-125" : ""
                   }`}
                   style={{
                     backgroundColor: i === index ? edu.color : "#6B7280",
                   }}
                 />
                 <span
-                  className="text-sm font-medium hidden sm:block"
+                  className="text-xs sm:text-sm font-medium hidden xs:block"
                   style={{
                     color: i === index ? edu.color : "#9CA3AF",
                   }}
@@ -230,21 +251,21 @@ const Education = () => {
 
         {/* CTA */}
         <motion.div
-          className="text-center mt-16"
+          className="text-center mt-12 sm:mt-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <motion.div
-            className="bg-gradient-to-r from-base-200/50 to-base-300/30 backdrop-blur-md rounded-2xl p-8 border border-base-300/50 max-w-2xl mx-auto"
+            className="bg-gradient-to-r from-base-200/50 to-base-300/30 backdrop-blur-md rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-base-300/50 max-w-2xl mx-auto"
             whileHover={{ y: -5 }}
             transition={{ duration: 0.3 }}
           >
-            <h3 className="text-2xl font-bold text-white mb-4">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
               Continuous Learning Journey
             </h3>
-            <p className="text-gray-300">
+            <p className="text-sm sm:text-base text-gray-300">
               I believe in lifelong learning and continuously improving my
               skills to stay ahead in technology and software innovation.
             </p>
@@ -259,19 +280,21 @@ export default Education;
 
 // Separate content component for reuse
 const EducationCardContent = ({ edu }) => (
-  <div className="flex flex-col lg:flex-row gap-8 items-center">
+  <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 items-center">
     {/* Image */}
-    <div className="lg:w-2/5 relative">
+    <div className="w-full lg:w-2/5 relative">
       <div className="relative group">
         <motion.img
           src={edu.image}
           alt={edu.university}
-          className="w-full h-64 lg:h-80 object-cover rounded-2xl shadow-2xl"
+          className="w-full h-48 xs:h-56 sm:h-64 md:h-72 lg:h-80 object-cover rounded-xl sm:rounded-2xl shadow-xl"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
+          loading="lazy"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
         />
         <div
-          className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm border"
+          className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-semibold backdrop-blur-sm border"
           style={{
             backgroundColor: `${edu.color}20`,
             borderColor: `${edu.color}40`,
@@ -281,40 +304,42 @@ const EducationCardContent = ({ edu }) => (
           {edu.status}
         </div>
         <div
-          className="absolute -top-3 -right-3 w-14 h-14 rounded-2xl flex items-center justify-center backdrop-blur-sm border shadow-lg"
+          className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm border shadow-lg"
           style={{
             backgroundColor: `${edu.color}20`,
             borderColor: `${edu.color}40`,
           }}
         >
-          {edu.icon}
+          {React.cloneElement(edu.icon, {
+            className: "text-white text-sm sm:text-base lg:text-lg",
+          })}
         </div>
       </div>
     </div>
 
     {/* Content */}
-    <div className="lg:w-3/5 space-y-6">
+    <div className="w-full lg:w-3/5 space-y-4 sm:space-y-6">
       <div>
-        <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2">
+        <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2 leading-tight">
           {edu.title}
         </h3>
         <div
-          className="w-16 h-1 rounded-full mb-4"
+          className="w-12 sm:w-16 h-0.5 sm:h-1 rounded-full mb-3 sm:mb-4"
           style={{ background: edu.color }}
         />
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-center gap-3 text-lg">
-          <MdOutlineDriveFileRenameOutline className="text-gray-400" />
+      <div className="space-y-2.5 sm:space-y-3">
+        <div className="flex items-center gap-2 sm:gap-3 text-base sm:text-lg">
+          <MdOutlineDriveFileRenameOutline className="text-gray-400 text-sm sm:text-base" />
           <span className="text-white font-semibold">{edu.university}</span>
         </div>
-        <div className="flex items-center gap-3 text-gray-300">
-          <FaMapMarkerAlt className="text-gray-400" />
+        <div className="flex items-center gap-2 sm:gap-3 text-gray-300 text-sm sm:text-base">
+          <FaMapMarkerAlt className="text-gray-400 text-sm sm:text-base" />
           <span>{edu.location}</span>
         </div>
-        <div className="flex items-center gap-3 text-gray-300">
-          <FaCalendarAlt className="text-gray-400" />
+        <div className="flex items-center gap-2 sm:gap-3 text-gray-300 text-sm sm:text-base">
+          <FaCalendarAlt className="text-gray-400 text-sm sm:text-base" />
           <span>{edu.duration}</span>
         </div>
       </div>
