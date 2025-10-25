@@ -32,6 +32,18 @@ import p2img6 from "../assets/mkauto/image (5).webp";
 import p3img1 from "../assets/eventmanager/image.webp";
 import p3img2 from "../assets/eventmanager/image (1).webp";
 import p3img3 from "../assets/eventmanager/image (2).webp";
+import p3img4 from "../assets/eventmanager/image (3).webp";
+import p3img5 from "../assets/eventmanager/image (4).webp";
+import p3img6 from "../assets/eventmanager/image (5).webp";
+import p3img7 from "../assets/eventmanager/image (6).webp";
+import p3img8 from "../assets/eventmanager/image (7).webp";
+import p3img9 from "../assets/eventmanager/image (8).webp";
+import p3img10 from "../assets/eventmanager/image (9).webp";
+
+import p4img1 from "../assets/librarymanagerAPI/image.webp";
+import p4img2 from "../assets/librarymanagerAPI/image (1).webp";
+import p4img3 from "../assets/librarymanagerAPI/image (2).webp";
+import p4img4 from "../assets/librarymanagerAPI/image (3).webp";
 
 const Projects = () => {
   const [zoomedImage, setZoomedImage] = useState(null);
@@ -185,13 +197,39 @@ const Projects = () => {
       description:
         "A web MVT application built with Django, HTML, TailwindCSS, and PostgreSQL that enables users to create, manage, and participate in events seamlessly. Admins and organizers can easily create, update, and categorize events, while participants can explore upcoming events, RSVP with a single click, and manage their dashboard efficiently. Role-based dashboards ensure that each user sees what matters most to them, all within a modern, responsive, and user-friendly interface.",
       tech: ["TailwindCSS", "Django", "PostgreSQL", "HTML"],
-      images: [p3img1, p3img2, p3img3],
+      images: [
+        p3img1,
+        p3img2,
+        p3img3,
+        p3img4,
+        p3img5,
+        p3img6,
+        p3img7,
+        p3img8,
+        p3img9,
+        p3img10,
+      ],
       backend: "https://github.com/tanbinali/event_management_django",
       live: "https://event-management-django-neon.vercel.app/",
       theme: {
         borderColor: "#10B981",
         gradientFrom: "#34D399",
         gradientTo: "#059669",
+        hoverText: "text-green-400",
+      },
+    },
+    {
+      title: "Library Manager API",
+      description:
+        "A Django REST Framework-based Library Management System API designed to manage books, members, and borrow records efficiently. Built with secure JWT authentication and robust role-based access control to differentiate between librarians and members. Includes Swagger and ReDoc documentation, nested routing, and well-structured RESTful endpoints for seamless integration with frontend clients.",
+      tech: ["Django REST Framework", "Python", "JWT", "Djoser"],
+      images: [p4img1, p4img2, p4img3, p4img4],
+      frontend: "https://github.com/tanbinali/library_manager_api",
+      live: "https://library-manager-api-alpha.vercel.app/",
+      theme: {
+        borderColor: "#85EA2D",
+        gradientFrom: "#85EA2D",
+        gradientTo: "#20232A",
         hoverText: "text-green-400",
       },
     },
@@ -288,7 +326,7 @@ const Projects = () => {
                             <motion.img
                               src={mainImage}
                               alt={`${project.title} main screenshot`}
-                              className="w-full h-full object-cover cursor-pointer"
+                              className="w-full h-full object-cover cursor-zoom-in"
                               onClick={() => handleImageClick(mainImage)}
                               whileHover={{ scale: 1.03 }}
                             />
@@ -417,9 +455,13 @@ const Projects = () => {
                         />
 
                         {/* Image Count Badge */}
-                        <div className="absolute top-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                        {/* Image Info Badge */}
+                        <div className="absolute top-4 right-4 bg-black/70 text-white px-2.5 py-1 rounded-full text-[11px] flex items-center gap-1.5 shadow-md">
                           <FaImages className="text-xs" />
                           <span>{project.images.length}</span>
+                          <span className="text-gray-300 font-medium ml-1">
+                            • Click to zoom
+                          </span>
                         </div>
                       </div>
 
