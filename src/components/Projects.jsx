@@ -1,8 +1,15 @@
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaGithub, FaExternalLinkAlt, FaTimes, FaImages } from "react-icons/fa";
+import {
+  FaGithub,
+  FaExternalLinkAlt,
+  FaTimes,
+  FaImages,
+  FaServer,
+} from "react-icons/fa";
 import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
+import { VscPreview } from "react-icons/vsc";
 
 // Import project images
 import p1img1 from "../assets/serviceease/image1.webp";
@@ -224,7 +231,7 @@ const Projects = () => {
         "A Django REST Framework-based Library Management System API designed to manage books, members, and borrow records efficiently. Built with secure JWT authentication and robust role-based access control to differentiate between librarians and members. Includes Swagger and ReDoc documentation, nested routing, and well-structured RESTful endpoints for seamless integration with frontend clients.",
       tech: ["Django REST Framework", "Python", "JWT", "Djoser"],
       images: [p4img1, p4img2, p4img3, p4img4],
-      frontend: "https://github.com/tanbinali/library_manager_api",
+      backend: "https://github.com/tanbinali/library_manager_api",
       live: "https://library-manager-api-alpha.vercel.app/",
       theme: {
         borderColor: "#85EA2D",
@@ -398,7 +405,7 @@ const Projects = () => {
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <FaGithub className="text-lg" />
+                              <VscPreview className="text-lg" />
                               Frontend
                             </motion.a>
                           )}
@@ -414,7 +421,7 @@ const Projects = () => {
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <FaGithub className="text-lg" />
+                              <FaServer className="text-lg" />
                               Backend
                             </motion.a>
                           )}
@@ -454,7 +461,6 @@ const Projects = () => {
                           onClick={() => handleImageClick(mainImage)}
                         />
 
-                        {/* Image Count Badge */}
                         {/* Image Info Badge */}
                         <div className="absolute top-4 right-4 bg-black/70 text-white px-2.5 py-1 rounded-full text-[11px] flex items-center gap-1.5 shadow-md">
                           <FaImages className="text-xs" />
@@ -515,9 +521,9 @@ const Projects = () => {
                             href={project.frontend}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-sm btn-outline border-2 text-white gap-1.5 flex-1 min-w-0"
+                            className="btn btn-sm btn-outline border-2 text-white gap-1.5 flex-1 sm:flex-none min-w-fit"
                           >
-                            <FaGithub className="text-sm" />
+                            <VscPreview className="text-sm" />
                             Frontend
                           </a>
                         )}
@@ -526,9 +532,9 @@ const Projects = () => {
                             href={project.backend}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-sm btn-outline border-2 text-white gap-1.5 flex-1 min-w-0"
+                            className="btn btn-sm btn-outline border-2 text-white gap-1.5 flex-1 sm:flex-none min-w-fit"
                           >
-                            <FaGithub className="text-sm" />
+                            <FaServer className="text-sm" />
                             Backend
                           </a>
                         )}
@@ -537,7 +543,7 @@ const Projects = () => {
                             href={project.live}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-sm bg-white text-gray-900 gap-1.5 flex-1 min-w-0 border-0 font-medium"
+                            className="btn btn-sm bg-white text-gray-900 gap-1.5 flex-1 sm:flex-none min-w-fit border-0 font-medium"
                           >
                             <FaExternalLinkAlt className="text-sm" />
                             Live

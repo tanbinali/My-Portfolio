@@ -14,6 +14,8 @@ import {
   SiEclipseide,
   SiXampp,
   SiCodeblocks,
+  SiVite,
+  SiVercel,
 } from "react-icons/si";
 import { DiDjango } from "react-icons/di";
 import { TbApi } from "react-icons/tb";
@@ -155,6 +157,16 @@ const Expertise = () => {
         title: "CodeBlocks",
         href: "https://www.codeblocks.org/",
       },
+      {
+        node: <SiVite />,
+        title: "Vite",
+        href: "https://vitejs.dev/",
+      },
+      {
+        node: <SiVercel />,
+        title: "Vercel",
+        href: "https://vercel.com/",
+      },
     ],
     []
   );
@@ -169,8 +181,8 @@ const Expertise = () => {
         bgGradient: "from-green-500/10 to-emerald-600/10",
         items: [
           { icon: <SiPython />, name: "Python" },
-          { icon: <DiDjango />, name: "Django MVT" },
-          { icon: <TbApi />, name: "Django DRF" },
+          { icon: <SiDjango />, name: "Django" },
+          { icon: <SiVite />, name: "Vite" },
           { icon: <SiReact />, name: "React" },
           { icon: <SiTailwindcss />, name: "TailwindCSS" },
           { icon: <MdHtml />, name: "HTML" },
