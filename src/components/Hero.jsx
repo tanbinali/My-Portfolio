@@ -347,7 +347,7 @@ const Hero = () => {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="w-full h-96 bg-base-200/50 rounded-2xl flex items-center justify-center"
+                className="w-full max-w-sm sm:max-w-sm h-auto aspect-[3/4] bg-base-200/50 rounded-2xl flex items-center justify-center mx-auto"
               >
                 <div className="text-accent">Loading...</div>
               </motion.div>
