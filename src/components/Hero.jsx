@@ -50,7 +50,7 @@ const socialLinks = [
   },
   {
     icon: CgNotes,
-    href: resume,
+    href: "https://docs.google.com/document/d/1y_Qr_S4kuzAHVzZvZuUzUXFOdeDGiY1rVmTHZmc9k8A/edit?usp=sharing",
     label: "Resume",
     download: true,
     color: "hover:text-green-400",
@@ -292,8 +292,8 @@ const Hero = () => {
               y: -2,
             }}
             whileTap={{ scale: 0.95 }}
-            href={resume}
-            download
+            href="https://docs.google.com/document/d/1y_Qr_S4kuzAHVzZvZuUzUXFOdeDGiY1rVmTHZmc9k8A/export?format=pdf"
+            download="MD_Tanbin_Ali_Resume.pdf"
             className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-base-200 border border-accent text-accent font-semibold rounded-xl transition-all duration-300 hover:bg-accent hover:text-accent-content hover:border-accent transform"
           >
             <span>Download Resume</span>
