@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FaEnvelope,
@@ -8,6 +8,29 @@ import {
 } from "react-icons/fa";
 import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
+
+const useReducedMotion = () => {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+  return prefersReducedMotion;
+};
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+};
 
 const contacts = [
   {
@@ -37,50 +60,63 @@ const contacts = [
 ];
 
 const Contacts = () => {
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-    },
-  };
+  const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  const shouldReduceAnimations = prefersReducedMotion || isMobile;
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
+  const containerVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: shouldReduceAnimations ? 0.08 : 0.12,
+          delayChildren: shouldReduceAnimations ? 0.1 : 0.15,
+        },
+      },
+    }),
+    [shouldReduceAnimations]
+  );
 
-  const cardHoverVariants = {
-    hover: {
-      y: -8,
-      scale: 1.02,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-  };
+  const itemVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: shouldReduceAnimations ? 15 : 25, scale: 0.97 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: {
+          duration: shouldReduceAnimations ? 0.3 : 0.5,
+          ease: "easeOut",
+        },
+      },
+    }),
+    [shouldReduceAnimations]
+  );
 
-  const iconHoverVariants = {
-    hover: { scale: 1.1, rotate: 5, transition: { duration: 0.2 } },
-  };
+  const cardHoverVariants = useMemo(
+    () =>
+      shouldReduceAnimations
+        ? {}
+        : {
+            hover: {
+              y: -6,
+              scale: 1.01,
+              transition: { duration: 0.25, ease: "easeOut" },
+            },
+          },
+    [shouldReduceAnimations]
+  );
 
-  const backgroundVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 1.5, ease: "easeOut" },
-    },
-    pulse: {
-      scale: [1, 1.05, 1],
-      opacity: [0.3, 0.5, 0.3],
-      transition: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-    },
-  };
+  const iconHoverVariants = useMemo(
+    () =>
+      shouldReduceAnimations
+        ? {}
+        : {
+            hover: { scale: 1.08, rotate: 3, transition: { duration: 0.2 } },
+          },
+    [shouldReduceAnimations]
+  );
 
   const contactItems = useMemo(
     () =>
@@ -96,70 +132,57 @@ const Contacts = () => {
         const ctaColorStyle = { color: contact.color };
         const hoverBorderStyle = { boxShadow: `0 0 0 1px ${contact.color}40` };
 
-        // Shared card content
         const cardContent = (
           <>
-            {/* Background Glow */}
+            {!shouldReduceAnimations && (
+              <motion.div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={bgGlowStyle}
+                aria-hidden="true"
+              />
+            )}
             <motion.div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={bgGlowStyle}
-              aria-hidden="true"
-              whileHover={{ opacity: 1 }}
-            />
-            {/* Icon */}
-            <motion.div
-              className="relative z-10 w-14 h-14 xs:w-16 xs:h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 transition-all duration-300 group-hover:shadow-lg"
+              className="relative z-10 w-14 h-14 xs:w-16 xs:h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 transition-all duration-300 group-hover:shadow-lg gpu-accelerated"
               style={iconContainerStyle}
               variants={iconHoverVariants}
             >
               <div
-                className="text-xl xs:text-2xl sm:text-2xl md:text-2xl transition-transform duration-300"
+                className="text-xl xs:text-2xl sm:text-2xl md:text-2xl"
                 style={titleStyle}
                 aria-hidden="true"
               >
                 {contact.icon}
               </div>
             </motion.div>
-            {/* Content */}
             <div className="relative z-10 flex-1 flex flex-col">
-              <motion.h3
-                className="text-lg xs:text-xl sm:text-2xl font-bold mb-2 sm:mb-3 transition-colors duration-300"
+              <h3
+                className="text-lg xs:text-xl sm:text-2xl font-bold mb-2 sm:mb-3"
                 style={titleStyle}
-                whileHover={{ scale: 1.05 }}
               >
                 {contact.title}
-              </motion.h3>
+              </h3>
               <p className="text-gray-300 text-sm xs:text-base sm:text-lg font-medium mb-2 sm:mb-3 leading-tight">
                 {contact.info}
               </p>
               <p className="text-gray-400 text-xs xs:text-sm mb-4 sm:mb-6 flex-1 leading-relaxed">
                 {contact.description}
               </p>
-              {/* CTA */}
-              <motion.div
-                className="flex items-center justify-center gap-1 xs:gap-2 text-xs xs:text-sm font-semibold transition-all duration-300"
-                whileHover={{ gap: "0.5rem" }}
-              >
+              <div className="flex items-center justify-center gap-1 xs:gap-2 text-xs xs:text-sm font-semibold">
                 <span style={ctaColorStyle}>Get in Touch</span>
-                <motion.div
-                  animate={{ x: 0 }}
-                  whileHover={{ x: 3 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <FaArrowRight
-                    style={ctaColorStyle}
-                    size={12}
-                    className="xs:size-auto"
-                  />
-                </motion.div>
-              </motion.div>
+                <FaArrowRight
+                  style={ctaColorStyle}
+                  size={12}
+                  className="xs:size-auto"
+                />
+              </div>
             </div>
-            {/* Hover Border */}
-            <div
-              className="absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-              style={hoverBorderStyle}
-              aria-hidden="true"
-            />
+            {!shouldReduceAnimations && (
+              <div
+                className="absolute inset-0 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                style={hoverBorderStyle}
+                aria-hidden="true"
+              />
+            )}
           </>
         );
 
@@ -230,64 +253,56 @@ const Contacts = () => {
           </motion.div>
         );
       }),
-    []
+    [iconHoverVariants, cardHoverVariants, itemVariants, shouldReduceAnimations]
   );
 
   return (
     <motion.section
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "-100px" }}
       id="contact"
-      className="py-8 xs:py-12 sm:py-16 px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-transparent relative overflow-hidden"
+      className="py-10 sm:py-14 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-transparent relative overflow-hidden"
       aria-label="Contact Section"
     >
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
         <motion.div
           variants={containerVariants}
-          className="text-center mb-12 sm:mb-16"
+          className="text-center mb-8 sm:mb-12 lg:mb-16"
         >
-          {/* Small badge */}
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 py-1.5 xs:py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-4 xs:mb-6 mx-auto"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card-light max-w-max mb-4 sm:mb-6 mx-auto"
           >
-            <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-xs xs:text-sm font-medium text-accent">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-xs sm:text-sm font-medium text-accent">
               Get in touch
             </span>
           </motion.div>
 
-          {/* Frosted container for title + description */}
           <motion.div
             variants={itemVariants}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="max-w-3xl mx-auto mb-4 xs:mb-6 p-4 xs:p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
+            className="max-w-3xl mx-auto mb-4 sm:mb-6 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl glass-card"
           >
-            <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 xs:mb-4 text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4 text-center">
               <ShinyText
                 text="Let's Work Together"
-                disabled={false}
-                speed={3}
+                disabled={shouldReduceAnimations}
+                speed={shouldReduceAnimations ? 5 : 3}
               />
             </h2>
-            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-neutral-content leading-relaxed text-center">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-neutral-content leading-relaxed text-center">
               Ready to bring your ideas to life? Reach out through any of these
               channels and let's start building something amazing.
             </p>
           </motion.div>
 
-          {/* Underline */}
           <motion.div
             variants={itemVariants}
-            initial={{ width: 0 }}
-            whileInView={{ width: "6rem" }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            viewport={{ once: true }}
-            className="w-24 xs:w-32 h-0.5 xs:h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto"
+            className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-primary via-secondary to-transparent rounded-full mx-auto"
           />
         </motion.div>
 
@@ -303,26 +318,31 @@ const Contacts = () => {
         </motion.div>
       </div>
 
-      {/* Background Elements - Hidden on mobile for performance */}
-      <div className="absolute inset-0 overflow-hidden -z-10 hidden sm:block">
-        <motion.div
-          variants={backgroundVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          animate="pulse"
-          className="absolute top-1/4 sm:top-1/3 left-1/4 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-primary/5 rounded-full blur-2xl sm:blur-3xl"
-        />
-        <motion.div
-          variants={backgroundVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          animate="pulse"
-          transition={{ delay: 0.5 }}
-          className="absolute bottom-1/4 sm:bottom-1/3 right-1/4 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-secondary/5 rounded-full blur-2xl sm:blur-3xl"
-        />
-      </div>
+      {!shouldReduceAnimations && (
+        <div className="absolute inset-0 overflow-hidden -z-10 hidden md:block pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            animate={{ scale: [1, 1.04, 1], opacity: [0.2, 0.35, 0.2] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/4 left-1/4 w-64 md:w-80 lg:w-96 h-64 md:h-80 lg:h-96 bg-primary/5 rounded-full blur-3xl gpu-accelerated"
+          />
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            animate={{ scale: [1, 1.04, 1], opacity: [0.2, 0.35, 0.2] }}
+            transition={{
+              delay: 1,
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute bottom-1/4 right-1/4 w-64 md:w-80 lg:w-96 h-64 md:h-80 lg:h-96 bg-secondary/5 rounded-full blur-3xl gpu-accelerated"
+          />
+        </div>
+      )}
     </motion.section>
   );
 };

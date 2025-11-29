@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   SiReact,
@@ -26,72 +26,103 @@ import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
 import LogoLoop from "./LogoLoop/LogoLoop";
 
+const useReducedMotion = () => {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+  return prefersReducedMotion;
+};
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+};
+
 const Expertise = () => {
-  // Container variants for staggered children
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
-  };
+  const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  const shouldReduceAnimations = prefersReducedMotion || isMobile;
 
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
+  const containerVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: shouldReduceAnimations ? 0.05 : 0.08,
+          delayChildren: shouldReduceAnimations ? 0.1 : 0.2,
+        },
       },
-    },
-  };
+    }),
+    [shouldReduceAnimations]
+  );
 
-  const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      scale: 0.95,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
+  const itemVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: shouldReduceAnimations ? 10 : 20 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: shouldReduceAnimations ? 0.3 : 0.5,
+          ease: "easeOut",
+        },
       },
-    },
-    hover: {
-      y: -5,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-  };
+    }),
+    [shouldReduceAnimations]
+  );
 
-  const logoVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.8,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
+  const cardVariants = useMemo(
+    () => ({
+      hidden: {
+        opacity: 0,
+        y: shouldReduceAnimations ? 15 : 25,
+        scale: shouldReduceAnimations ? 0.98 : 0.95,
       },
-    },
-  };
+      visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: {
+          duration: shouldReduceAnimations ? 0.3 : 0.45,
+          ease: "easeOut",
+        },
+      },
+      hover: shouldReduceAnimations
+        ? {}
+        : {
+            y: -4,
+            transition: { duration: 0.2, ease: "easeInOut" },
+          },
+    }),
+    [shouldReduceAnimations]
+  );
+
+  const logoVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0, scale: 0.9 },
+      visible: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+          duration: shouldReduceAnimations ? 0.4 : 0.6,
+          ease: "easeOut",
+        },
+      },
+    }),
+    [shouldReduceAnimations]
+  );
 
   const techLogos = useMemo(
     () => [
@@ -226,79 +257,72 @@ const Expertise = () => {
     <motion.section
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "-100px" }}
       id="expertise"
-      className="py-12 xs:py-16 sm:py-20 px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-transparent relative overflow-hidden"
+      className="py-10 sm:py-14 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-transparent relative overflow-hidden"
       aria-labelledby="expertise-heading"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <motion.div
           variants={containerVariants}
-          className="text-center mb-12 sm:mb-16"
+          className="text-center mb-8 sm:mb-12 lg:mb-16"
         >
-          {/* Small badge */}
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 py-1.5 xs:py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-4 xs:mb-6 mx-auto"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card-light max-w-max mb-4 sm:mb-6 mx-auto"
           >
-            <span className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-xs xs:text-sm font-medium text-accent">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-xs sm:text-sm font-medium text-accent">
               Technical Skills
             </span>
           </motion.div>
 
-          {/* Frosted container for title + description */}
           <motion.div
             variants={itemVariants}
-            className="max-w-3xl mx-auto mb-4 xs:mb-6 p-4 xs:p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
+            className="max-w-3xl mx-auto mb-4 sm:mb-6 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl glass-card"
           >
-            <motion.h2
-              variants={itemVariants}
-              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 xs:mb-4 text-center"
-            >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4 text-center">
               <ShinyText
                 text="Technical Expertise"
-                disabled={false}
-                speed={3}
+                disabled={shouldReduceAnimations}
+                speed={shouldReduceAnimations ? 5 : 3}
               />
-            </motion.h2>
+            </h2>
 
-            <motion.p
-              variants={itemVariants}
-              className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed text-center"
-            >
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-300 leading-relaxed text-center">
               A concise overview of my technical stack and areas of proficiency
               — showcasing the technologies and tools I work with regularly.
-            </motion.p>
+            </p>
           </motion.div>
-          {/* Underline */}
+
           <motion.div
             variants={itemVariants}
-            className="w-24 xs:w-32 h-0.5 xs:h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mt-4 xs:mt-6"
+            className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-primary via-secondary to-transparent rounded-full mx-auto mt-3 sm:mt-4 md:mt-6"
           />
         </motion.div>
 
-        {/* Tech Logo Marquee */}
         <motion.div
           variants={logoVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="relative overflow-hidden mb-12 sm:mb-16 md:mb-20"
+          className="relative overflow-hidden mb-8 sm:mb-12 lg:mb-16"
           aria-label="Scrolling technology stack logos"
         >
           <LogoLoop
             logos={techLogos}
-            speed={40}
+            speed={shouldReduceAnimations ? 60 : 40}
             direction="left"
-            logoHeight={40}
-            gap={32}
-            pauseOnHover
-            scaleOnHover
+            logoHeight={isMobile ? 32 : 40}
+            gap={isMobile ? 20 : 32}
+            pauseOnHover={!isMobile}
+            scaleOnHover={!isMobile}
             fadeOut
             fadeOutColor="rgba(0,0,0,1)"
-            className="logoloop logoloop--scale-hover logoloop--fade"
+            className="logoloop logoloop--scale-hover logoloop--fade gpu-accelerated"
             style={{ width: "100%" }}
           />
         </motion.div>
@@ -453,36 +477,31 @@ const Expertise = () => {
         </motion.div>
       </div>
 
-      {/* Background Elements - Hidden on mobile for performance */}
-      <div className="absolute inset-0 overflow-hidden -z-10 hidden sm:block">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          animate={{
-            scale: [1, 1.05, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 sm:top-1/3 left-1/4 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-primary/5 rounded-full blur-2xl sm:blur-3xl"
-        />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          animate={{
-            scale: [1, 1.05, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            delay: 0.5,
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute bottom-1/4 sm:bottom-1/3 right-1/4 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-secondary/5 rounded-full blur-2xl sm:blur-3xl"
-        />
-      </div>
+      {!shouldReduceAnimations && (
+        <div className="absolute inset-0 overflow-hidden -z-10 hidden md:block pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            animate={{ scale: [1, 1.04, 1], opacity: [0.2, 0.35, 0.2] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/4 left-1/4 w-64 md:w-80 lg:w-96 h-64 md:h-80 lg:h-96 bg-primary/5 rounded-full blur-3xl gpu-accelerated"
+          />
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            animate={{ scale: [1, 1.04, 1], opacity: [0.2, 0.35, 0.2] }}
+            transition={{
+              delay: 1,
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute bottom-1/4 right-1/4 w-64 md:w-80 lg:w-96 h-64 md:h-80 lg:h-96 bg-secondary/5 rounded-full blur-3xl gpu-accelerated"
+          />
+        </div>
+      )}
     </motion.section>
   );
 };

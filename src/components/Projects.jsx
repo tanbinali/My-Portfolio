@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaGithub,
@@ -10,6 +10,29 @@ import {
 import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
 import { VscPreview } from "react-icons/vsc";
+
+const useReducedMotion = () => {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+  return prefersReducedMotion;
+};
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+};
 
 // Import project images
 import p1img1 from "../assets/serviceease/image1.webp";
@@ -55,78 +78,73 @@ import p4img4 from "../assets/librarymanagerAPI/image (3).webp";
 const Projects = () => {
   const [zoomedImage, setZoomedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState({});
+  const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  const shouldReduceAnimations = prefersReducedMotion || isMobile;
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
+  const containerVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: shouldReduceAnimations ? 0.1 : 0.15,
+          delayChildren: shouldReduceAnimations ? 0.1 : 0.2,
+        },
       },
-    },
-  };
+    }),
+    [shouldReduceAnimations]
+  );
 
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-      scale: 0.95,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
+  const itemVariants = useMemo(
+    () => ({
+      hidden: {
+        opacity: 0,
+        y: shouldReduceAnimations ? 20 : 40,
+        scale: shouldReduceAnimations ? 0.98 : 0.95,
       },
-    },
-  };
+      visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: {
+          duration: shouldReduceAnimations ? 0.35 : 0.5,
+          ease: "easeOut",
+        },
+      },
+    }),
+    [shouldReduceAnimations]
+  );
 
-  const cardHoverVariants = {
-    hover: {
-      y: -5,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    },
-  };
+  const cardHoverVariants = useMemo(
+    () =>
+      shouldReduceAnimations
+        ? {}
+        : {
+            hover: {
+              y: -4,
+              transition: { duration: 0.25, ease: "easeOut" },
+            },
+          },
+    [shouldReduceAnimations]
+  );
 
-  const imageHoverVariants = {
-    hover: {
-      scale: 1.03,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
+  const zoomModalVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0, scale: 0.9 },
+      visible: {
+        opacity: 1,
+        scale: 1,
+        transition: { duration: 0.2, ease: "easeOut" },
       },
-    },
-  };
-
-  const zoomModalVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.8,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
+      exit: {
+        opacity: 0,
+        scale: 0.9,
+        transition: { duration: 0.15, ease: "easeIn" },
       },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.8,
-      transition: {
-        duration: 0.2,
-        ease: "easeIn",
-      },
-    },
-  };
+    }),
+    []
+  );
 
   const handleImageClick = useCallback((img) => setZoomedImage(img), []);
   const closeZoom = useCallback(() => setZoomedImage(null), []);
@@ -246,49 +264,50 @@ const Projects = () => {
     <motion.section
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "-100px" }}
       id="projects"
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-transparent"
+      className="py-12 sm:py-16 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-transparent"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <motion.div variants={containerVariants} className="text-center mb-16">
-          {/* Small badge */}
+        <motion.div
+          variants={containerVariants}
+          className="text-center mb-10 sm:mb-12 lg:mb-16"
+        >
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-6 mx-auto"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card-light max-w-max mb-4 sm:mb-6 mx-auto"
           >
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-accent">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-xs sm:text-sm font-medium text-accent">
               Featured Work
             </span>
           </motion.div>
 
-          {/* Frosted container for title + description */}
           <motion.div
             variants={itemVariants}
-            className="max-w-3xl mx-auto mb-6 p-6 rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md"
+            className="max-w-3xl mx-auto mb-4 sm:mb-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl glass-card"
           >
-            <motion.h2
-              variants={itemVariants}
-              className="text-4xl md:text-5xl font-bold text-white mb-4 text-center"
-            >
-              <ShinyText text="Projects Showcase" disabled={false} speed={3} />
-            </motion.h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 text-center">
+              <ShinyText
+                text="Projects Showcase"
+                disabled={shouldReduceAnimations}
+                speed={shouldReduceAnimations ? 5 : 3}
+              />
+            </h2>
 
-            <motion.p
-              variants={itemVariants}
-              className="text-xl text-gray-300 leading-relaxed text-center"
-            >
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed text-center">
               A showcase of my professional projects demonstrating full-stack
               development capabilities, modern design principles, and real-world
               problem-solving skills.
-            </motion.p>
+            </p>
           </motion.div>
-          {/* Underline */}
+
           <motion.div
             variants={itemVariants}
-            className="w-32 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mt-6"
+            className="w-20 sm:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-primary via-secondary to-transparent rounded-full mx-auto mt-4 sm:mt-6"
           />
         </motion.div>
 
@@ -444,45 +463,50 @@ const Projects = () => {
                   </ElectricBorder>
                 </div>
 
-                {/* Mobile Layout */}
                 <div className="block lg:hidden">
                   <motion.div
                     variants={cardHoverVariants}
-                    className="bg-base-200 rounded-2xl shadow-2xl overflow-hidden border-2"
+                    className="
+                      rounded-xl sm:rounded-2xl overflow-hidden border-2 gpu-accelerated
+                      bg-white/10
+                      backdrop-blur-md
+                      supports-[backdrop-filter]:backdrop-blur-xl
+                      border-white/20"
                     style={{ borderColor: theme.borderColor }}
                   >
-                    {/* Image Section */}
                     <div className="relative">
                       <div className="relative aspect-video bg-base-300/20">
-                        <motion.img
+                        <img
                           src={mainImage}
                           alt={`${project.title} main screenshot`}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover cursor-zoom-in"
+                          loading="lazy"
+                          decoding="async"
                           onClick={() => handleImageClick(mainImage)}
                         />
 
-                        {/* Image Info Badge */}
-                        <div className="absolute top-4 right-4 bg-black/70 text-white px-2.5 py-1 rounded-full text-[11px] flex items-center gap-1.5 shadow-md">
-                          <FaImages className="text-xs" />
+                        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-black/70 text-white px-2 py-1 rounded-full text-[10px] sm:text-[11px] flex items-center gap-1 shadow-lg safe-blur">
+                          <FaImages className="text-[10px] sm:text-xs" />
                           <span>{project.images.length}</span>
-                          <span className="text-gray-300 font-medium ml-1">
-                            • Click to zoom
+                          <span className="text-gray-300 ml-0.5 hidden xs:inline">
+                            • Tap to zoom
                           </span>
                         </div>
                       </div>
 
-                      {/* Mobile Thumbnail Slider */}
                       {project.images.length > 1 && (
-                        <div className="p-4 overflow-x-auto flex space-x-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
+                        <div className="p-2 sm:p-3 overflow-x-auto flex space-x-1.5 sm:space-x-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
                           {project.images.map((img, i) => (
                             <img
                               key={i}
                               src={img}
                               alt={`${project.title} thumbnail ${i + 1}`}
-                              className={`h-16 w-auto rounded-lg cursor-pointer flex-shrink-0 border-2 transition-all ${
+                              loading="lazy"
+                              decoding="async"
+                              className={`h-12 sm:h-14 md:h-16 w-auto rounded-md sm:rounded-lg cursor-pointer flex-shrink-0 border-2 transition-all duration-200 touch-target ${
                                 selectedIndex === i
-                                  ? "border-white"
-                                  : "border-transparent hover:border-white/50"
+                                  ? "border-white ring-1 ring-white/30"
+                                  : "border-transparent opacity-70 hover:opacity-100 active:scale-95"
                               }`}
                               onClick={() => handleThumbnailClick(index, i)}
                             />
@@ -491,21 +515,20 @@ const Projects = () => {
                       )}
                     </div>
 
-                    {/* Content */}
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-white mb-3">
+                    <div className="p-4 sm:p-5 md:p-6">
+                      <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
                         {project.title}
                       </h3>
 
-                      <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                      <p className="text-gray-300 mb-3 sm:mb-4 text-xs sm:text-sm leading-relaxed line-clamp-4">
                         {project.description}
                       </p>
 
-                      <div className="flex flex-wrap gap-1.5 mb-4">
+                      <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-4">
                         {project.tech.map((tech, i) => (
                           <span
                             key={i}
-                            className="px-2 py-1 text-xs rounded-full text-white"
+                            className="px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs rounded-full text-white font-medium"
                             style={{
                               background: `linear-gradient(135deg, ${theme.gradientFrom}, ${theme.gradientTo})`,
                             }}
@@ -515,16 +538,16 @@ const Projects = () => {
                         ))}
                       </div>
 
-                      <div className="flex gap-3 flex-wrap">
+                      <div className="flex gap-2 sm:gap-3 flex-wrap">
                         {project.frontend && (
                           <a
                             href={project.frontend}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-sm btn-outline border-2 text-white gap-1.5 flex-1 sm:flex-none min-w-fit"
+                            className="btn btn-sm btn-outline border text-white gap-1 flex-1 min-w-0 text-xs sm:text-sm touch-target focus-ring"
                           >
-                            <VscPreview className="text-sm" />
-                            Frontend
+                            <VscPreview className="text-sm flex-shrink-0" />
+                            <span className="truncate">Frontend</span>
                           </a>
                         )}
                         {project.backend && (
@@ -532,10 +555,10 @@ const Projects = () => {
                             href={project.backend}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-sm btn-outline border-2 text-white gap-1.5 flex-1 sm:flex-none min-w-fit"
+                            className="btn btn-sm btn-outline border text-white gap-1 flex-1 min-w-0 text-xs sm:text-sm touch-target focus-ring"
                           >
-                            <FaServer className="text-sm" />
-                            Backend
+                            <FaServer className="text-sm flex-shrink-0" />
+                            <span className="truncate">Backend</span>
                           </a>
                         )}
                         {project.live && (
@@ -543,10 +566,10 @@ const Projects = () => {
                             href={project.live}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-sm bg-white text-gray-900 gap-1.5 flex-1 sm:flex-none min-w-fit border-0 font-medium"
+                            className="btn btn-sm bg-white text-gray-900 gap-1 flex-1 min-w-0 border-0 font-medium text-xs sm:text-sm touch-target focus-ring hover:bg-gray-100"
                           >
-                            <FaExternalLinkAlt className="text-sm" />
-                            Live
+                            <FaExternalLinkAlt className="text-xs flex-shrink-0" />
+                            <span className="truncate">Live</span>
                           </a>
                         )}
                       </div>

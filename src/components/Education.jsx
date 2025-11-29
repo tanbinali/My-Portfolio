@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -15,7 +15,33 @@ import ElectricBorder from "./ElectricBorder/ElectricBorder";
 import uniimage from "../assets/versity.webp";
 import phitron from "../assets/phitron.webp";
 
+const useReducedMotion = () => {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+  return prefersReducedMotion;
+};
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+};
+
 const Education = () => {
+  const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  const shouldReduceAnimations = prefersReducedMotion || isMobile;
   const educationData = [
     {
       title: "B.Sc in Computer Science & Engineering",
@@ -47,49 +73,64 @@ const Education = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState(0);
 
-  const slideVariants = {
-    enter: (dir) => ({
-      x: dir > 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.95,
+  const slideVariants = useMemo(
+    () => ({
+      enter: (dir) => ({
+        x: shouldReduceAnimations ? 0 : dir > 0 ? 200 : -200,
+        opacity: 0,
+        scale: shouldReduceAnimations ? 0.98 : 0.95,
+      }),
+      center: {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        transition: {
+          duration: shouldReduceAnimations ? 0.3 : 0.4,
+          ease: "easeOut",
+        },
+      },
+      exit: (dir) => ({
+        x: shouldReduceAnimations ? 0 : dir < 0 ? 200 : -200,
+        opacity: 0,
+        scale: shouldReduceAnimations ? 0.98 : 0.95,
+        transition: {
+          duration: shouldReduceAnimations ? 0.3 : 0.4,
+          ease: "easeIn",
+        },
+      }),
     }),
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-    exit: (dir) => ({
-      x: dir < 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.95,
-      transition: { duration: 0.5, ease: "easeIn" },
-    }),
-  };
+    [shouldReduceAnimations]
+  );
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setDirection(1);
     setIndex((prev) => (prev + 1) % educationData.length);
-    setTimeout(() => setIsAnimating(false), 700);
-  };
+    setTimeout(() => setIsAnimating(false), shouldReduceAnimations ? 400 : 600);
+  }, [isAnimating, educationData.length, shouldReduceAnimations]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setDirection(-1);
     setIndex((prev) => (prev === 0 ? educationData.length - 1 : prev - 1));
-    setTimeout(() => setIsAnimating(false), 700);
-  };
+    setTimeout(() => setIsAnimating(false), shouldReduceAnimations ? 400 : 600);
+  }, [isAnimating, educationData.length, shouldReduceAnimations]);
 
-  const goToSlide = (i) => {
-    if (isAnimating || i === index) return;
-    setIsAnimating(true);
-    setDirection(i > index ? 1 : -1);
-    setIndex(i);
-    setTimeout(() => setIsAnimating(false), 700);
-  };
+  const goToSlide = useCallback(
+    (i) => {
+      if (isAnimating || i === index) return;
+      setIsAnimating(true);
+      setDirection(i > index ? 1 : -1);
+      setIndex(i);
+      setTimeout(
+        () => setIsAnimating(false),
+        shouldReduceAnimations ? 400 : 600
+      );
+    },
+    [isAnimating, index, shouldReduceAnimations]
+  );
 
   const currentEdu = educationData[index];
 
@@ -97,29 +138,35 @@ const Education = () => {
     <motion.section
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "-100px" }}
       id="education"
-      className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 bg-transparent relative"
+      className="py-10 sm:py-14 lg:py-20 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-transparent relative"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-base-200/50 backdrop-blur-sm border border-accent/30 max-w-max mb-4 sm:mb-6 mx-auto">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse" />
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card-light max-w-max mb-4 sm:mb-6 mx-auto">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
             <span className="text-xs sm:text-sm font-medium text-accent">
               Academic Journey
             </span>
           </div>
-          <div className="max-w-3xl mx-auto mb-4 sm:mb-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-base-300/50 bg-base-200/30 backdrop-blur-md">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 text-center">
-              <ShinyText text="Education & Learning" speed={3} />
+          <div className="max-w-3xl mx-auto mb-4 sm:mb-6 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl glass-card">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4 text-center">
+              <ShinyText
+                text="Education & Learning"
+                disabled={shouldReduceAnimations}
+                speed={shouldReduceAnimations ? 5 : 3}
+              />
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed text-center">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-300 leading-relaxed text-center">
               A glimpse into my educational journey — where I built strong
               foundations in software engineering and computer science.
             </p>
           </div>
-          <div className="w-24 sm:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto" />
+          <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-primary via-secondary to-transparent rounded-full mx-auto" />
         </div>
 
         {/* Carousel */}
