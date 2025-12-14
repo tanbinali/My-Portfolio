@@ -171,12 +171,13 @@ const Hero = () => {
         target={download ? "_self" : "_blank"}
         rel="noopener noreferrer"
         download={download || false}
-        className={`group relative p-3 sm:p-4 rounded-xl glass-card-light hover-lift focus-ring touch-target transition-all duration-300 hover:border-primary/30 ${color}`}
+        // Increased mobile padding for better touch targets and layout stability
+        className={`group relative p-3 sm:p-4 rounded-xl glass-card-light hover-lift focus-ring touch-target transition-all duration-300 hover:border-primary/30 flex items-center justify-center ${color}`}
         title={label}
         aria-label={label}
         tabIndex={0}
       >
-        <Icon className="w-5 h-5 text-accent group-hover:text-primary transition-colors duration-200" />
+        <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-accent group-hover:text-primary transition-colors duration-200" />
         <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 px-2.5 py-1.5 bg-base-300/95 text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none shadow-lg border border-white/10 hidden sm:block">
           {label}
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1 w-2 h-2 bg-base-300/95 rotate-45 border-r border-b border-white/10"></div>
@@ -227,7 +228,7 @@ const Hero = () => {
       >
         <motion.div
           variants={itemVariants}
-          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card-light max-w-max"
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card-light max-w-max self-center lg:self-start"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -238,7 +239,10 @@ const Hero = () => {
           </span>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="space-y-2 sm:space-y-4">
+        <motion.div
+          variants={itemVariants}
+          className="space-y-2 sm:space-y-4 text-center lg:text-left"
+        >
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
             <motion.span
               initial={{ opacity: 0, x: -15 }}
@@ -256,7 +260,10 @@ const Hero = () => {
           </h1>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="space-y-2 sm:space-y-3">
+        <motion.div
+          variants={itemVariants}
+          className="space-y-2 sm:space-y-3 flex flex-col items-center lg:items-start"
+        >
           <TextType
             as="h2"
             text={[
@@ -267,7 +274,7 @@ const Hero = () => {
               "Clean Code Advocate",
               "Tech Stack Explorer",
             ]}
-            className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary min-h-[2rem] sm:min-h-[2.5rem]"
+            className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary min-h-[2rem] sm:min-h-[2.5rem] text-center lg:text-left"
             typingSpeed={shouldReduceAnimations ? 50 : 75}
             pauseDuration={shouldReduceAnimations ? 2000 : 1500}
             showCursor
@@ -288,7 +295,7 @@ const Hero = () => {
 
         <motion.p
           variants={itemVariants}
-          className="text-sm sm:text-base md:text-lg lg:text-xl text-neutral-content leading-relaxed max-w-xl glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6"
+          className="text-sm sm:text-base md:text-lg lg:text-xl text-neutral-content leading-relaxed max-w-xl glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center lg:text-left mx-auto lg:mx-0"
         >
           I'm passionate about creating{" "}
           <span className="text-primary font-semibold">
@@ -302,7 +309,7 @@ const Hero = () => {
 
         <motion.div
           variants={itemVariants}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start"
         >
           <motion.a
             whileHover={shouldReduceAnimations ? {} : { scale: 1.03, y: -2 }}
@@ -338,7 +345,7 @@ const Hero = () => {
           </motion.p>
           <motion.div
             variants={containerVariants}
-            className="flex gap-2 sm:gap-3 flex-wrap justify-center lg:justify-start"
+            className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-4"
           >
             {socialLinkElements}
           </motion.div>
