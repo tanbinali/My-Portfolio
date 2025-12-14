@@ -1,14 +1,21 @@
-import React, { useMemo, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useMemo, useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaEnvelope,
   FaWhatsapp,
   FaDiscord,
   FaArrowRight,
+  FaPaperPlane,
+  FaCheck,
+  FaExclamationCircle,
+  FaUser,
 } from "react-icons/fa";
+import { MdEmail, MdMessage } from "react-icons/md";
 import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
+import emailjs from "@emailjs/browser";
 
+// --- Hooks ---
 const useReducedMotion = () => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   useEffect(() => {
@@ -32,6 +39,7 @@ const useIsMobile = () => {
   return isMobile;
 };
 
+// --- Data ---
 const contacts = [
   {
     title: "Email",
@@ -59,6 +67,177 @@ const contacts = [
   },
 ];
 
+// --- Form Sub-Component ---
+const ContactForm = ({ shouldReduceAnimations }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [status, setStatus] = useState("idle"); // idle, loading, success, error
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.message) {
+      setErrorMsg("Please fill in all fields.");
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setStatus("loading");
+
+    const serviceID = "service_5newz1s";
+    const templateID = "template_iqlvitu";
+    const publicKey = "8t89P3VDgfBhV3mWX";
+
+    const templateParams = {
+      from_name: formData.name,
+      from_email: formData.email,
+      message: formData.message,
+    };
+
+    try {
+      await emailjs.send(serviceID, templateID, templateParams, publicKey);
+      setStatus("success");
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch (error) {
+      console.error("Email Error:", error);
+      setStatus("error");
+      setErrorMsg("Failed to send. Please try again later.");
+      setTimeout(() => setStatus("idle"), 4000);
+    }
+  };
+
+  const inputClasses =
+    "w-full bg-base-300/50 border border-white/10 rounded-xl px-12 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-white/50 focus:ring-1 focus:ring-white/50 transition-all duration-300 backdrop-blur-sm";
+  const iconClasses =
+    "absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg";
+
+  return (
+    <div className="w-full h-full flex flex-col justify-center">
+      <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+        <MdMessage className="text-white" /> Send a Message
+      </h3>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Name Input */}
+        <div className="relative group">
+          <FaUser
+            className={`${iconClasses} group-focus-within:text-white transition-colors`}
+          />
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleChange}
+            className={inputClasses}
+            disabled={status === "loading" || status === "success"}
+          />
+        </div>
+
+        {/* Email Input */}
+        <div className="relative group">
+          <MdEmail
+            className={`${iconClasses} group-focus-within:text-white transition-colors`}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            value={formData.email}
+            onChange={handleChange}
+            className={inputClasses}
+            disabled={status === "loading" || status === "success"}
+          />
+        </div>
+
+        {/* Message Input */}
+        <div className="relative group">
+          <div className="absolute left-4 top-4 text-gray-400 text-lg group-focus-within:text-white transition-colors">
+            <FaPaperPlane />
+          </div>
+          <textarea
+            name="message"
+            placeholder="What's on your mind?"
+            rows="4"
+            value={formData.message}
+            onChange={handleChange}
+            className={`${inputClasses} pl-12 resize-none`}
+            disabled={status === "loading" || status === "success"}
+          />
+        </div>
+
+        {/* Status Messages */}
+        <AnimatePresence mode="wait">
+          {status === "error" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="flex items-center gap-2 text-red-400 text-sm bg-red-400/10 p-3 rounded-lg border border-red-400/20"
+            >
+              <FaExclamationCircle /> {errorMsg}
+            </motion.div>
+          )}
+          {status === "success" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="flex items-center gap-2 text-green-400 text-sm bg-green-400/10 p-3 rounded-lg border border-green-400/20"
+            >
+              <FaCheck /> Message sent successfully! I'll get back to you soon.
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Submit Button */}
+        <motion.button
+          type="submit"
+          disabled={status !== "idle"}
+          className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300 ${
+            status === "loading"
+              ? "bg-gray-600 cursor-not-allowed text-gray-300"
+              : "bg-white text-black hover:bg-gray-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]"
+          }`}
+          whileHover={status === "idle" ? { scale: 1.02 } : {}}
+          whileTap={status === "idle" ? { scale: 0.98 } : {}}
+        >
+          {status === "loading" ? (
+            <span className="loading loading-spinner loading-md"></span>
+          ) : status === "success" ? (
+            <>
+              Sent <FaCheck />
+            </>
+          ) : (
+            <>
+              Send Message <FaArrowRight size={14} />
+            </>
+          )}
+        </motion.button>
+      </form>
+    </div>
+  );
+};
+
+// --- Main Component ---
 const Contacts = () => {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
@@ -189,18 +368,18 @@ const Contacts = () => {
         return (
           <motion.div
             key={index}
-            className="group relative"
+            className="group relative h-full"
             variants={itemVariants}
             whileHover="hover"
           >
             {/* Desktop/Laptop: ElectricBorder */}
-            <div className="hidden md:block">
+            <div className="hidden md:block h-full">
               <ElectricBorder
                 color={contact.color}
                 thickness={2}
                 speed={0.5}
                 chaos={0.2}
-                style={{ borderRadius: 20 }}
+                style={{ borderRadius: 20, height: "100%" }}
               >
                 <motion.a
                   variants={cardHoverVariants}
@@ -215,31 +394,13 @@ const Contacts = () => {
               </ElectricBorder>
             </div>
 
-            {/* Tablet: Medium screens */}
-            <div className="hidden sm:block md:hidden">
+            {/* Mobile/Tablet Fallback */}
+            <div className="block md:hidden h-full">
               <motion.a
                 href={contact.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative p-6 rounded-2xl bg-base-200/80 backdrop-blur-md shadow-xl flex flex-col items-center text-center border-2 h-full min-h-[260px]"
-                style={{
-                  borderColor: contact.color,
-                  boxShadow: `0 0 15px ${contact.color}30`,
-                }}
-                whileHover={{ y: -5, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {cardContent}
-              </motion.a>
-            </div>
-
-            {/* Mobile: Small screens */}
-            <div className="block sm:hidden">
-              <motion.a
-                href={contact.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative p-4 xs:p-5 rounded-xl bg-base-200/80 backdrop-blur-md shadow-lg flex flex-col items-center text-center border-2 h-full min-h-[220px]"
+                className="relative p-4 xs:p-6 rounded-xl bg-base-200/80 backdrop-blur-md shadow-lg flex flex-col items-center text-center border-2 h-full min-h-[220px]"
                 style={{
                   borderColor: contact.color,
                   boxShadow: `0 0 10px ${contact.color}20`,
@@ -296,28 +457,55 @@ const Contacts = () => {
             </h2>
             <p className="text-xs sm:text-sm md:text-base lg:text-lg text-neutral-content leading-relaxed text-center">
               Ready to bring your ideas to life? Reach out through any of these
-              channels and let's start building something amazing.
+              channels or drop a message below.
             </p>
           </motion.div>
+          <div className="w-20 h-1 bg-gradient-to-r from-primary via-secondary to-transparent rounded-full mx-auto" />
+        </motion.div>
 
+        {/* --- GRID LAYOUT: Contacts Top, Form Bottom --- */}
+        <div className="flex flex-col gap-8 lg:gap-12">
+          {/* 1. Contact Info Cards */}
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 sm:gap-8"
+          >
+            {contactItems}
+          </motion.div>
+
+          {/* 2. Contact Form Section */}
           <motion.div
             variants={itemVariants}
-            className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-primary via-secondary to-transparent rounded-full mx-auto"
-          />
-        </motion.div>
+            className="w-full max-w-3xl mx-auto"
+          >
+            {/* Desktop Electric Border for Form */}
+            <div className="hidden md:block">
+              <ElectricBorder
+                color="#FFFFFF" // Changed to White
+                thickness={2}
+                speed={0.8}
+                chaos={0.1}
+                style={{ borderRadius: 24 }}
+              >
+                <div className="bg-base-200/50 backdrop-blur-xl p-8 rounded-3xl border border-white/5 shadow-2xl">
+                  <ContactForm
+                    shouldReduceAnimations={shouldReduceAnimations}
+                  />
+                </div>
+              </ElectricBorder>
+            </div>
 
-        {/* Contact Cards Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 sm:gap-8 mb-12 sm:mb-16"
-        >
-          {contactItems}
-        </motion.div>
+            {/* Mobile Fallback for Form */}
+            <div className="block md:hidden">
+              <div className="bg-base-200/50 backdrop-blur-xl p-6 rounded-2xl border-2 border-white/30 shadow-xl">
+                <ContactForm shouldReduceAnimations={shouldReduceAnimations} />
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
+      {/* Background Ambience */}
       {!shouldReduceAnimations && (
         <div className="absolute inset-0 overflow-hidden -z-10 hidden md:block pointer-events-none">
           <motion.div

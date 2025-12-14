@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import { FiMail } from "react-icons/fi";
 import { CgNotes } from "react-icons/cg";
+import { SiCodeforces } from "react-icons/si";
 import TextType from "./TextType/TextType";
 import ShinyText from "./ShinyText/ShinyText";
 const ProfileCard = React.lazy(() => import("./ProfileCard/ProfileCard"));
@@ -68,6 +69,12 @@ const socialLinks = [
     icon: FaLinkedin,
     href: "https://linkedin.com/in/mdtanbinali",
     label: "LinkedIn",
+    color: "hover:text-blue-400",
+  },
+  {
+    icon: SiCodeforces,
+    href: "https://codeforces.com/profile/tanbinali",
+    label: "CodeForces",
     color: "hover:text-blue-400",
   },
   {

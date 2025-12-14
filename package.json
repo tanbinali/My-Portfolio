@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.1.13",
     "framer-motion": "^12.23.24",
     "gsap": "^3.13.0",
@@ -28,6 +29,7 @@
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
+    "baseline-browser-mapping": "^2.9.7",
     "daisyui": "^5.1.10",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
