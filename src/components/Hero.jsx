@@ -73,7 +73,7 @@ const socialLinks = [
   },
   {
     icon: SiCodeforces,
-    href: "https://codeforces.com/profile/tanbinali",
+    href: "https://codeforces.com/profile/mdtanbinali",
     label: "CodeForces",
     color: "hover:text-blue-400",
   },
