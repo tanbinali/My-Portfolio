@@ -18,7 +18,7 @@ import ElectricBorder from "./ElectricBorder/ElectricBorder";
 import uniimage from "../assets/versity.webp";
 import phitron from "../assets/phitron.webp";
 
-// --- Static Data (Moved outside to prevent recreation) ---
+// --- Static Data ---
 const EDUCATION_DATA = [
   {
     title: "B.Sc in Computer Science & Engineering",
@@ -31,6 +31,8 @@ const EDUCATION_DATA = [
     icon: <FaGraduationCap className="text-white" />,
     color: "#8B0000",
     current: true,
+    details:
+      "Studying core CSE subjects including C, C++, Java, Object-Oriented Programming (OOP), Data Structures, Algorithms, Discrete Mathematics, Database Systems, and Digital Logic Design (DLD). Actively participating in hackathons and practical software projects, with continuous learning planned in advanced systems, AI, and modern software engineering.",
   },
   {
     title: "CSE Fundamentals with Phitron",
@@ -43,8 +45,11 @@ const EDUCATION_DATA = [
     icon: <FaLaptopCode className="text-white" />,
     color: "#6B21A8",
     current: false,
+    details:
+      "Completed intensive training in C, C++, Data Structures, Algorithms, OOP, Competitive Programming (CP), HTML, CSS, Tailwind CSS, JavaScript, React, Python, SQL, and Django (MVT & REST API). Certificate ID: PHBATCH66222951006 (verifiable at phitron.io/verification).",
   },
 ];
+
 
 const slideVariants = {
   enter: (dir) => ({
@@ -65,8 +70,6 @@ const slideVariants = {
     transition: { duration: 0.4, ease: "easeIn" },
   }),
 };
-
-// --- Sub-Components ---
 
 // 1. Zoom Modal
 const ZoomModal = memo(({ image, onClose }) => (
@@ -102,7 +105,15 @@ const ZoomModal = memo(({ image, onClose }) => (
   </motion.div>
 ));
 
-// 2. Education Card Content (Memoized)
+// Info row
+const InfoRow = ({ icon: Icon, text, color = "text-gray-300" }) => (
+  <div className={`flex items-center gap-3 text-base sm:text-lg ${color}`}>
+    <Icon className="text-gray-400 text-base" />
+    <span className="font-medium">{text}</span>
+  </div>
+);
+
+// 2. Education Card Content
 const EducationCardContent = memo(({ edu, onZoom }) => (
   <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-center">
     {/* Image Section */}
@@ -168,40 +179,19 @@ const EducationCardContent = memo(({ edu, onZoom }) => (
         <InfoRow icon={FaMapMarkerAlt} text={edu.location} />
         <InfoRow icon={FaCalendarAlt} text={edu.duration} />
       </div>
+
+      {edu.details && (
+        <div className="mt-3 sm:mt-4">
+          <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
+            {edu.details}
+          </p>
+        </div>
+      )}
     </div>
   </div>
 ));
 
-const InfoRow = ({ icon: Icon, text, color = "text-gray-300" }) => (
-  <div className={`flex items-center gap-3 text-base sm:text-lg ${color}`}>
-    <Icon className="text-gray-400 text-base" />
-    <span className="font-medium">{text}</span>
-  </div>
-);
-
-// 3. Navigation Controls (Memoized)
-const CarouselControls = memo(({ onPrev, onNext }) => (
-  <>
-    {/* Desktop/Tablet */}
-    <NavButton
-      onClick={onPrev}
-      direction="left"
-      className="hidden sm:flex -left-4 lg:-left-6"
-    />
-    <NavButton
-      onClick={onNext}
-      direction="right"
-      className="hidden sm:flex -right-4 lg:-right-6"
-    />
-
-    {/* Mobile */}
-    <div className="flex sm:hidden justify-center gap-4 mt-6">
-      <NavButtonMobile onClick={onPrev} icon={<FaChevronLeft />} />
-      <NavButtonMobile onClick={onNext} icon={<FaChevronRight />} />
-    </div>
-  </>
-));
-
+// 3. Navigation Controls
 const NavButton = ({ onClick, direction, className }) => (
   <motion.button
     onClick={onClick}
@@ -224,8 +214,29 @@ const NavButtonMobile = ({ onClick, icon }) => (
   </motion.button>
 );
 
-// --- Main Component ---
+const CarouselControls = memo(({ onPrev, onNext }) => (
+  <>
+    {/* Desktop/Tablet */}
+    <NavButton
+      onClick={onPrev}
+      direction="left"
+      className="hidden sm:flex -left-4 lg:-left-6"
+    />
+    <NavButton
+      onClick={onNext}
+      direction="right"
+      className="hidden sm:flex -right-4 lg:-right-6"
+    />
 
+    {/* Mobile */}
+    <div className="flex sm:hidden justify-center gap-4 mt-6">
+      <NavButtonMobile onClick={onPrev} icon={<FaChevronLeft />} />
+      <NavButtonMobile onClick={onNext} icon={<FaChevronRight />} />
+    </div>
+  </>
+));
+
+// --- Main Component ---
 const Education = () => {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -283,11 +294,11 @@ const Education = () => {
           </div>
           <div className="max-w-3xl mx-auto mb-6 p-6 rounded-2xl glass-card">
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 text-center">
-              <ShinyText text="Education & Learning" speed={3} />
+              <ShinyText text="Education & Certifications" speed={3} />
             </h2>
             <p className="text-gray-300 text-center text-sm sm:text-lg">
-              A glimpse into my educational journey — where I built strong
-              foundations in software engineering.
+              A glimpse into my educational journey — where strong fundamentals
+              in computer science and software engineering were built.
             </p>
           </div>
         </div>
@@ -304,7 +315,7 @@ const Education = () => {
               exit="exit"
               className="w-full"
             >
-              {/* Conditional Rendering for Mobile/Desktop Border Performance */}
+              {/* Desktop/Laptop with ElectricBorder */}
               <div className="hidden md:block">
                 <ElectricBorder
                   color={currentEdu.color}
@@ -322,7 +333,7 @@ const Education = () => {
                 </ElectricBorder>
               </div>
 
-              {/* Lighter rendering for Mobile */}
+              {/* Mobile */}
               <div className="block md:hidden">
                 <div
                   className="bg-base-200/30 backdrop-blur-md rounded-2xl p-4 border-2 shadow-lg"
@@ -372,7 +383,8 @@ const Education = () => {
               Continuous Learning
             </h3>
             <p className="text-gray-300 text-sm">
-              Always upgrading skills to stay ahead in technology.
+              Always exploring new technologies, course materials, and
+              certifications to stay ahead in software engineering.
             </p>
           </div>
         </motion.div>
