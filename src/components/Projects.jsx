@@ -51,10 +51,21 @@ import p3img8 from "../assets/eventmanager/image (7).webp";
 import p3img9 from "../assets/eventmanager/image (8).webp";
 import p3img10 from "../assets/eventmanager/image (9).webp";
 
-import p4img1 from "../assets/librarymanagerAPI/image.webp";
-import p4img2 from "../assets/librarymanagerAPI/image (1).webp";
-import p4img3 from "../assets/librarymanagerAPI/image (2).webp";
-import p4img4 from "../assets/librarymanagerAPI/image (3).webp";
+import p4img1 from "../assets/harvestguard/image.webp";
+import p4img2 from "../assets/harvestguard/image (1).webp";
+import p4img3 from "../assets/harvestguard/image (2).webp";
+import p4img4 from "../assets/harvestguard/image (3).webp";
+import p4img5 from "../assets/harvestguard/image (4).webp";
+import p4img6 from "../assets/harvestguard/image (5).webp";
+import p4img7 from "../assets/harvestguard/image (6).webp";
+import p4img8 from "../assets/harvestguard/image (7).webp";
+
+
+import p5img1 from "../assets/librarymanagerAPI/image.webp";
+import p5img2 from "../assets/librarymanagerAPI/image (1).webp";
+import p5img3 from "../assets/librarymanagerAPI/image (2).webp";
+import p5img4 from "../assets/librarymanagerAPI/image (3).webp";
+
 
 // --- Static Data ---
 const PROJECTS_DATA = [
@@ -200,18 +211,68 @@ const PROJECTS_DATA = [
   },
   },
   {
+  title: "HarvestGuard",
+  shortDescription:
+    "A hackathon-built, farmer-centric platform to reduce post-harvest food loss in Bangladesh using storytelling UI, early warnings, and smart interventions.",
+  description:
+    "HarvestGuard is a hackathon project focused on reducing post-harvest food loss in Bangladesh, particularly for grains and staple crops such as rice. " +
+    "Bangladesh loses millions of metric tonnes of food every year due to inadequate storage, poor handling practices, and inefficient transportation, resulting in severe economic loss and food insecurity. " +
+    "HarvestGuard addresses this challenge by presenting a technology-driven, farmer-first solution aligned with Sustainable Development Goal (SDG) 12.3 — Responsible Consumption and Production. " +
+    "The platform emphasizes a storytelling-based, mobile-first user experience that visually communicates the problem and guides users through a simple data-to-action workflow: Data → Warning → Action → Saved Food. " +
+    "Accessibility is a core design consideration, with a responsive interface, large intuitive UI elements, and a Bangla-first approach with planned Bangla/English language switchability to ensure usability for rural farmers on low-cost Android devices. " +
+    "Currently implemented features include a problem–solution storytelling landing experience, basic farmer onboarding, crop batch registration, and a structured foundation for future data-driven interventions. " +
+    "Advanced features such as offline-first support, hyper-local Bangla weather advisories, risk forecasting, AI-based crop health scanning, smart alerts, pest identification, voice interaction, and community risk visualization are planned but not yet implemented. " +
+    "This project is actively under development and should be considered a work in progress, with the foundation laid during the hackathon and continuous improvements planned post-event.\n\n" +
+    "The project was built collaboratively with contributors Sadman Chowdhury and Muhammad Sharfuddin.",
+  tech: [
+    "React",
+    "React Router",
+    "Tailwind CSS",
+    "DaisyUI",
+    "Framer Motion",
+    "JavaScript",
+    "Django",
+    "Python",
+    "Django REST Framework",
+    "REST API",
+    "PostgreSQL",
+    "Axios",
+    "Supabase",
+    "Cloudinary",
+    "Vercel",
+    "Vite",
+  ],
+  images: [
+    p4img1,
+    p4img2,
+    p4img3,
+    p4img4,
+    p4img5,
+    p4img6,
+    p4img7,
+    p4img8,
+  ],
+  frontend: "https://github.com/tanbinali/HarvestGuardClient",
+  backend: "https://github.com/tanbinali/HarvestGuardAPI",
+  live: "https://harvest-guard-client.vercel.app/",
+  theme: {
+    borderColor: "#E6F4EA",
+    gradientFrom: "#14532d",
+    gradientTo: "#022c22",
+    hoverText: "text-green-300",
+  },
+  },
+
+  {
   title: "Library Manager API",
   shortDescription:
     "A secure, role-based REST API for managing library resources with JWT authentication.",
   description:
     "Library Manager API is a robust backend system built with Django REST Framework to manage books, authors, members, and borrowing workflows for a library environment. " +
-    "The API is designed with clear RESTful standards, supporting filtering, pagination, throttling, and nested routing for related resources such as authors’ books and members’ borrow records. " +
-    "Authentication and authorization are handled using Djoser and Simple JWT, enabling role-based permissions that distinguish librarians from members. " +
-    "Librarians have full CRUD access to books, members, and borrow records, while members can browse available books, borrow and return items, and view their own active borrow history. " +
-    "Borrow record management ensures data integrity and accurate tracking of availability and user activity. " +
-    "Comprehensive API documentation is provided using Swagger and ReDoc, making the system easy to integrate with frontend dashboards or third-party services. " +
-    "Book cover images are stored and optimized using Cloudinary, and PostgreSQL is used for reliable relational data storage. " +
-    "The project emphasizes security, scalability, and maintainability, making it suitable for institutional or production-level use.",
+    "The API follows RESTful standards with support for filtering, pagination, throttling, and nested routing for related resources. " +
+    "Authentication and authorization are handled using Djoser and Simple JWT, enabling role-based access control for librarians and members. " +
+    "The system includes comprehensive API documentation using Swagger and ReDoc, optimized media storage via Cloudinary, and reliable PostgreSQL-backed data persistence. " +
+    "The project emphasizes security, scalability, and maintainability, making it suitable for real-world backend systems.",
   tech: [
     "Python",
     "Django",
@@ -225,7 +286,7 @@ const PROJECTS_DATA = [
     "ReDoc",
     "drf-yasg",
   ],
-  images: [p4img1, p4img2, p4img3, p4img4],
+  images: [p5img1, p5img2, p5img3, p5img4],
   backend: "https://github.com/tanbinali/library_manager_api",
   live: "https://library-manager-api-alpha.vercel.app/",
   theme: {
@@ -234,8 +295,7 @@ const PROJECTS_DATA = [
     gradientTo: "#3f6212",
     hoverText: "text-green-400",
   },
-  },
-
+  }
 ];
 
 // --- Custom Hooks ---
