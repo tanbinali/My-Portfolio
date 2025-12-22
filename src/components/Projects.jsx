@@ -213,7 +213,7 @@ const PROJECTS_DATA = [
   {
   title: "HarvestGuard",
   shortDescription:
-    "A hackathon-built, farmer-centric platform to reduce post-harvest food loss in Bangladesh using storytelling UI, early warnings, and smart interventions.",
+    "A farmer-centric platform to reduce food loss in Bangladesh using storytelling UI, and smart interventions.",
   description:
     "HarvestGuard is a hackathon project focused on reducing post-harvest food loss in Bangladesh, particularly for grains and staple crops such as rice. " +
     "Bangladesh loses millions of metric tonnes of food every year due to inadequate storage, poor handling practices, and inefficient transportation, resulting in severe economic loss and food insecurity. " +
@@ -221,7 +221,7 @@ const PROJECTS_DATA = [
     "The platform emphasizes a storytelling-based, mobile-first user experience that visually communicates the problem and guides users through a simple data-to-action workflow: Data → Warning → Action → Saved Food. " +
     "Accessibility is a core design consideration, with a responsive interface, large intuitive UI elements, and a Bangla-first approach with planned Bangla/English language switchability to ensure usability for rural farmers on low-cost Android devices. " +
     "Currently implemented features include a problem–solution storytelling landing experience, basic farmer onboarding, crop batch registration, and a structured foundation for future data-driven interventions. " +
-    "Advanced features such as offline-first support, hyper-local Bangla weather advisories, risk forecasting, AI-based crop health scanning, smart alerts, pest identification, voice interaction, and community risk visualization are planned but not yet implemented. " +
+    "Advanced features such as offline-first support, hyper-local Bangla weather advisories, risk forecasting, AI-based crop health scanning, smart alerts, pest identification, voice interaction, and community risk visualization are planned but not yet implemented.\n\n" +
     "This project is actively under development and should be considered a work in progress, with the foundation laid during the hackathon and continuous improvements planned post-event.\n\n" +
     "The project was built collaboratively with contributors Sadman Chowdhury and Muhammad Sharfuddin.",
   tech: [
