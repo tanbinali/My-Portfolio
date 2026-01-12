@@ -11,6 +11,7 @@ import {
   FaTimes,
   FaTrophy,
 } from "react-icons/fa";
+import { FaXmarksLines } from "react-icons/fa6";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
@@ -25,6 +26,7 @@ const EDUCATION_DATA = [
   {
     title: "B.Sc in Computer Science & Engineering",
     university: "East Delta University",
+    cgpa:"CGPA 3.77/4 (Currently)",
     shortName: "EDU",
     location: "Chattogram, Bangladesh",
     duration: "2024 – 2028 (expected)",
@@ -39,6 +41,7 @@ const EDUCATION_DATA = [
   {
     title: "CSE Fundamentals with Phitron",
     university: "Phitron",
+    cgpa:"CGPA 4/4",
     shortName: "Phitron",
     location: "Online Platform",
     duration: "2024 – 2025",
@@ -53,6 +56,7 @@ const EDUCATION_DATA = [
   {
     title: "EDU Hackfest 2025",
     university: "East Delta University",
+    cgpa:"Participant",
     shortName: "Hackfest",
     location: "Chattogram, Bangladesh",
     duration: "2025",
@@ -192,6 +196,7 @@ const EducationCardContent = memo(({ edu, onZoom }) => (
           text={edu.university}
           color="text-white"
         />
+        <InfoRow icon={FaXmarksLines} text={edu.cgpa} />
         <InfoRow icon={FaMapMarkerAlt} text={edu.location} />
         <InfoRow icon={FaCalendarAlt} text={edu.duration} />
       </div>
