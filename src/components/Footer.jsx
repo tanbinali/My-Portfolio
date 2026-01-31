@@ -191,8 +191,7 @@ const Footer = () => {
             whileHover={{ color: "#9CA3AF", scale: 1.02 }}
             transition={{ duration: 0.2 }}
           >
-            © {new Date().getFullYear()} MD Tanbin Ali. All rights reserved.
-          </motion.div>
+            © 2025–{new Date().getFullYear()} MD Tanbin Ali. All rights reserved.          </motion.div>
         </motion.div>
       </div>
 
@@ -283,8 +282,7 @@ const Footer = () => {
               whileHover={{ color: "#9CA3AF", scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              © {new Date().getFullYear()} MD Tanbin Ali. All rights reserved.
-            </motion.div>
+            © 2025–{new Date().getFullYear()} MD Tanbin Ali. All rights reserved.            </motion.div>
           </div>
         </motion.div>
       </div>
@@ -375,8 +373,7 @@ const Footer = () => {
             whileHover={{ color: "#9CA3AF", scale: 1.02 }}
             transition={{ duration: 0.2 }}
           >
-            © {new Date().getFullYear()} MD Tanbin Ali. All rights reserved.
-          </motion.div>
+            © 2025–{new Date().getFullYear()} MD Tanbin Ali. All rights reserved.          </motion.div>
         </motion.div>
       </div>
     </motion.footer>
