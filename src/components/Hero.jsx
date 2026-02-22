@@ -267,7 +267,7 @@ const Hero = () => {
           <TextType
             as="h2"
             text={[
-              "Full Stack Software Developer",
+              "Full-Stack Software Developer",
               "Django & REST API Specialist",
               "React & JavaScript Expert",
               "Problem Solver & Lifelong Learner",
@@ -382,7 +382,7 @@ const Hero = () => {
           >
             <ProfileCard
               name="MD. Tanbin Ali"
-              title="Full Stack Developer"
+              title="Full-Stack Developer"
               handle="tanbinali"
               status="Available for Hire"
               contactText="Hire Me!"
