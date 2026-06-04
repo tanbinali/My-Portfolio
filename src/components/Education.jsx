@@ -26,7 +26,7 @@ const EDUCATION_DATA = [
   {
     title: "B.Sc in Computer Science & Engineering",
     university: "East Delta University",
-    cgpa:"CGPA 3.77/4 (Currently)",
+    cgpa:"CGPA 3.82/4 (Currently)",
     shortName: "EDU",
     location: "Chattogram, Bangladesh",
     duration: "2024 – 2028 (expected)",
@@ -36,7 +36,7 @@ const EDUCATION_DATA = [
     color: "#8B0000",
     current: true,
     details:
-      "Studying core CSE subjects including C, C++, Java, Object-Oriented Programming (OOP), Data Structures, Algorithms, Discrete Mathematics, Database Systems, and Digital Logic Design (DLD). Actively participating in hackathons and practical software projects, with continuous learning planned in advanced systems, AI, and modern software engineering.",
+      "Studying core CSE subjects including C, C++, Java, Object-Oriented Programming (OOP), Data Structures, Algorithms, Operating Systems, Micro-processors, Database Systems, and Digital Logic Design (DLD). Actively participating in hackathons and practical software projects, with continuous learning planned in advanced systems, AI, and modern software engineering.",
   },
   {
     title: "CSE Fundamentals with Phitron",
