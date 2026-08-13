@@ -52,7 +52,7 @@ const contacts = [
   {
     title: "WhatsApp",
     icon: <FaWhatsapp />,
-    info: "+880 1882-393841",
+    info: "@mdtanbinali",
     href: "https://wa.me/8801882393841",
     color: "#25D366",
     description: "Quick chat and instant messaging",
