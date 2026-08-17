@@ -168,13 +168,13 @@ const Recommendations = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-1 flex items-center gap-2">
-            <FaBriefcase style={{ color: formThemeColor }} /> Position/Company
+            <FaBriefcase style={{ color: formThemeColor }} /> Position
           </label>
           <input
             type="text"
             name="position"
             required
-            placeholder="Assistant Professor, East Delta University"
+            placeholder="Your Position, Company/Institution"
             value={formData.position}
             onChange={handleChange}
             className="w-full bg-base-300/50 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#C0C0C0] focus:ring-1 focus:ring-[#C0C0C0] transition-all"
@@ -356,13 +356,8 @@ const Recommendations = () => {
           )}
         </AnimatePresence>
 
-        {/* Recommendations Grid List (Always preserved underneath) */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
+        {/* Recommendations Grid List (Always rendered stably) */}
+        <div className="w-full">
           {loading ? (
             <div className="flex justify-center py-12">
               <FaSpinner className="animate-spin text-[#2ecc71]" size={32} />
@@ -392,7 +387,7 @@ const Recommendations = () => {
                 );
 
                 return (
-                  <motion.div key={index} variants={itemVariants} className="h-full">
+                  <div key={index} className="h-full">
                     {isMobile ? (
                       <div
                         className="h-full rounded-2xl border-2"
@@ -414,12 +409,12 @@ const Recommendations = () => {
                         {cardContent}
                       </ElectricBorder>
                     )}
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
           )}
-        </motion.div>
+        </div>
 
       </div>
     </motion.section>
