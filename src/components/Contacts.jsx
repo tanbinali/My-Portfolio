@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaEnvelope,
@@ -53,7 +53,7 @@ const contacts = [
     title: "WhatsApp",
     icon: <FaWhatsapp />,
     info: "@mdtanbinali",
-    href: "https://wa.me/8801882393841",
+    href: "https://wa.me/qr/7RT5LQLJCOX3G1",
     color: "#25D366",
     description: "Quick chat and instant messaging",
   },
@@ -101,9 +101,9 @@ const ContactForm = ({ shouldReduceAnimations }) => {
 
     setStatus("loading");
 
-    const serviceID = "service_5newz1s";
-    const templateID = "template_iqlvitu";
-    const publicKey = "8t89P3VDgfBhV3mWX";
+    const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
     const templateParams = {
       from_name: formData.name,
@@ -215,7 +215,7 @@ const ContactForm = ({ shouldReduceAnimations }) => {
           className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300 ${
             status === "loading"
               ? "bg-gray-600 cursor-not-allowed text-gray-300"
-              : "bg-white text-black hover:bg-gray-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]"
+              : "bg-white text-black hover:bg-gray-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] cursor-pointer"
           }`}
           whileHover={status === "idle" ? { scale: 1.02 } : {}}
           whileTap={status === "idle" ? { scale: 0.98 } : {}}
@@ -481,7 +481,7 @@ const Contacts = () => {
             {/* Desktop Electric Border for Form */}
             <div className="hidden md:block">
               <ElectricBorder
-                color="#FFFFFF" // Changed to White
+                color="#FFFFFF"
                 thickness={2}
                 speed={0.8}
                 chaos={0.1}
