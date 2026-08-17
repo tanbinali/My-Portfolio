@@ -56,7 +56,7 @@ const Recommendations = () => {
   const cardColors = ["#2ecc71", "#FFD700", "#C0C0C0"];
 
   // Fetch recommendations on component mount
- useEffect(() => {
+  useEffect(() => {
     const fetchRecommendations = async () => {
       try {
         const response = await fetch('/api/get-recommendations');
@@ -66,28 +66,11 @@ const Recommendations = () => {
             const data = await response.json();
             if (data && data.length > 0) {
               setRecommendationsList(data.reverse());
-              setLoading(false);
-              return;
             }
           }
         }
-        // Fallback data if API isn't running or returns non-JSON
-        setRecommendationsList([
-          {
-            name: "Dr. Ahmed Hossain",
-            position: "Assistant Professor, East Delta University",
-            recommendation: "Tanbin is an exceptionally driven developer with a deep grasp of full-stack architecture.",
-          }
-        ]);
       } catch (err) {
-        // Fallback on network error
-        setRecommendationsList([
-          {
-            name: "Dr. Ahmed Hossain",
-            position: "Assistant Professor, East Delta University",
-            recommendation: "Tanbin is an exceptionally driven developer with a deep grasp of full-stack architecture.",
-          }
-        ]);
+        console.error("Failed to load recommendations", err);
       } finally {
         setLoading(false);
       }
@@ -118,7 +101,7 @@ const Recommendations = () => {
         
         setTimeout(() => {
           setStatus("idle");
-          setShowForm(false); // Close form and go back to recommendations list
+          setShowForm(false); // Close form and show updated list
         }, 2500);
       } else {
         setStatus("error");
@@ -337,15 +320,16 @@ const Recommendations = () => {
           )}
         </motion.div>
 
-        {/* Dynamic Display Area: Form or Recommendations List */}
-        <AnimatePresence mode="wait">
-          {showForm ? (
+        {/* Form Container (Toggles open/close smoothly) */}
+        <AnimatePresence>
+          {showForm && (
             <motion.div
               key="form"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="w-full max-w-2xl mx-auto"
+              initial={{ opacity: 0, height: 0, y: -20 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-2xl mx-auto mb-12 overflow-hidden"
             >
               {isMobile ? (
                 <div
@@ -369,72 +353,73 @@ const Recommendations = () => {
                 </ElectricBorder>
               )}
             </motion.div>
-          ) : (
-            <motion.div
-              key="list"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              {loading ? (
-                <div className="flex justify-center py-12">
-                  <FaSpinner className="animate-spin text-[#2ecc71]" size={32} />
-                </div>
-              ) : recommendationsList.length === 0 ? (
-                <p className="text-center text-gray-400 italic">No recommendations yet. Be the first to add one!</p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {recommendationsList.map((rec, index) => {
-                    const currentThemeColor = cardColors[index % cardColors.length];
-
-                    const cardContent = (
-                      <div className="w-full h-full bg-base-200/80 backdrop-blur-md rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
-                        <div className="absolute top-4 right-4 text-white/10 group-hover:text-white/20 transition-colors">
-                          <FaQuoteLeft size={36} />
-                        </div>
-                        <p className="text-gray-300 text-sm sm:text-base leading-relaxed relative z-10 mb-6 italic">
-                          "{rec.recommendation}"
-                        </p>
-                        <div className="relative z-10 border-t border-white/10 pt-4 mt-auto">
-                          <h4 className="font-bold text-white text-base" style={{ color: currentThemeColor }}>
-                            {rec.name}
-                          </h4>
-                          <p className="text-xs text-gray-400 mt-0.5">{rec.position}</p>
-                        </div>
-                      </div>
-                    );
-
-                    return (
-                      <motion.div key={index} variants={itemVariants} className="h-full">
-                        {isMobile ? (
-                          <div
-                            className="h-full rounded-2xl border-2"
-                            style={{
-                              borderColor: currentThemeColor,
-                              boxShadow: `0 0 15px 1px ${currentThemeColor}30`,
-                            }}
-                          >
-                            {cardContent}
-                          </div>
-                        ) : (
-                          <ElectricBorder
-                            color={currentThemeColor}
-                            thickness={2}
-                            speed={0.8}
-                            chaos={0.1}
-                            style={{ borderRadius: 16, height: "100%" }}
-                          >
-                            {cardContent}
-                          </ElectricBorder>
-                        )}
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              )}
-            </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Recommendations Grid List (Always preserved underneath) */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <FaSpinner className="animate-spin text-[#2ecc71]" size={32} />
+            </div>
+          ) : recommendationsList.length === 0 ? (
+            <p className="text-center text-gray-400 italic">No recommendations yet. Be the first to add one!</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {recommendationsList.map((rec, index) => {
+                const currentThemeColor = cardColors[index % cardColors.length];
+
+                const cardContent = (
+                  <div className="w-full h-full bg-base-200/80 backdrop-blur-md rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
+                    <div className="absolute top-4 right-4 text-white/10 group-hover:text-white/20 transition-colors">
+                      <FaQuoteLeft size={36} />
+                    </div>
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed relative z-10 mb-6 italic">
+                      "{rec.recommendation}"
+                    </p>
+                    <div className="relative z-10 border-t border-white/10 pt-4 mt-auto">
+                      <h4 className="font-bold text-white text-base" style={{ color: currentThemeColor }}>
+                        {rec.name}
+                      </h4>
+                      <p className="text-xs text-gray-400 mt-0.5">{rec.position}</p>
+                    </div>
+                  </div>
+                );
+
+                return (
+                  <motion.div key={index} variants={itemVariants} className="h-full">
+                    {isMobile ? (
+                      <div
+                        className="h-full rounded-2xl border-2"
+                        style={{
+                          borderColor: currentThemeColor,
+                          boxShadow: `0 0 15px 1px ${currentThemeColor}30`,
+                        }}
+                      >
+                        {cardContent}
+                      </div>
+                    ) : (
+                      <ElectricBorder
+                        color={currentThemeColor}
+                        thickness={2}
+                        speed={0.8}
+                        chaos={0.1}
+                        style={{ borderRadius: 16, height: "100%" }}
+                      >
+                        {cardContent}
+                      </ElectricBorder>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+        </motion.div>
 
       </div>
     </motion.section>
