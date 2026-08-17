@@ -6,6 +6,7 @@ import { IoIosCall } from "react-icons/io";
 import { SiEducative } from "react-icons/si";
 import { TbCertificate } from "react-icons/tb";
 import { GrUserExpert } from "react-icons/gr";
+import { MdOutlineRecommend } from "react-icons/md";
 
 // --- Static Data (Moved outside to prevent recreation) ---
 const MENU_ITEMS = [
@@ -28,6 +29,11 @@ const MENU_ITEMS = [
     id: "education",
     label: "Education",
     icon: <TbCertificate className="inline-block mr-2" />,
+  },
+  {
+    id: "recommendations",
+    label: "Recommendations",
+    icon: <MdOutlineRecommend className="inline-block mr-2" />,
   },
   {
     id: "contact",

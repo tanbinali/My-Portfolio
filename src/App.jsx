@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import Contacts from "./components/Contacts";
 import Projects from "./components/Projects";
 import LoadingScreen from "./components/LoadingScreen";
+import Recommendations from "./components/Recommendations";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -63,6 +64,13 @@ function App() {
             <Education />
           </section>
 
+           <section
+            id="Recommendations"
+            className="scroll-mt-16 pt-4 pb-16 px-6 md:px-16 lg:px-24"
+          >
+            <Recommendations />
+          </section>
+          
           <section
             id="contact"
             className="scroll-mt-16 pt-4 pb-16 px-6 md:px-16 lg:px-24"
