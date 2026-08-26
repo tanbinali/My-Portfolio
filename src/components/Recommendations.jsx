@@ -44,7 +44,7 @@ const Recommendations = () => {
   // View & Form State
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", position: "", recommendation: "" });
-  const [status, setStatus] = useState("idle"); // 'idle', 'submitting', 'success', 'error'
+  const [status, setStatus] = useState("idle");
   
   // Real recommendations fetched from Google Sheets
   const [recommendationsList, setRecommendationsList] = useState([]);
@@ -54,6 +54,19 @@ const Recommendations = () => {
   const formThemeColor = "#C0C0C0"; 
   // Color Palette Cycle for cards: Green, Gold, Silver
   const cardColors = ["#2ecc71", "#FFD700", "#C0C0C0"];
+
+  const mockReviews = [
+  {
+    name: "Daniel Carter",
+    position: "Founder, Carter Auto Solutions",
+    recommendation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae justo nec augue consequat posuere. Praesent feugiat, sapien at tincidunt luctus, erat massa posuere nibh, vitae suscipit libero magna sed nisl. Donec vulputate neque at turpis facilisis."
+  },
+  {
+    name: "Arjun Mehta",
+    position: "Director, Mehta Battery Center",
+    recommendation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae justo nec augue consequat posuere. Praesent feugiat, sapien at tincidunt luctus, erat massa posuere nibh, vitae suscipit libero magna sed nisl. Donec vulputate neque at turpis facilisis, sed malesuada purus consectetur. Aliquam erat volutpat, curabitur."
+  }
+];
 
   // Fetch recommendations on component mount
   useEffect(() => {
@@ -66,11 +79,16 @@ const Recommendations = () => {
             const data = await response.json();
             if (data && data.length > 0) {
               setRecommendationsList(data.reverse());
+              setLoading(false);
+              return;
             }
           }
         }
+        // Fallback to mock data if API fails or returns HTML locally
+        setRecommendationsList(mockReviews);
       } catch (err) {
         console.error("Failed to load recommendations", err);
+        setRecommendationsList(mockReviews);
       } finally {
         setLoading(false);
       }
@@ -101,7 +119,7 @@ const Recommendations = () => {
         
         setTimeout(() => {
           setStatus("idle");
-          setShowForm(false); // Close form and show updated list
+          setShowForm(false);
         }, 2500);
       } else {
         setStatus("error");
@@ -295,7 +313,7 @@ const Recommendations = () => {
           />
         </motion.div>
 
-        {/* Persistent Toggle Action Button with Electric Border - Fixed Width */}
+        {/* Persistent Toggle Action Button */}
         <motion.div variants={itemVariants} className="flex justify-center mb-10 w-64 mx-auto">
           {isMobile ? (
             <div
@@ -320,7 +338,6 @@ const Recommendations = () => {
           )}
         </motion.div>
 
-        {/* Form Container (Toggles open/close smoothly) */}
         <AnimatePresence>
           {showForm && (
             <motion.div
@@ -356,7 +373,6 @@ const Recommendations = () => {
           )}
         </AnimatePresence>
 
-        {/* Recommendations Grid List (Always rendered stably) */}
         <div className="w-full">
           {loading ? (
             <div className="flex justify-center py-12">
@@ -365,16 +381,16 @@ const Recommendations = () => {
           ) : recommendationsList.length === 0 ? (
             <p className="text-center text-gray-400 italic">No recommendations yet. Be the first to add one!</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch auto-rows-fr">
               {recommendationsList.map((rec, index) => {
                 const currentThemeColor = cardColors[index % cardColors.length];
 
                 const cardContent = (
-                  <div className="w-full h-full bg-base-200/80 backdrop-blur-md rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
+                  <div className="flex-1 w-full h-full bg-base-200/80 backdrop-blur-md rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
                     <div className="absolute top-4 right-4 text-white/10 group-hover:text-white/20 transition-colors">
                       <FaQuoteLeft size={36} />
                     </div>
-                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed relative z-10 mb-6 italic">
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed relative z-10 mb-6 italic flex-1">
                       "{rec.recommendation}"
                     </p>
                     <div className="relative z-10 border-t border-white/10 pt-4 mt-auto">
@@ -387,10 +403,10 @@ const Recommendations = () => {
                 );
 
                 return (
-                  <div key={index} className="h-full">
+                  <div key={index} className="flex flex-col h-full w-full">
                     {isMobile ? (
                       <div
-                        className="h-full rounded-2xl border-2"
+                        className="flex-1 flex flex-col rounded-2xl border-2 w-full h-full"
                         style={{
                           borderColor: currentThemeColor,
                           boxShadow: `0 0 15px 1px ${currentThemeColor}30`,
@@ -399,15 +415,24 @@ const Recommendations = () => {
                         {cardContent}
                       </div>
                     ) : (
-                      <ElectricBorder
-                        color={currentThemeColor}
-                        thickness={2}
-                        speed={0.8}
-                        chaos={0.1}
-                        style={{ borderRadius: 16, height: "100%" }}
-                      >
-                        {cardContent}
-                      </ElectricBorder>
+                      <div className="flex-1 flex flex-col w-full h-full relative [&>div]:!flex-1 [&>div]:!h-full [&>div]:flex [&>div]:flex-col [&>div>div]:!flex-1 [&>div>div]:!h-full [&>div>div]:flex [&>div>div]:flex-col">
+                        <ElectricBorder
+                          color={currentThemeColor}
+                          thickness={2}
+                          speed={0.8}
+                          chaos={0.1}
+                          className="flex-1 flex flex-col w-full h-full"
+                          style={{ 
+                            borderRadius: 16, 
+                            height: "100%", 
+                            display: "flex", 
+                            flexDirection: "column", 
+                            flex: 1 
+                          }}
+                        >
+                          {cardContent}
+                        </ElectricBorder>
+                      </div>
                     )}
                   </div>
                 );
