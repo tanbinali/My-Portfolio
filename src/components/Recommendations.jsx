@@ -302,7 +302,7 @@ const Recommendations = () => {
               />
             </h2>
             <p className="text-xs sm:text-sm md:text-base text-gray-300 leading-relaxed text-center">
-              Feedback and professional endorsements from colleagues and mentors.
+              Feedback and professional endorsements from colleagues, clients and mentors.
             </p>
           </motion.div>
           
