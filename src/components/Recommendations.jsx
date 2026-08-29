@@ -84,7 +84,6 @@ const Recommendations = () => {
             }
           }
         }
-        // Fallback to mock data if API fails or returns HTML locally
         setRecommendationsList(mockReviews);
       } catch (err) {
         console.error("Failed to load recommendations", err);

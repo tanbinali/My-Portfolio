@@ -116,19 +116,19 @@ const VerticalProjectCard = memo(
     const content = (
       <div
         onClick={() => onDetails(project)}
-        className="flex flex-col h-full w-full cursor-pointer transition-colors p-5 group"
+        className="flex-1 w-full h-full flex flex-col justify-between cursor-pointer transition-colors p-5 group"
       >
-        <div className="w-full mb-4">
-          <ImageCarousel
-            images={project.images}
-            activeIndex={activeImgIndex}
-            onThumbnailClick={setActiveImgIndex}
-            onZoom={onZoom}
-            borderColor={theme.borderColor}
-          />
-        </div>
+        <div>
+          <div className="w-full mb-4">
+            <ImageCarousel
+              images={project.images}
+              activeIndex={activeImgIndex}
+              onThumbnailClick={setActiveImgIndex}
+              onZoom={onZoom}
+              borderColor={theme.borderColor}
+            />
+          </div>
 
-        <div className="flex flex-col flex-1">
           <h3 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors leading-tight">
             {project.title}
           </h3>
@@ -152,31 +152,32 @@ const VerticalProjectCard = memo(
               </span>
             )}
           </div>
+        </div>
 
-          <div
-            className="flex gap-2.5 flex-wrap mt-auto"
-            onClick={(e) => e.stopPropagation()}
+        <div
+          className="flex gap-2.5 flex-wrap mt-auto pt-2"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => onDetails(project)}
+            className="btn btn-sm h-8 min-h-0 px-3 text-white border-0 shadow-md text-xs font-semibold tracking-wide flex-1"
+            style={{
+              background: `linear-gradient(135deg, ${theme.gradientFrom}, ${theme.gradientTo})`,
+              color: "#ffffff",
+            }}
           >
-            <button
-              onClick={() => onDetails(project)}
-              className="btn btn-sm h-8 min-h-0 px-3 text-white border-0 shadow-md text-xs font-semibold tracking-wide flex-1"
-              style={{
-                background: `linear-gradient(135deg, ${theme.gradientFrom}, ${theme.gradientTo})`,
-              }}
-            >
-              <FaInfoCircle /> Details
-            </button>
+            <FaInfoCircle /> Details
+          </button>
 
-            {project.live && (
-              <ProjectLink
-                href={project.live}
-                icon={<FaExternalLinkAlt />}
-                text="Live"
-                isSolid
-                theme={theme}
-              />
-            )}
-          </div>
+          {project.live && (
+            <ProjectLink
+              href={project.live}
+              icon={<FaExternalLinkAlt />}
+              text="Live"
+              isSolid
+              theme={theme}
+            />
+          )}
         </div>
       </div>
     );
@@ -184,7 +185,7 @@ const VerticalProjectCard = memo(
     if (isMobile) {
       return (
         <div
-          className="h-full w-full rounded-2xl border-2 overflow-hidden bg-base-200"
+          className="flex-1 flex flex-col rounded-2xl border-2 w-full h-full overflow-hidden bg-base-200"
           style={{
             borderColor: theme.borderColor,
             boxShadow: `0 0 15px 1px ${theme.borderColor}40`,
@@ -196,15 +197,22 @@ const VerticalProjectCard = memo(
     }
 
     return (
-      <div className="h-full w-full">
+      <div className="flex-1 flex flex-col w-full h-full relative [&>div]:!flex-1 [&>div]:!h-full [&>div]:flex [&>div]:flex-col [&>div>div]:!flex-1 [&>div>div]:!h-full [&>div>div]:flex [&>div>div]:flex-col">
         <ElectricBorder
           color={theme.borderColor}
           thickness={2}
           speed={0.8}
           chaos={0.1}
-          style={{ borderRadius: 16, height: "100%", width: "100%" }}
+          className="flex-1 flex flex-col w-full h-full"
+          style={{
+            borderRadius: 16,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            flex: 1,
+          }}
         >
-          <div className="h-full w-full bg-base-200 rounded-2xl overflow-hidden hover:bg-base-200/80 transition-colors">
+          <div className="flex-1 flex flex-col w-full h-full bg-base-200 rounded-2xl overflow-hidden hover:bg-base-200/80 transition-colors">
             {content}
           </div>
         </ElectricBorder>
@@ -247,7 +255,7 @@ const ProjectCard = memo(
         exit="hidden"
         variants={itemVariants}
         whileHover={!isMobile ? "hover" : undefined}
-        className="group h-full w-full"
+        className="group h-full w-full flex flex-col"
       >
         <VerticalProjectCard
           project={project}
@@ -277,6 +285,7 @@ const ProjectLink = ({ href, icon, text, isSolid, theme }) => (
       isSolid && theme
         ? {
             background: `linear-gradient(135deg, ${theme.gradientFrom}, ${theme.gradientTo})`,
+            color: "#ffffff",
           }
         : {}
     }
@@ -360,6 +369,7 @@ const ProjectDetailsModal = memo(({ project, onClose, onZoom }) => {
                         className="btn text-white w-full border-none shadow-md"
                         style={{
                           background: `linear-gradient(135deg, ${theme.gradientFrom}, ${theme.gradientTo})`,
+                          color: "#ffffff",
                         }}
                       >
                         <FaExternalLinkAlt /> Live Demo
@@ -439,6 +449,7 @@ const ProjectDetailsModal = memo(({ project, onClose, onZoom }) => {
                         className="btn text-white w-full border-none shadow-md btn-sm h-9"
                         style={{
                           background: `linear-gradient(135deg, ${theme.gradientFrom}, ${theme.gradientTo})`,
+                          color: "#ffffff",
                         }}
                       >
                         <FaExternalLinkAlt /> Live Demo
@@ -705,10 +716,10 @@ const Projects = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-primary via-secondary to-transparent rounded-full mx-auto mt-6" />
         </motion.div>
 
-        {/* Projects Grid with AnimatePresence */}
+        {/* Projects Grid with items-stretch and auto-rows-fr */}
         <motion.div
           variants={containerVariants}
-          className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch auto-rows-fr"
         >
           <AnimatePresence mode="popLayout">
             {visibleProjects.map((project, index) => (

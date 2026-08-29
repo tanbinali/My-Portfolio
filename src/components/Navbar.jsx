@@ -42,35 +42,42 @@ const MENU_ITEMS = [
   },
 ];
 
-// --- Animation Variants (Static) ---
+// --- Animation Variants (Static & GPU-Accelerated) ---
 const navVariants = {
-  hidden: { y: -100 },
+  hidden: { y: -100, opacity: 0 },
   visible: {
     y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+    opacity: 1,
+    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
   },
 };
 
+// Optimized to use transform/opacity instead of layout-thrashing height animations
 const mobileMenuVariants = {
   closed: {
     opacity: 0,
-    height: 0,
+    y: -8,
+    scaleY: 0.98,
     transition: {
-      staggerDirection: -1,
-      staggerChildren: 0.05,
-      when: "afterChildren",
-      duration: 0.2,
+      duration: 0.15,
+      ease: "easeInOut",
     },
   },
   open: {
     opacity: 1,
-    height: "auto",
-    transition: { staggerChildren: 0.07, delayChildren: 0.06, duration: 0.3 },
+    y: 0,
+    scaleY: 1,
+    transition: {
+      duration: 0.2,
+      ease: "easeOut",
+      staggerChildren: 0.04,
+      delayChildren: 0.02,
+    },
   },
 };
 
 const menuItemVariants = {
-  closed: { opacity: 0, x: -10 },
+  closed: { opacity: 0, x: -8 },
   open: { opacity: 1, x: 0 },
 };
 
@@ -79,7 +86,7 @@ const underlineVariants = {
   visible: { width: "100%" },
 };
 
-// --- Sub-Components (Memoized to prevent re-renders on scroll) ---
+// --- Sub-Components (Memoized) ---
 
 const Logo = memo(({ onClick }) => (
   <motion.button
@@ -98,7 +105,7 @@ const Logo = memo(({ onClick }) => (
         alt="Logo"
         className="h-7 sm:h-8 md:h-9 w-auto"
         loading="eager"
-        width={36} // Explicit width/height helps avoid layout shift
+        width={36}
         height={36}
       />
     </motion.div>
@@ -107,6 +114,8 @@ const Logo = memo(({ onClick }) => (
     </span>
   </motion.button>
 ));
+
+Logo.displayName = "Logo";
 
 const DesktopMenu = memo(({ onNavigate }) => (
   <div className="hidden md:flex items-center space-x-0.5 lg:space-x-1">
@@ -127,12 +136,14 @@ const DesktopMenu = memo(({ onNavigate }) => (
           variants={underlineVariants}
           initial="hidden"
           whileHover="visible"
-          transition={{ duration: 0.25, ease: "easeOut" }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         />
       </motion.button>
     ))}
   </div>
 ));
+
+DesktopMenu.displayName = "DesktopMenu";
 
 const MobileMenuToggleButton = memo(({ isOpen, onToggle }) => (
   <motion.button
@@ -153,18 +164,19 @@ const MobileMenuToggleButton = memo(({ isOpen, onToggle }) => (
   </motion.button>
 ));
 
+MobileMenuToggleButton.displayName = "MobileMenuToggleButton";
+
 // --- Main Component ---
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Refs for logic that shouldn't trigger re-renders or depend on stale closures
   const navRef = useRef(null);
   const isScrolledRef = useRef(false);
   const pendingScrollId = useRef(null);
 
-  // Optimized Scroll Listener
+  // Optimized Scroll Listener using requestAnimationFrame
   useEffect(() => {
     let ticking = false;
 
@@ -172,7 +184,6 @@ const Navbar = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const nextIsScrolled = window.scrollY > 10;
-          // Only update state if the value has actually changed
           if (nextIsScrolled !== isScrolledRef.current) {
             setIsScrolled(nextIsScrolled);
             isScrolledRef.current = nextIsScrolled;
@@ -185,7 +196,7 @@ const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // Empty dependency array = listener bound once
+  }, []);
 
   // Body lock for mobile menu
   useEffect(() => {
@@ -206,12 +217,10 @@ const Navbar = () => {
 
     const navEl = navRef.current;
     const navHeight = navEl ? navEl.offsetHeight : 0;
-    // Calculate position
     const target = section.offsetTop - navHeight - 8;
     window.scrollTo({ top: target, behavior: "smooth" });
   }, []);
 
-  // Handlers wrapped in useCallback to keep props stable for memoized children
   const handleLogoClick = useCallback(() => {
     performScroll("top");
     setIsOpen(false);
@@ -227,7 +236,6 @@ const Navbar = () => {
 
   const handleMobileClick = useCallback((id) => {
     setIsOpen(false);
-    // Queue scroll for after animation frame to allow menu to close visually
     pendingScrollId.current = id;
   }, []);
 
@@ -236,8 +244,7 @@ const Navbar = () => {
   return (
     <motion.nav
       ref={navRef}
-      // Added 'will-change-transform' via standard CSS class approach or inline if needed
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 will-change-[background-color,backdrop-filter] ${
+      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
         isScrolled
           ? "bg-base-100/80 safe-blur shadow-lg py-2 border-b border-primary/10"
           : "bg-transparent py-3"
@@ -245,6 +252,10 @@ const Navbar = () => {
       variants={navVariants}
       initial="hidden"
       animate="visible"
+      style={{
+        transform: "translateZ(0)",
+        backfaceVisibility: "hidden",
+      }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8">
         <Logo onClick={handleLogoClick} />
@@ -255,30 +266,31 @@ const Navbar = () => {
       <AnimatePresence
         onExitComplete={() => {
           if (pendingScrollId.current) {
-            // Tiny delay ensures strict mode doesn't clash with layout calculation
             setTimeout(() => {
               performScroll(pendingScrollId.current);
               pendingScrollId.current = null;
-            }, 50);
+            }, 30);
           }
         }}
       >
         {isOpen && (
           <motion.div
-            className="md:hidden bg-base-100/95 safe-blur border-t border-primary/10 px-4 sm:px-6 py-3 sm:py-4 overflow-hidden"
+            className="md:hidden absolute top-full left-0 w-full bg-base-100/95 safe-blur border-t border-primary/10 px-4 sm:px-6 py-3 sm:py-4 shadow-xl origin-top"
             variants={mobileMenuVariants}
             initial="closed"
             animate="open"
             exit="closed"
-            // Optimization: Rendering hint for GPU
-            style={{ willChange: "height, opacity" }}
+            style={{
+              transform: "translateZ(0)",
+              backfaceVisibility: "hidden",
+            }}
           >
             <div className="space-y-1">
-              {MENU_ITEMS.map((item, index) => (
+              {MENU_ITEMS.map((item) => (
                 <motion.button
                   key={item.id}
                   onClick={() => handleMobileClick(item.id)}
-                  className="w-full text-left py-3.5 px-4 text-base font-medium text-base-content/90 hover:text-primary hover:bg-primary/5 transition-colors duration-200 items-center flex gap-3 group rounded-xl touch-target"
+                  className="w-full text-left py-3 px-4 text-base font-medium text-base-content/90 hover:text-primary hover:bg-primary/5 transition-colors duration-200 items-center flex gap-3 group rounded-xl touch-target"
                   variants={menuItemVariants}
                   whileTap={{ scale: 0.98 }}
                 >

@@ -1,57 +1,131 @@
 // src/data/projectsData.js
 
 // --- Assets Imports ---
-import p1img1 from "../assets/serviceease/image1.webp";
-import p1img2 from "../assets/serviceease/image2.webp";
-import p1img3 from "../assets/serviceease/image3.webp";
-import p1img4 from "../assets/serviceease/image4.webp";
-import p1img5 from "../assets/serviceease/image5.webp";
-import p1img6 from "../assets/serviceease/image6.webp";
-import p1img7 from "../assets/serviceease/image7.webp";
-import p1img8 from "../assets/serviceease/image8.webp";
-import p1img9 from "../assets/serviceease/image9.webp";
-import p1img10 from "../assets/serviceease/image10.webp";
-import p1img11 from "../assets/serviceease/image11.webp";
-import p1img12 from "../assets/serviceease/image12.webp";
-import p1img13 from "../assets/serviceease/image13.webp";
-import p1img14 from "../assets/serviceease/image14.webp";
-import p1img15 from "../assets/serviceease/image15.webp";
-import p1img16 from "../assets/serviceease/image16.webp";
+import p1img1 from "../assets/awqat/image.webp";
+import p1img2 from "../assets/awqat/image (1).webp";
+import p1img3 from "../assets/awqat/image (2).webp";
+import p1img4 from "../assets/awqat/image (3).webp";
+import p1img5 from "../assets/awqat/image (4).webp";
+import p1img6 from "../assets/awqat/image (5).webp";
+import p1img7 from "../assets/awqat/image (6).webp";
+import p1img8 from "../assets/awqat/image (7).webp";
+import p1img9 from "../assets/awqat/image (8).webp";
+import p1img10 from "../assets/awqat/image (9).webp";
+import p1img11 from "../assets/awqat/image (10).webp";
+import p1img12 from "../assets/awqat/image (11).webp";
+import p1img13 from "../assets/awqat/image (12).webp";
+import p1img14 from "../assets/awqat/image (13).webp";
+import p1img15 from "../assets/awqat/image (14).webp";
+import p1img16 from "../assets/awqat/image (15).webp";
+import p1img17 from "../assets/awqat/image (16).webp";
+import p1img18 from "../assets/awqat/image (17).webp";
+import p1img19 from "../assets/awqat/image (18).webp";
+import p1img20 from "../assets/awqat/image (19).webp";
+import p1img21 from "../assets/awqat/image (20).webp";
 
-import p2img1 from "../assets/mkauto/image.webp";
-import p2img2 from "../assets/mkauto/image (1).webp";
-import p2img3 from "../assets/mkauto/image (2).webp";
-import p2img4 from "../assets/mkauto/image (3).webp";
-import p2img5 from "../assets/mkauto/image (4).webp";
-import p2img6 from "../assets/mkauto/image (5).webp";
+import p2img1 from "../assets/serviceease/image1.webp";
+import p2img2 from "../assets/serviceease/image2.webp";
+import p2img3 from "../assets/serviceease/image3.webp";
+import p2img4 from "../assets/serviceease/image4.webp";
+import p2img5 from "../assets/serviceease/image5.webp";
+import p2img6 from "../assets/serviceease/image6.webp";
+import p2img7 from "../assets/serviceease/image7.webp";
+import p2img8 from "../assets/serviceease/image8.webp";
+import p2img9 from "../assets/serviceease/image9.webp";
+import p2img10 from "../assets/serviceease/image10.webp";
+import p2img11 from "../assets/serviceease/image11.webp";
+import p2img12 from "../assets/serviceease/image12.webp";
+import p2img13 from "../assets/serviceease/image13.webp";
+import p2img14 from "../assets/serviceease/image14.webp";
+import p2img15 from "../assets/serviceease/image15.webp";
+import p2img16 from "../assets/serviceease/image16.webp";
 
-import p3img1 from "../assets/eventmanager/image.webp";
-import p3img2 from "../assets/eventmanager/image (1).webp";
-import p3img3 from "../assets/eventmanager/image (2).webp";
-import p3img4 from "../assets/eventmanager/image (3).webp";
-import p3img5 from "../assets/eventmanager/image (4).webp";
-import p3img6 from "../assets/eventmanager/image (5).webp";
-import p3img7 from "../assets/eventmanager/image (6).webp";
-import p3img8 from "../assets/eventmanager/image (7).webp";
-import p3img9 from "../assets/eventmanager/image (8).webp";
-import p3img10 from "../assets/eventmanager/image (9).webp";
+import p3img1 from "../assets/jajitrading/image.webp";
+import p3img2 from "../assets/jajitrading/image (1).webp";
+import p3img3 from "../assets/jajitrading/image (2).webp";
+import p3img4 from "../assets/jajitrading/image (3).webp";
+import p3img5 from "../assets/jajitrading/image (4).webp";
+import p3img6 from "../assets/jajitrading/image (5).webp";
+import p3img7 from "../assets/jajitrading/image (6).webp";
+import p3img8 from "../assets/jajitrading/image (7).webp";
 
-import p4img1 from "../assets/harvestguard/image.webp";
-import p4img2 from "../assets/harvestguard/image (1).webp";
-import p4img3 from "../assets/harvestguard/image (2).webp";
-import p4img4 from "../assets/harvestguard/image (3).webp";
-import p4img5 from "../assets/harvestguard/image (4).webp";
-import p4img6 from "../assets/harvestguard/image (5).webp";
-import p4img7 from "../assets/harvestguard/image (6).webp";
-import p4img8 from "../assets/harvestguard/image (7).webp";
+import p4img1 from "../assets/mkauto/image.webp";
+import p4img2 from "../assets/mkauto/image (1).webp";
+import p4img3 from "../assets/mkauto/image (2).webp";
+import p4img4 from "../assets/mkauto/image (3).webp";
+import p4img5 from "../assets/mkauto/image (4).webp";
+import p4img6 from "../assets/mkauto/image (5).webp";
 
-import p5img1 from "../assets/librarymanagerAPI/image.webp";
-import p5img2 from "../assets/librarymanagerAPI/image (1).webp";
-import p5img3 from "../assets/librarymanagerAPI/image (2).webp";
-import p5img4 from "../assets/librarymanagerAPI/image (3).webp";
+import p5img1 from "../assets/eventmanager/image.webp";
+import p5img2 from "../assets/eventmanager/image (1).webp";
+import p5img3 from "../assets/eventmanager/image (2).webp";
+import p5img4 from "../assets/eventmanager/image (3).webp";
+import p5img5 from "../assets/eventmanager/image (4).webp";
+import p5img6 from "../assets/eventmanager/image (5).webp";
+import p5img7 from "../assets/eventmanager/image (6).webp";
+import p5img8 from "../assets/eventmanager/image (7).webp";
+import p5img9 from "../assets/eventmanager/image (8).webp";
+import p5img10 from "../assets/eventmanager/image (9).webp";
+
+import p6img1 from "../assets/harvestguard/image.webp";
+import p6img2 from "../assets/harvestguard/image (1).webp";
+import p6img3 from "../assets/harvestguard/image (2).webp";
+import p6img4 from "../assets/harvestguard/image (3).webp";
+import p6img5 from "../assets/harvestguard/image (4).webp";
+import p6img6 from "../assets/harvestguard/image (5).webp";
+import p6img7 from "../assets/harvestguard/image (6).webp";
+import p6img8 from "../assets/harvestguard/image (7).webp";
+
+import p7img1 from "../assets/librarymanagerAPI/image.webp";
+import p7img2 from "../assets/librarymanagerAPI/image (1).webp";
+import p7img3 from "../assets/librarymanagerAPI/image (2).webp";
+import p7img4 from "../assets/librarymanagerAPI/image (3).webp";
 
 // --- Static Data ---
 export const PROJECTS_DATA = [
+  {
+    title: "AwQat Gamestore",
+    shortDescription:
+      "A scalable full-stack digital gaming e-commerce platform with catalog management, carts, reviews, and secure local payment integration.",
+    description:
+      "AwQat Gamestore started as a project for the CSE 242 course, but with the clear intention of building a fully-realized real-world product with ambitious future scaling plans. " +
+      "Built in collaboration with designer and friend Avik Deb Nath who served as the partner on the project, the platform is designed to let gamers purchase in-game currencies and digital gaming services seamlessly using local payment methods. " +
+      "The system features comprehensive product browsing, category filtering, studios management, real-time shopping cart workflows, and customer reviews. " +
+      "The frontend is built with React, Tailwind CSS, and Vite, delivering a responsive and modern interface. " +
+      "On the backend, Django REST Framework manages complex business logic, role-based permissions, and user authentication using Djoser and Simple JWT. " +
+      "Secure payment processing is integrated via SSLCommerz, while PostgreSQL ensures structured and reliable data storage. " +
+      "Cloudinary handles optimized image uploads, and the complete application is deployed for production use.",
+    tech: [
+      "React",
+      "Tailwind CSS",
+      "JavaScript",
+      "Django",
+      "Python",
+      "Django REST Framework",
+      "Djoser",
+      "Simple JWT",
+      "PostgreSQL",
+      "SSLCommerz",
+      "Cloudinary",
+      "REST API",
+      "Vite",
+      "Vercel",
+    ],
+    images: [
+      p1img1, p1img2, p1img3, p1img4, p1img5, p1img6, p1img7, p1img8,
+      p1img9, p1img10, p1img11, p1img12, p1img13, p1img14, p1img15, p1img16,
+      p1img17, p1img18, p1img19, p1img20, p1img21,
+    ],
+    frontend: "https://github.com/AvikDN/AwQat-Gamestore",
+    backend: "https://github.com/tanbinali/AwQatAPI",
+    live: "https://awqatgamestore.vercel.app/",
+    theme: {
+      borderColor: "#FD5353",
+      gradientFrom: "#DC2626",
+      gradientTo: "#7F1D1D",
+      hoverText: "text-red-400",
+    },
+  },
   {
     title: "ServiceEase",
     shortDescription:
@@ -85,8 +159,8 @@ export const PROJECTS_DATA = [
       "Vite",
     ],
     images: [
-      p1img1, p1img2, p1img3, p1img4, p1img5, p1img6, p1img7, p1img8,
-      p1img9, p1img10, p1img11, p1img12, p1img13, p1img14, p1img15, p1img16,
+      p2img1, p2img2, p2img3, p2img4, p2img5, p2img6, p2img7, p2img8,
+      p2img9, p2img10, p2img11, p2img12, p2img13, p2img14, p2img15, p2img16,
     ],
     frontend: "https://github.com/tanbinali/ServiceEaseClient",
     backend: "https://github.com/tanbinali/ServiceEaseProject",
@@ -96,6 +170,40 @@ export const PROJECTS_DATA = [
       gradientFrom: "#4b5563",
       gradientTo: "#1f2937",
       hoverText: "text-white",
+    },
+  },
+  {
+    title: "Jaji Trading",
+    shortDescription:
+      "A high-performance 24/7 emergency car battery replacement and auto spare parts service platform in Abu Dhabi.",
+    description:
+      "Jaji Car Battery Replacement & Auto Spare Parts Trading is a professional commercial web platform built to provide fast and reliable 24/7 mobile battery replacement across Abu Dhabi. " +
+      "The application highlights emergency roadside assistance, home or parking area battery installation, and transparent service features like warranty coverage. " +
+      "It features an intuitive navigation structure with dedicated sections for about, batteries, contact, and physical location mapping to drive immediate customer conversions. " +
+      "The user interface is fully responsive across all devices, featuring clean typography, high-contrast action elements, and smooth interactions. " +
+      "SEO best practices, meta tags, and structured configurations are implemented to optimize local search engine visibility for automotive services in the region. " +
+      "Built with speed and accessibility in mind, the platform delivers a reliable, trustworthy online presence tailored for urgent automotive needs.",
+    tech: [
+      "React",
+      "JavaScript",
+      "Tailwind CSS",
+      "Figma",
+      "Framer Motion",
+      "Vercel",
+      "Google Maps Embed",
+      "HTML",
+      "Vite",
+      "NameCheap",
+      "SEO",
+    ],
+    images: [p3img1, p3img2, p3img3, p3img4, p3img5, p3img6, p3img7, p3img8],
+    frontend: "https://github.com/tanbinali/Jaji-Trading",
+    live: "https://www.jajicarbatteryautospareparts.com/",
+    theme: {
+      borderColor: "#EAB308",
+      gradientFrom: "#CA8A04",
+      gradientTo: "#854D0E",
+      hoverText: "text-yellow-400",
     },
   },
   {
@@ -122,7 +230,7 @@ export const PROJECTS_DATA = [
       "NameCheap",
       "SEO",
     ],
-    images: [p2img1, p2img2, p2img3, p2img4, p2img5, p2img6],
+    images: [p4img1, p4img2, p4img3, p4img4, p4img5, p4img6],
     frontend: "https://github.com/tanbinali/Mohd.KhanAutoPartsClient",
     live: "https://www.mohammadkhanautoparts.com/",
     theme: {
@@ -159,7 +267,7 @@ export const PROJECTS_DATA = [
       "Render",
     ],
     images: [
-      p3img1, p3img2, p3img3, p3img4, p3img5, p3img6, p3img7, p3img8, p3img9, p3img10,
+      p5img1, p5img2, p5img3, p5img4, p5img5, p5img6, p5img7, p5img8, p5img9, p5img10,
     ],
     backend: "https://github.com/tanbinali/event_management_django",
     live: "https://event-management-django-neon.vercel.app/",
@@ -203,7 +311,7 @@ export const PROJECTS_DATA = [
       "Vite",
     ],
     images: [
-      p4img1, p4img2, p4img3, p4img4, p4img5, p4img6, p4img7, p4img8,
+      p6img1, p6img2, p6img3, p6img4, p6img5, p6img6, p6img7, p6img8,
     ],
     frontend: "https://github.com/tanbinali/HarvestGuardClient",
     backend: "https://github.com/tanbinali/HarvestGuardAPI",
@@ -238,7 +346,7 @@ export const PROJECTS_DATA = [
       "ReDoc",
       "drf-yasg",
     ],
-    images: [p5img1, p5img2, p5img3, p5img4],
+    images: [p7img1, p7img2, p7img3, p7img4],
     backend: "https://github.com/tanbinali/library_manager_api",
     live: "https://library-manager-api-alpha.vercel.app/",
     theme: {
