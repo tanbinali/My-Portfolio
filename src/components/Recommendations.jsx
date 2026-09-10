@@ -1,6 +1,16 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaPaperPlane, FaUserAlt, FaBriefcase, FaQuoteLeft, FaCheckCircle, FaSpinner, FaPlus, FaTimes } from "react-icons/fa";
+import {
+  FaPaperPlane,
+  FaUserAlt,
+  FaBriefcase,
+  FaQuoteLeft,
+  FaCheckCircle,
+  FaSpinner,
+  FaPlus,
+  FaTimes,
+  FaArrowRight,
+} from "react-icons/fa";
 import ShinyText from "./ShinyText/ShinyText";
 import ElectricBorder from "./ElectricBorder/ElectricBorder";
 
@@ -41,38 +51,50 @@ const Recommendations = () => {
   const isMobile = useIsMobile();
   const shouldReduceAnimations = prefersReducedMotion || isMobile;
 
-  // View & Form State
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", position: "", recommendation: "" });
   const [status, setStatus] = useState("idle");
-  
-  // Real recommendations fetched from Google Sheets
+
   const [recommendationsList, setRecommendationsList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form theme color set to Silver
-  const formThemeColor = "#C0C0C0"; 
-  // Color Palette Cycle for cards: Green, Gold, Silver
+  // Selected endorsement for Modal Popup
+  const [activeModalItem, setActiveModalItem] = useState(null);
+
+  const formThemeColor = "#C0C0C0";
   const cardColors = ["#2ecc71", "#FFD700", "#C0C0C0"];
 
   const mockReviews = [
-  {
-    name: "Daniel Carter",
-    position: "Founder, Carter Auto Solutions",
-    recommendation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae justo nec augue consequat posuere. Praesent feugiat, sapien at tincidunt luctus, erat massa posuere nibh, vitae suscipit libero magna sed nisl. Donec vulputate neque at turpis facilisis."
-  },
-  {
-    name: "Arjun Mehta",
-    position: "Director, Mehta Battery Center",
-    recommendation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae justo nec augue consequat posuere. Praesent feugiat, sapien at tincidunt luctus, erat massa posuere nibh, vitae suscipit libero magna sed nisl. Donec vulputate neque at turpis facilisis, sed malesuada purus consectetur. Aliquam erat volutpat, curabitur."
-  }
-];
+    {
+      name: "Ethan Brooks",
+      position: "Founder, Brooks Auto Solutions",
+      recommendation:
+        "Lorem ipsum dolor sit amet consectetur adipiscing elit integer vitae justo nec augue consequat posuere praesent feugiat sapien at tincidunt luctus erat massa nibh suscipit libero magna sed nisl donec vulputate neque turpis facilisis malesuada purus aliquam volutpat curabitur lorem ipsum dolor sit amet consectetur adipiscing elit vitae justo nec augue posuere praesent feugiat sapien tincidunt luctus erat massa suscipit libero magna sed nisl donec vulputate neque turpis facilisis purus aliquam volutpat curabitur integer vitae lorem ipsum dolor sit amet consectetur adipiscing elit integer vitae justo nec augue consequat posuere praesent feugiat sapien at tincidunt luctus erat massa nibh suscipit libero magna sed nisl donec vulputate neque turpis facilisis malesuada purus aliquam volutpat curabitur.",
+    },
+    {
+      name: "Ryan Mitchell",
+      position: "Director, Mitchell Battery Center",
+      recommendation:
+        "Lorem ipsum dolor sit amet consectetur adipiscing elit integer vitae justo nec augue consequat posuere praesent feugiat sapien at tincidunt luctus erat massa nibh suscipit libero magna sed nisl donec vulputate neque turpis facilisis malesuada purus aliquam volutpat curabitur lorem ipsum dolor sit amet consectetur adipiscing elit vitae justo nec augue posuere praesent feugiat sapien tincidunt luctus erat massa suscipit libero magna sed nisl donec vulputate neque turpis facilisis purus aliquam volutpat curabitur integer vitae lorem ipsum dolor sit amet consectetur.",
+    },
+    {
+      name: "Lucas Anderson",
+      position: "Managing Director, Anderson Auto Care",
+      recommendation:
+        "Lorem ipsum dolor sit amet consectetur adipiscing elit vitae justo nec augue posuere praesent feugiat sapien tincidunt luctus erat massa suscipit libero magna sed nisl donec vulputate neque turpis facilisis purus aliquam volutpat curabitur integer vitae lorem ipsum sit turpis posuere consectetur sed adipiscing.",
+    },
+    {
+      name: "Nathan Wilson",
+      position: "Owner, Wilson Automotive Center",
+      recommendation:
+        "Lorem ipsum dolor sit amet consectetur adipiscing elit integer vitae justo nec augue consequat posuere praesent feugiat sapien at tincidunt luctus erat massa nibh suscipit libero magna sed nisl donec vulputate neque turpis facilisis malesuada purus aliquam volutpat curabitur lorem ipsum dolor sit amet consectetur adipiscing elit vitae justo nec augue posuere praesent feugiat sapien.",
+    },
+  ];
 
-  // Fetch recommendations on component mount
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const response = await fetch('/api/get-recommendations');
+        const response = await fetch("/api/get-recommendations");
         if (response.ok) {
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -105,9 +127,9 @@ const Recommendations = () => {
     setStatus("submitting");
 
     try {
-      const response = await fetch('/api/submit-recommendation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/submit-recommendation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
@@ -115,7 +137,7 @@ const Recommendations = () => {
         setStatus("success");
         setRecommendationsList([formData, ...recommendationsList]);
         setFormData({ name: "", position: "", recommendation: "" });
-        
+
         setTimeout(() => {
           setStatus("idle");
           setShowForm(false);
@@ -158,9 +180,9 @@ const Recommendations = () => {
 
   const FormContent = (
     <div className="w-full h-full bg-base-200/80 backdrop-blur-md rounded-2xl p-6 sm:p-10 flex flex-col items-center justify-center relative overflow-hidden group">
-      <div 
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-[#C0C0C0]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" 
-        aria-hidden="true" 
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-[#C0C0C0]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+        aria-hidden="true"
       />
 
       <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-5 relative z-10">
@@ -217,15 +239,19 @@ const Recommendations = () => {
           type="submit"
           disabled={status === "submitting"}
           className={`w-full py-3.5 rounded-lg flex items-center justify-center gap-2 text-sm font-bold tracking-wide transition-all shadow-lg ${
-            status === "submitting" 
-              ? "bg-gray-600 text-gray-300 cursor-not-allowed" 
+            status === "submitting"
+              ? "bg-gray-600 text-gray-300 cursor-not-allowed"
               : "bg-[#C0C0C0] text-black hover:bg-[#a6a6a6] hover:scale-[1.02] cursor-pointer"
           }`}
         >
           {status === "submitting" ? (
-            <><FaSpinner className="animate-spin" /> Submitting...</>
+            <>
+              <FaSpinner className="animate-spin" /> Submitting...
+            </>
           ) : (
-            <><FaPaperPlane /> Submit Recommendation</>
+            <>
+              <FaPaperPlane /> Submit Recommendation
+            </>
           )}
         </button>
 
@@ -283,14 +309,15 @@ const Recommendations = () => {
     >
       <div className="max-w-5xl mx-auto">
         <motion.div variants={containerVariants} className="text-center mb-8 sm:mb-12 lg:mb-16">
-          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card-light max-w-max mb-4 mx-auto">
+          <motion.div
+            variants={itemVariants}
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card-light max-w-max mb-4 mx-auto"
+          >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2ecc71] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2ecc71]"></span>
             </span>
-            <span className="text-xs sm:text-sm font-medium text-white">
-              Endorsements
-            </span>
+            <span className="text-xs sm:text-sm font-medium text-white">Endorsements</span>
           </motion.div>
 
           <motion.div variants={itemVariants} className="max-w-3xl mx-auto mb-4 p-4 sm:p-5 md:p-6 rounded-xl glass-card">
@@ -305,7 +332,7 @@ const Recommendations = () => {
               Feedback and professional endorsements from colleagues, clients and mentors.
             </p>
           </motion.div>
-          
+
           <motion.div
             variants={itemVariants}
             className="w-16 sm:w-20 md:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-primary via-[#2ecc71] to-transparent rounded-full mx-auto mt-3"
@@ -380,18 +407,33 @@ const Recommendations = () => {
           ) : recommendationsList.length === 0 ? (
             <p className="text-center text-gray-400 italic">No recommendations yet. Be the first to add one!</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch auto-rows-fr">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
               {recommendationsList.map((rec, index) => {
                 const currentThemeColor = cardColors[index % cardColors.length];
+                const isLong = rec.recommendation.length > 200;
 
                 const cardContent = (
-                  <div className="flex-1 w-full h-full bg-base-200/80 backdrop-blur-md rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
+                  <div className="w-full h-full bg-base-200/80 backdrop-blur-md rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group">
                     <div className="absolute top-4 right-4 text-white/10 group-hover:text-white/20 transition-colors">
                       <FaQuoteLeft size={36} />
                     </div>
-                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed relative z-10 mb-6 italic flex-1">
-                      "{rec.recommendation}"
-                    </p>
+
+                    <div className="relative z-10 mb-4 flex-1">
+                      <p className="text-gray-300 text-sm sm:text-base leading-relaxed italic line-clamp-4">
+                        "{rec.recommendation}"
+                      </p>
+                      {isLong && (
+                        <button
+                          type="button"
+                          onClick={() => setActiveModalItem({ ...rec, color: currentThemeColor })}
+                          className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-semibold hover:underline cursor-pointer"
+                          style={{ color: currentThemeColor }}
+                        >
+                          Read full endorsement <FaArrowRight size={10} />
+                        </button>
+                      )}
+                    </div>
+
                     <div className="relative z-10 border-t border-white/10 pt-4 mt-auto">
                       <h4 className="font-bold text-white text-base" style={{ color: currentThemeColor }}>
                         {rec.name}
@@ -402,10 +444,10 @@ const Recommendations = () => {
                 );
 
                 return (
-                  <div key={index} className="flex flex-col h-full w-full">
+                  <div key={index} className="h-full flex flex-col w-full">
                     {isMobile ? (
                       <div
-                        className="flex-1 flex flex-col rounded-2xl border-2 w-full h-full"
+                        className="rounded-2xl border-2 h-full flex flex-col"
                         style={{
                           borderColor: currentThemeColor,
                           boxShadow: `0 0 15px 1px ${currentThemeColor}30`,
@@ -414,24 +456,15 @@ const Recommendations = () => {
                         {cardContent}
                       </div>
                     ) : (
-                      <div className="flex-1 flex flex-col w-full h-full relative [&>div]:!flex-1 [&>div]:!h-full [&>div]:flex [&>div]:flex-col [&>div>div]:!flex-1 [&>div>div]:!h-full [&>div>div]:flex [&>div>div]:flex-col">
-                        <ElectricBorder
-                          color={currentThemeColor}
-                          thickness={2}
-                          speed={0.8}
-                          chaos={0.1}
-                          className="flex-1 flex flex-col w-full h-full"
-                          style={{ 
-                            borderRadius: 16, 
-                            height: "100%", 
-                            display: "flex", 
-                            flexDirection: "column", 
-                            flex: 1 
-                          }}
-                        >
-                          {cardContent}
-                        </ElectricBorder>
-                      </div>
+                      <ElectricBorder
+                        color={currentThemeColor}
+                        thickness={2}
+                        speed={0.8}
+                        chaos={0.1}
+                        style={{ borderRadius: 16, height: "100%", width: "100%" }}
+                      >
+                        {cardContent}
+                      </ElectricBorder>
                     )}
                   </div>
                 );
@@ -439,8 +472,108 @@ const Recommendations = () => {
             </div>
           )}
         </div>
-
       </div>
+
+      {/* Modal View for Full Recommendation */}
+      <AnimatePresence>
+        {activeModalItem && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveModalItem(null)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"
+            />
+
+            {/* Modal Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-10 w-full max-w-xl max-h-[85vh] flex flex-col"
+            >
+              {isMobile ? (
+                <div
+                  className="w-full bg-base-200/95 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border-2 shadow-2xl flex flex-col max-h-[85vh]"
+                  style={{
+                    borderColor: activeModalItem.color,
+                    boxShadow: `0 0 25px 2px ${activeModalItem.color}35`,
+                  }}
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex items-center gap-2">
+                      <FaQuoteLeft style={{ color: activeModalItem.color }} size={20} />
+                      <span className="text-xs uppercase tracking-widest font-semibold text-gray-400">
+                        Full Recommendation
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setActiveModalItem(null)}
+                      className="p-1 text-gray-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+                    >
+                      <FaTimes size={18} />
+                    </button>
+                  </div>
+
+                  <div className="overflow-y-auto pr-2 space-y-4 my-2">
+                    <p className="text-gray-200 text-sm sm:text-base leading-relaxed italic">
+                      "{activeModalItem.recommendation}"
+                    </p>
+                  </div>
+
+                  <div className="border-t border-white/10 pt-4 mt-4">
+                    <h4 className="font-bold text-base sm:text-lg" style={{ color: activeModalItem.color }}>
+                      {activeModalItem.name}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-gray-400 mt-0.5">{activeModalItem.position}</p>
+                  </div>
+                </div>
+              ) : (
+                <ElectricBorder
+                  color={activeModalItem.color}
+                  thickness={2}
+                  speed={0.8}
+                  chaos={0.1}
+                  style={{ borderRadius: 20, width: "100%" }}
+                >
+                  <div className="w-full bg-base-200/95 backdrop-blur-xl p-8 rounded-2xl flex flex-col max-h-[80vh] shadow-2xl">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-2">
+                        <FaQuoteLeft style={{ color: activeModalItem.color }} size={22} />
+                        <span className="text-xs uppercase tracking-widest font-semibold text-gray-400">
+                          Full Recommendation
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setActiveModalItem(null)}
+                        className="p-1 text-gray-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+                      >
+                        <FaTimes size={18} />
+                      </button>
+                    </div>
+
+                    <div className="overflow-y-auto pr-3 space-y-4 my-2">
+                      <p className="text-gray-200 text-sm sm:text-base leading-relaxed italic">
+                        "{activeModalItem.recommendation}"
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4 mt-4">
+                      <h4 className="font-bold text-lg" style={{ color: activeModalItem.color }}>
+                        {activeModalItem.name}
+                      </h4>
+                      <p className="text-sm text-gray-400 mt-0.5">{activeModalItem.position}</p>
+                    </div>
+                  </div>
+                </ElectricBorder>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 };
