@@ -11,7 +11,7 @@ export const EDUCATION_DATA = [
   {
     title: "B.Sc in Computer Science & Engineering",
     university: "East Delta University",
-    cgpa: "CGPA 3.82/4 (Currently)",
+    cgpa: "CGPA 3.85/4 (Currently)",
     shortName: "EDU",
     location: "Chattogram, Bangladesh",
     duration: "2024 – 2028 (expected)",
