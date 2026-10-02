@@ -21,7 +21,7 @@ export const EDUCATION_DATA = [
     color: "#8B0000",
     current: true,
     details:
-      "Studying core CSE subjects including C, C++, Java, Object-Oriented Programming (OOP), Data Structures, Algorithms, Operating Systems, Micro-processors, Database Systems, and Digital Logic Design (DLD). Actively participating in hackathons and practical software projects, with continuous learning planned in advanced systems, AI, and modern software engineering.",
+      "Studying core Computer Science and Engineering subjects, including Structured Programming, Object-Oriented Programming (OOP), Data Structures, Algorithms, Database Management Systems, Digital Logic Design, Operating Systems, Microprocessors & Assembly Language, Computer Networks, Data Communication, Web Development, and Digital Electronics. Actively developing practical software projects and strengthening problem-solving skills through hands-on learning, with a continued focus on full-stack development, advanced computing, and modern software engineering.",
   },
   {
     title: "CSE Fundamentals with Phitron",
